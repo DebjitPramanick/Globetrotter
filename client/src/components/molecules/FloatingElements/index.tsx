@@ -2,13 +2,17 @@ import { useEffect, useState } from "react";
 import { FloatingElementsContainer, FloatingElement } from "./index.styled";
 
 const FloatingElements = () => {
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [windowWidth, setWindowWidth] = useState(0);
 
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  useEffect(() => {
+    setWindowWidth(window.innerWidth);
+  }, [windowWidth]);
 
   const getSize = (baseSize: number) => {
     if (windowWidth <= 576) return baseSize * 0.6; // smaller for mobile

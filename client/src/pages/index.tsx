@@ -1,5 +1,4 @@
 import { useState, FormEvent } from "react";
-import { useNavigate } from "react-router-dom";
 import { Button, Credit, Logo } from "@/components/atoms";
 import { FloatingElements } from "@/components/molecules";
 import {
@@ -9,18 +8,19 @@ import {
   Subtitle,
   Form,
   Input,
-} from "./index.styled";
+} from "./Welcome/index.styled";
+import { useRouter } from "next/router";
 
 const Welcome = () => {
   const [username, setUsername] = useState("");
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (username.trim()) {
       // You can store the username in context or local storage if needed
       localStorage.setItem("username", username.trim());
-      navigate("/game");
+      router.push("/game");
     }
   };
 

@@ -1,6 +1,4 @@
 import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import { useTheme } from "@/context/ThemeContext";
 import { Moon, Sun, Play, BarChart2 } from "react-feather";
 import { Avatar } from "@/components/atoms";
 import {
@@ -14,12 +12,13 @@ import {
   ThemeToggleWrapper,
   IconWrapper,
 } from "./index.styled";
-
+import { useRouter } from "next/router";
+import { useApp } from "@/context/AppContext";
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
-  const { isDarkMode, toggleTheme } = useTheme();
-  const navigate = useNavigate();
+  const { isDarkMode, toggleTheme } = useApp();
+  const router = useRouter();
   const username = localStorage.getItem("username") || "";
 
   useEffect(() => {
@@ -34,7 +33,7 @@ const Header = () => {
   }, []);
 
   const handleNavigation = (path: string) => {
-    navigate(path);
+    router.push(path);
     setIsMenuOpen(false);
   };
 

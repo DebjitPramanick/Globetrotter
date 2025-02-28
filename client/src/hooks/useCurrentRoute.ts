@@ -1,6 +1,6 @@
-import { useLocation } from "react-router-dom";
+import { useRouter } from "next/router";
 
 export const useCurrentRoute = () => {
-  const location = useLocation();
-  return location.pathname;
+  const router = useRouter();
+  return router.pathname;
 };

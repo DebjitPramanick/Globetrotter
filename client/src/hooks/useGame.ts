@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { DESTINATIONS } from "@/constants";
-
+import { useRouter } from "next/router";
 interface UseGameReturn {
   currentDestination: number;
   currentClue: number;
@@ -16,7 +15,7 @@ const MAX_SCORE_PER_QUESTION = 100;
 const SCORE_DEDUCTION = 25;
 
 export const useGame = (): UseGameReturn => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const username = localStorage.getItem("username");
   const [currentDestination, setCurrentDestination] = useState(0);
   const [currentClue, setCurrentClue] = useState(0);
@@ -25,9 +24,9 @@ export const useGame = (): UseGameReturn => {
 
   useEffect(() => {
     if (!username) {
-      navigate("/");
+      router.push("/");
     }
-  }, [username, navigate]);
+  }, [username]);
 
   const handleAnswer = (answer: string) => {
     const destination = DESTINATIONS[currentDestination];
