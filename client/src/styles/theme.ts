@@ -6,10 +6,13 @@ declare module "styled-components" {
       primary: string;
       secondary: string;
       background: string;
+      surface: string;
       text: string;
+      textSecondary: string;
       border: string;
       error: string;
       success: string;
+      accent: string;
     };
     spacing: {
       xs: string;
@@ -38,18 +41,28 @@ declare module "styled-components" {
       medium: string;
       large: string;
     };
+    breakpoints: {
+      xs: string;
+      sm: string;
+      md: string;
+      lg: string;
+      xl: string;
+    };
   }
 }
 
 export const lightTheme: DefaultTheme = {
   colors: {
-    primary: "#007AFF",
-    secondary: "#5856D6",
-    background: "#FFFFFF",
-    text: "#000000",
-    border: "#E5E5EA",
-    error: "#FF3B30",
-    success: "#34C759",
+    primary: "#2563eb",
+    secondary: "#3b82f6",
+    background: "#ffffff",
+    surface: "#f8fafc",
+    text: "#1e293b",
+    textSecondary: "#64748b",
+    border: "#e2e8f0",
+    error: "#ef4444",
+    success: "#22c55e",
+    accent: "#818cf8",
   },
   spacing: {
     xs: "0.25rem",
@@ -78,17 +91,27 @@ export const lightTheme: DefaultTheme = {
     medium: "8px",
     large: "12px",
   },
+  breakpoints: {
+    xs: "320px",
+    sm: "576px",
+    md: "768px",
+    lg: "992px",
+    xl: "1200px",
+  },
 };
 
 export const darkTheme: DefaultTheme = {
   ...lightTheme,
   colors: {
-    primary: "#0A84FF",
-    secondary: "#5E5CE6",
-    background: "#000000",
-    text: "#FFFFFF",
-    border: "#38383A",
-    error: "#FF453A",
-    success: "#32D74B",
+    primary: "#3b82f6",
+    secondary: "#60a5fa",
+    background: "#0f172a",
+    surface: "#1e293b",
+    text: "#f8fafc",
+    textSecondary: "#94a3b8",
+    border: "#334155",
+    error: "#ef4444",
+    success: "#22c55e",
+    accent: "#818cf8",
   },
 };

@@ -3,21 +3,31 @@ import { Link } from "react-router-dom";
 
 export const Nav = styled.nav`
   padding: ${({ theme }) => theme.spacing.md};
-  background: ${({ theme }) => theme.colors.primary};
+  background: ${({ theme }) => theme.colors.surface};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
   display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: ${({ theme }) => theme.spacing.xl};
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    padding: ${({ theme }) => theme.spacing.sm};
+    gap: ${({ theme }) => theme.spacing.md};
+  }
 `;
 
 export const NavLinks = styled.div`
   display: flex;
   gap: ${({ theme }) => theme.spacing.md};
   align-items: center;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.xs}) {
+    gap: ${({ theme }) => theme.spacing.sm};
+  }
 `;
 
 export const StyledLink = styled(Link)`
-  color: white;
+  color: ${({ theme }) => theme.colors.text};
   text-decoration: none;
   font-weight: ${({ theme }) => theme.typography.fontWeight.medium};
   position: relative;
@@ -30,7 +40,7 @@ export const StyledLink = styled(Link)`
     height: 2px;
     bottom: 0;
     left: 0;
-    background-color: white;
+    background-color: ${({ theme }) => theme.colors.primary};
     transition: width 0.3s ease;
   }
 
@@ -49,9 +59,9 @@ const spin = keyframes`
 `;
 
 export const ThemeToggle = styled.button`
-  background: transparent;
-  border: none;
-  color: white;
+  background: ${({ theme }) => theme.colors.surface};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  color: ${({ theme }) => theme.colors.text};
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -59,19 +69,17 @@ export const ThemeToggle = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.3s ease;
+  transition: all 0.3s ease;
   padding: 0;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: ${({ theme }) => theme.colors.background};
+    border-color: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.colors.primary};
   }
 
   svg {
     transition: all 0.3s ease;
-  }
-
-  &:hover svg {
-    animation: ${spin} 2s linear infinite;
   }
 `;
 

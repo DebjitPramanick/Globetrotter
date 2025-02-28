@@ -14,7 +14,7 @@ const Header = () => {
   return (
     <Nav>
       <NavLinks>
-        <StyledLink to="/">Home</StyledLink>
+        <StyledLink to="/game">Game</StyledLink>
         <StyledLink to="/stats">Stats</StyledLink>
       </NavLinks>
       <ThemeToggle
