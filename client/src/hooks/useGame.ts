@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { DESTINATIONS } from "@/constants";
 import { useRouter } from "next/router";
+import { useApp } from "@/context/AppContext";
 interface UseGameReturn {
   currentDestination: number;
   currentClue: number;
@@ -16,7 +17,7 @@ const SCORE_DEDUCTION = 25;
 
 export const useGame = (): UseGameReturn => {
   const router = useRouter();
-  const username = localStorage.getItem("username");
+  const { username } = useApp();
   const [currentDestination, setCurrentDestination] = useState(0);
   const [currentClue, setCurrentClue] = useState(0);
   const [totalScore, setTotalScore] = useState(0);

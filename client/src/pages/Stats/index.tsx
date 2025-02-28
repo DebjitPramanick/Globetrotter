@@ -1,10 +1,13 @@
+import AppLayout from "@/layouts/AppLayout";
 import { StatsContainer, Title } from "./index.styled";
 
 const Stats = () => {
   return (
-    <StatsContainer>
-      <Title>Statistics</Title>
-    </StatsContainer>
+    <AppLayout>
+      <StatsContainer>
+        <Title>Statistics</Title>
+      </StatsContainer>
+    </AppLayout>
   );
 };
 

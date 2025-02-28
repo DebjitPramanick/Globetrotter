@@ -19,7 +19,7 @@ const Header = () => {
   const menuRef = useRef<HTMLDivElement>(null);
   const { isDarkMode, toggleTheme } = useApp();
   const router = useRouter();
-  const username = localStorage.getItem("username") || "";
+  const { username } = useApp();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -43,7 +43,10 @@ const Header = () => {
         <Title>Destination Quest</Title>
       </LeftSection>
       <RightSection ref={menuRef}>
-        <Avatar name={username} onClick={() => setIsMenuOpen(!isMenuOpen)} />
+        <Avatar
+          name={username || ""}
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+        />
         <AvatarMenu isOpen={isMenuOpen}>
           <MenuItem onClick={() => handleNavigation("/game")}>
             <Play size={18} />
