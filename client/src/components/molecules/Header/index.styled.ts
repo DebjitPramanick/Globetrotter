@@ -101,9 +101,13 @@ export const HeaderContainer = styled.header`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.lg};
+  padding: 0 ${({ theme }) => theme.spacing.lg};
   background: ${({ theme }) => theme.colors.surface};
   border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+  height: 76px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 `;
 
 export const LeftSection = styled.div`

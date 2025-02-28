@@ -25,6 +25,7 @@ const float = keyframes`
 
 export const Card = styled.div`
   display: flex;
+  flex-direction: column;
   gap: ${({ theme }) => theme.spacing.xl};
   background: ${({ theme }) => theme.colors.surface};
   border-radius: ${({ theme }) => theme.borderRadius.large};
@@ -34,6 +35,7 @@ export const Card = styled.div`
   animation: ${fadeIn} 0.5s ease-out;
   max-width: 1000px;
   width: 100%;
+  height: calc(100vh - 200px);
   margin: 0 auto;
   position: relative;
   overflow: hidden;
@@ -61,6 +63,14 @@ export const CluesSection = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.lg};
+`;
+
+export const CluesHeader = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: ${({ theme }) => theme.spacing.md};
 `;
 
 export const AnswerSection = styled.div`
@@ -116,22 +126,29 @@ export const RevealButton = styled.button`
   font-size: ${({ theme }) => theme.typography.fontSize.small};
   font-weight: ${({ theme }) => theme.typography.fontWeight.medium};
   cursor: pointer;
-  padding: ${({ theme }) => theme.spacing.sm};
+  padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
-  gap: ${({ theme }) => theme.spacing.xs};
-  margin: ${({ theme }) => theme.spacing.md} 0;
+  gap: ${({ theme }) => theme.spacing.sm};
+  border-radius: ${({ theme }) => theme.borderRadius.small};
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
 
   &:hover {
     color: ${({ theme }) => theme.colors.secondary};
     transform: translateY(-2px);
+    background: ${({ theme }) => `${theme.colors.primary}10`};
   }
 
   &:disabled {
     color: ${({ theme }) => theme.colors.textSecondary};
     cursor: not-allowed;
     transform: none;
+    background: none;
   }
 `;
 
@@ -193,4 +210,44 @@ export const Input = styled.input`
     border-color: ${({ theme }) => theme.colors.primary};
     box-shadow: 0 0 0 3px ${({ theme }) => `${theme.colors.primary}20`};
   }
+`;
+
+export const ScoresContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: ${({ theme }) => theme.spacing.md};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+  margin-bottom: ${({ theme }) => theme.spacing.lg};
+`;
+
+export const ScoreDisplay = styled.div`
+  font-size: ${({ theme }) => theme.typography.fontSize.h3};
+  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
+  color: ${({ theme }) => theme.colors.primary};
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.sm};
+`;
+
+export const TotalScore = styled.div`
+  font-size: ${({ theme }) => theme.typography.fontSize.body};
+  color: ${({ theme }) => theme.colors.textSecondary};
+`;
+
+export const GameContent = styled.div`
+  display: flex;
+  gap: ${({ theme }) => theme.spacing.xl};
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    flex-direction: column;
+  }
+`;
+
+export const ScoreNumber = styled.span<{ isDecreasing: boolean }>`
+  transition: all 0.3s ease;
+  transform: ${({ isDecreasing }) =>
+    isDecreasing ? "scale(1.2)" : "scale(1)"};
+  color: ${({ theme, isDecreasing }) =>
+    isDecreasing ? theme.colors.error : theme.colors.primary};
 `;

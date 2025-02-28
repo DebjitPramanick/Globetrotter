@@ -13,8 +13,6 @@ export const DESTINATIONS: Destination[] = [
     clues: [
       "I am a monument of eternal love",
       "My white marble walls change color with the light",
-      "I took over 20 years to complete with help from 20,000 artisans",
-      "I stand proudly in Agra, India",
     ],
     facts: [
       "Built between 1632 and 1653",
@@ -30,8 +28,6 @@ export const DESTINATIONS: Destination[] = [
     clues: [
       "I am a city in the clouds",
       "The Inca built me without using wheels",
-      "I remained hidden from the Spanish conquistadors",
-      "I sit high in the Andes mountains",
     ],
     facts: [
       "Built in the 15th century",
