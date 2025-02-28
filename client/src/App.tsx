@@ -2,13 +2,13 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "@fontsource/manrope/400.css";
 import "@fontsource/manrope/500.css";
 import "@fontsource/manrope/700.css";
-import { ThemeProvider } from "./context/ThemeContext";
-import Welcome from "./pages/Welcome";
-import Game from "./pages/Game";
-import Stats from "./pages/Stats";
-import Header from "./components/Header";
+import { ThemeProvider } from "@/context/ThemeContext";
+import Welcome from "@/pages/Welcome";
+import Game from "@/pages/Game";
+import Stats from "@/pages/Stats";
+import { Header } from "@/components/molecules";
 import { GlobalStyle, AppContainer } from "./App.styled";
-import { useCurrentRoute } from "./hooks/useCurrentRoute";
+import { useCurrentRoute } from "@/hooks/useCurrentRoute";
 
 const HeaderWrapper = () => {
   const currentRoute = useCurrentRoute();

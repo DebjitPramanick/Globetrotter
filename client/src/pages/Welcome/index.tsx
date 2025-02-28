@@ -1,7 +1,7 @@
 import { useState, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import FloatingElements from "../../components/FloatingElements";
-import { Button, Credit, Logo } from "../../components/atoms";
+import { Button, Credit, Logo } from "@/components/atoms";
+import { FloatingElements } from "@/components/molecules";
 import {
   WelcomeContainer,
   ContentWrapper,

@@ -18,7 +18,8 @@ export const GameContainer = styled.div`
 export const Title = styled.h1`
   font-size: ${({ theme }) => theme.typography.fontSize.h1};
   color: ${({ theme }) => theme.colors.text};
-  margin-bottom: ${({ theme }) => theme.spacing.lg};
+  margin-bottom: ${({ theme }) => theme.spacing.xl};
+  text-align: center;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     font-size: ${({ theme }) => theme.typography.fontSize.h2};
@@ -28,4 +29,12 @@ export const Title = styled.h1`
 
 export const Username = styled.span`
   color: ${({ theme }) => theme.colors.primary};
+  background: linear-gradient(
+    90deg,
+    ${({ theme }) => theme.colors.primary},
+    ${({ theme }) => theme.colors.secondary}
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 `;

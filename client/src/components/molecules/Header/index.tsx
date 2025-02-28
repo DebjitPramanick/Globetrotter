@@ -1,4 +1,4 @@
-import { useTheme } from "../../context/ThemeContext";
+import { useTheme } from "@/context/ThemeContext";
 import { Moon, Sun } from "react-feather";
 import {
   Nav,
