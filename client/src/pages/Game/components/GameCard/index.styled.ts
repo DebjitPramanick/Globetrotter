@@ -16,7 +16,7 @@ const float = keyframes`
     transform: translateY(0);
   }
   50% {
-    transform: translateY(-10px);
+    transform: translateY(10px);
   }
   100% {
     transform: translateY(0);
@@ -41,7 +41,7 @@ export const Card = styled.div`
   overflow: hidden;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
-    flex-direction: column;
+    height: calc(100vh - 150px);
   }
 
   &::before {
@@ -64,6 +64,8 @@ export const CluesSection = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.lg};
+  height: 100%;
+  overflow: hidden;
 `;
 
 export const CluesHeader = styled.div`
@@ -94,6 +96,27 @@ export const CluesContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.md};
+  overflow-y: auto;
+  padding-right: ${({ theme }) => theme.spacing.md};
+  height: calc(100% - 48px);
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: ${({ theme }) => theme.colors.background};
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: ${({ theme }) => theme.colors.border};
+    border-radius: 4px;
+
+    &:hover {
+      background: ${({ theme }) => theme.colors.primary}40;
+    }
+  }
 `;
 
 export const ClueBox = styled.div<{ isRevealed: boolean }>`
@@ -238,6 +261,8 @@ export const TotalScore = styled.div`
 export const GameContent = styled.div`
   display: flex;
   gap: ${({ theme }) => theme.spacing.xl};
+  height: calc(100% - 80px);
+  overflow: hidden;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     flex-direction: column;
