@@ -1,4 +1,4 @@
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 export const Nav = styled.nav`
@@ -49,15 +49,6 @@ export const StyledLink = styled(Link)`
   }
 `;
 
-const spin = keyframes`
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-`;
-
 export const ThemeToggle = styled.button`
   background: ${({ theme }) => theme.colors.surface};
   border: 1px solid ${({ theme }) => theme.colors.border};
@@ -85,8 +76,8 @@ export const ThemeToggle = styled.button`
 
 export const IconWrapper = styled.div<{ isDarkMode: boolean }>`
   position: relative;
-  width: 24px;
-  height: 24px;
+  width: 18px;
+  height: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -103,5 +94,111 @@ export const IconWrapper = styled.div<{ isDarkMode: boolean }>`
       transform: ${({ isDarkMode }) =>
         isDarkMode ? "scale(0) rotate(180deg)" : "scale(1) rotate(0)"};
     }
+  }
+`;
+
+export const HeaderContainer = styled.header`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.lg};
+  background: ${({ theme }) => theme.colors.surface};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+`;
+
+export const LeftSection = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.md};
+`;
+
+export const RightSection = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.md};
+  position: relative;
+`;
+
+export const Title = styled.h1`
+  font-size: ${({ theme }) => theme.typography.fontSize.h3};
+  color: ${({ theme }) => theme.colors.text};
+  margin: 0;
+`;
+
+export const AvatarMenu = styled.div<{ isOpen: boolean }>`
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: ${({ theme }) => theme.colors.surface};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.borderRadius.medium};
+  box-shadow: 0 4px 20px ${({ theme }) => `${theme.colors.primary}10`};
+  min-width: 280px;
+  opacity: ${({ isOpen }) => (isOpen ? 1 : 0)};
+  transform: ${({ isOpen }) =>
+    isOpen ? "translateY(0) scale(1)" : "translateY(-10px) scale(0.95)"};
+  transform-origin: top right;
+  transition: all 0.2s ease;
+  pointer-events: ${({ isOpen }) => (isOpen ? "auto" : "none")};
+  z-index: 1000;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: -5px;
+    right: 20px;
+    width: 10px;
+    height: 10px;
+    background: ${({ theme }) => theme.colors.surface};
+    border-left: 1px solid ${({ theme }) => theme.colors.border};
+    border-top: 1px solid ${({ theme }) => theme.colors.border};
+    transform: rotate(45deg);
+  }
+`;
+
+export const MenuItem = styled.div`
+  padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.lg};
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.md};
+  color: ${({ theme }) => theme.colors.text};
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+
+  &:hover {
+    background: ${({ theme }) => `${theme.colors.primary}10`};
+  }
+
+  svg {
+    width: 18px;
+    height: 18px;
+    color: ${({ theme }) => theme.colors.textSecondary};
+  }
+`;
+
+export const MenuDivider = styled.div`
+  height: 1px;
+  background: ${({ theme }) => theme.colors.border};
+  margin: ${({ theme }) => theme.spacing.xs} 0;
+`;
+
+export const ThemeToggleWrapper = styled.div`
+  padding: ${({ theme }) => `${theme.spacing.md} ${theme.spacing.lg}`};
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.md};
+  color: ${({ theme }) => theme.colors.text};
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: ${({ theme }) => `${theme.colors.primary}10`};
+  }
+
+  svg {
+    width: 18px;
+    height: 18px;
+    color: ${({ theme }) => theme.colors.textSecondary};
   }
 `;

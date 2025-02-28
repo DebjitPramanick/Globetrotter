@@ -1,27 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { GameContainer, Title, Username } from "./index.styled";
+import { GameContainer } from "./index.styled";
 import GameCard from "./components/GameCard";
-import Progress from "./components/Progress";
-
-// Mock data - Replace with your actual data
-const mockClues = [
-  {
-    id: 1,
-    clue: "This ancient wonder sits atop a limestone plateau and has the face of a mythical creature.",
-    answer: "sphinx",
-    facts: [
-      "Built over 4,500 years ago",
-      "Missing nose mystery",
-      "Symbol of ancient Egypt",
-    ],
-  },
-  // Add more clues
-];
+import { DESTINATIONS } from "@/constants";
 
 const Game = () => {
   const navigate = useNavigate();
   const username = localStorage.getItem("username");
+  const [currentDestination, setCurrentDestination] = useState(0);
   const [currentClue, setCurrentClue] = useState(0);
   const [score, setScore] = useState(0);
 
@@ -32,30 +18,34 @@ const Game = () => {
   }, [username, navigate]);
 
   const handleAnswer = (answer: string) => {
-    if (answer.toLowerCase() === mockClues[currentClue].answer.toLowerCase()) {
+    const destination = DESTINATIONS[currentDestination];
+    if (answer.toLowerCase() === destination.name.toLowerCase()) {
       setScore(score + 1);
-      // Show success message and facts
-    } else {
-      // Show hint or try again message
+      if (currentDestination < DESTINATIONS.length - 1) {
+        setCurrentDestination(currentDestination + 1);
+        setCurrentClue(0);
+      }
+    }
+  };
+
+  const handleRevealNextClue = () => {
+    const destination = DESTINATIONS[currentDestination];
+    if (currentClue < destination.clues.length - 1) {
+      setCurrentClue(currentClue + 1);
     }
   };
 
   if (!username) return null;
 
+  const destination = DESTINATIONS[currentDestination];
+
   return (
     <GameContainer>
-      <Title>
-        Welcome, <Username>{username}</Username>!
-      </Title>
-      <Progress
-        current={currentClue + 1}
-        total={mockClues.length}
-        score={score}
-      />
       <GameCard
-        clueNumber={currentClue + 1}
-        clueText={mockClues[currentClue].clue}
+        clues={destination.clues}
+        currentClue={currentClue}
         onSubmit={handleAnswer}
+        onRevealNextClue={handleRevealNextClue}
       />
     </GameContainer>
   );
