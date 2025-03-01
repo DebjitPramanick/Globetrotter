@@ -51,45 +51,33 @@ declare module "styled-components" {
   }
 }
 
-export const lightTheme: DefaultTheme = {
-  colors: {
-    primary: "#2563eb",
-    secondary: "#3b82f6",
-    background: "#ffffff",
-    surface: "#f8fafc",
-    text: "#1e293b",
-    textSecondary: "#64748b",
-    border: "#e2e8f0",
-    error: "#ef4444",
-    success: "#22c55e",
-    accent: "#818cf8",
+const baseTheme = {
+  borderRadius: {
+    small: "4px",
+    medium: "8px",
+    large: "12px",
   },
   spacing: {
-    xs: "0.25rem",
-    sm: "0.5rem",
-    md: "1rem",
-    lg: "1.5rem",
-    xl: "2rem",
+    xs: "4px",
+    sm: "8px",
+    md: "16px",
+    lg: "24px",
+    xl: "32px",
   },
   typography: {
     fontFamily: "Manrope, sans-serif",
     fontSize: {
-      small: "0.875rem",
-      body: "1rem",
-      h1: "2rem",
-      h2: "1.5rem",
-      h3: "1.25rem",
+      small: "12px",
+      body: "14px",
+      h3: "18px",
+      h2: "24px",
+      h1: "32px",
     },
     fontWeight: {
       regular: 400,
       medium: 500,
       bold: 700,
     },
-  },
-  borderRadius: {
-    small: "4px",
-    medium: "8px",
-    large: "12px",
   },
   breakpoints: {
     xs: "320px",
@@ -100,18 +88,34 @@ export const lightTheme: DefaultTheme = {
   },
 };
 
-export const darkTheme: DefaultTheme = {
-  ...lightTheme,
+export const lightTheme: DefaultTheme = {
+  ...baseTheme,
   colors: {
-    primary: "#3b82f6",
-    secondary: "#60a5fa",
-    background: "#0f172a",
-    surface: "#1e293b",
-    text: "#f8fafc",
-    textSecondary: "#94a3b8",
-    border: "#334155",
-    error: "#ef4444",
-    success: "#22c55e",
-    accent: "#818cf8",
+    background: "#F5F5F5",
+    surface: "#FFFFFF",
+    primary: "#6366F1",
+    secondary: "#8B5CF6",
+    success: "#86EFAC",
+    error: "#FCA5A5",
+    text: "#1F2937",
+    textSecondary: "#6B7280",
+    border: "#E5E7EB",
+    accent: "#818CF8",
+  },
+};
+
+export const darkTheme: DefaultTheme = {
+  ...baseTheme,
+  colors: {
+    background: "#111827",
+    surface: "#1F2937",
+    primary: "#818CF8",
+    secondary: "#A78BFA",
+    success: "#86EFAC",
+    error: "#FCA5A5",
+    text: "#F9FAFB",
+    textSecondary: "#9CA3AF",
+    border: "#374151",
+    accent: "#A78BFA",
   },
 };
