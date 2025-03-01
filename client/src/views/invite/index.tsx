@@ -25,9 +25,7 @@ const InvitePageView = () => {
     return () => clearTimeout(timer);
   }, [router, from, score]);
 
-  const inviterName = from ? decodeURIComponent(from as string) : "Someone";
-  const inviterScore = score ? `with a best score of ${score}` : "";
-  const description = `${inviterName} has challenged you to play Globetrotter ${inviterScore}. Can you beat their score?`;
+  const description = `Someone has challenged you to play Globetrotter. Can you beat their score?`;
 
   return (
     <>

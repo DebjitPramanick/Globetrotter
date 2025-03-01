@@ -49,7 +49,7 @@ const StartGame = ({ onStart, isLoading }: StartGameProps) => {
           disabled={isAnimating}
           loading={isLoading}
           loadingText="Starting Game..."
-          size="large"
+          size="medium"
           fullWidth
         >
           Start Adventure

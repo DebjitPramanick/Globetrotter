@@ -67,13 +67,6 @@ const GameCard = ({ game, onCreateNewGame, onBack }: GameCardProps) => {
   const [showConfetti, setShowConfetti] = useState(false);
   const [stats, setStats] = useState({ correct: 0, wrong: 0 });
 
-  useEffect(() => {
-    if (isDecreasing) {
-      const timer = setTimeout(() => setIsDecreasing(false), 300);
-      return () => clearTimeout(timer);
-    }
-  }, [isDecreasing]);
-
   const handleRevealClick = () => {
     setIsDecreasing(true);
     revealNextClue();
@@ -87,12 +80,24 @@ const GameCard = ({ game, onCreateNewGame, onBack }: GameCardProps) => {
     submitAnswer(selectedOption!);
   };
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   const handleNext = () => {
     setSelectedOption(null);
     setShowModal(false);
     setShowConfetti(false);
     moveToNextDestination();
+    scrollToTop();
   };
+
+  useEffect(() => {
+    if (isDecreasing) {
+      const timer = setTimeout(() => setIsDecreasing(false), 300);
+      return () => clearTimeout(timer);
+    }
+  }, [isDecreasing]);
 
   useEffect(() => {
     if (hasSubmittedAnswer) {
