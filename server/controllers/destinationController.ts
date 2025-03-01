@@ -80,6 +80,7 @@ export const bulkCreateDestinationsController = async (
     );
     res.status(201).json(createdDestinations);
   } catch (error: any) {
+    console.log(error);
     if (error.message.includes("Cities already exist")) {
       return res.status(409).json({ error: error.message });
     }
