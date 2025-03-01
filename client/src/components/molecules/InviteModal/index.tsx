@@ -1,5 +1,6 @@
 import { Copy, X } from "react-feather";
 import { IconButton } from "@/components/atoms";
+import { useState, useEffect } from "react";
 import {
   Overlay,
   Container,
@@ -7,7 +8,11 @@ import {
   Description,
   InputWrapper,
   Input,
+  AnimationWrapper,
+  AvatarImage,
 } from "./index.styled";
+
+const AVATAR_STYLES = ["adventurer", "avataaars", "bottts", "fun-emoji"];
 
 interface InviteModalProps {
   isOpen: boolean;
@@ -15,6 +20,19 @@ interface InviteModalProps {
 }
 
 const InviteModal = ({ isOpen, onClose }: InviteModalProps) => {
+  const [avatarUrl, setAvatarUrl] = useState("");
+
+  useEffect(() => {
+    if (isOpen) {
+      const randomStyle =
+        AVATAR_STYLES[Math.floor(Math.random() * AVATAR_STYLES.length)];
+      const seed = Math.random().toString(36).substring(7);
+      setAvatarUrl(
+        `https://api.dicebear.com/7.x/${randomStyle}/svg?seed=${seed}`
+      );
+    }
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   const getInviteUrl = () => {
@@ -36,6 +54,9 @@ const InviteModal = ({ isOpen, onClose }: InviteModalProps) => {
         >
           <X size={24} />
         </IconButton>
+        <AnimationWrapper>
+          <AvatarImage src={avatarUrl} alt="Random avatar" />
+        </AnimationWrapper>
         <Title>Challenge a Friend</Title>
         <Description>
           Share this link with a friend to challenge them!

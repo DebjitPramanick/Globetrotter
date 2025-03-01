@@ -90,3 +90,26 @@ export const Input = styled.input`
     border-color: ${({ theme }) => theme.colors.primary};
   }
 `;
+
+export const AnimationWrapper = styled.div`
+  margin: -${({ theme }) => theme.spacing.xl} 0 ${({ theme }) => theme.spacing.md};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  ${mediaQueryMobileOrTablet} {
+    margin: -${({ theme }) => theme.spacing.lg} 0 ${({ theme }) => theme.spacing.sm};
+  }
+`;
+
+export const AvatarImage = styled.img`
+  width: 180px;
+  height: 180px;
+  border-radius: ${({ theme }) => theme.borderRadius.large};
+  animation: ${fadeIn} 0.3s ease-out;
+
+  ${mediaQueryMobileOrTablet} {
+    width: 140px;
+    height: 140px;
+  }
+`;
