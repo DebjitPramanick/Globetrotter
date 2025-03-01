@@ -6,11 +6,8 @@ export const CreditWrapper = styled.div`
   gap: ${({ theme }) => theme.spacing.xs};
   color: ${({ theme }) => theme.colors.textSecondary};
   font-size: ${({ theme }) => theme.typography.fontSize.small};
-  position: absolute;
   bottom: ${({ theme }) => theme.spacing.lg};
-  left: 50%;
-  transform: translateX(-50%);
-  padding: ${({ theme }) => theme.spacing.sm};
+  /* padding: ${({ theme }) => theme.spacing.sm}; */
   background: ${({ theme }) => `${theme.colors.surface}80`};
   backdrop-filter: blur(8px);
   border-radius: ${({ theme }) => theme.borderRadius.medium};

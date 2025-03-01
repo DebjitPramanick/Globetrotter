@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import { Moon, Sun, Play, BarChart2, Share2, Copy } from "react-feather";
-import { Avatar } from "@/components/atoms";
+import { Moon, Sun, Play, BarChart2, Share2 } from "react-feather";
+import { Avatar, Credit } from "@/components/atoms";
 import {
   HeaderContainer,
   LeftSection,
@@ -12,18 +12,20 @@ import {
   ThemeToggleWrapper,
   IconWrapper,
   ChallengeButton,
-  InviteInput,
 } from "./index.styled";
 import { useRouter } from "next/router";
 import { useApp } from "@/context/AppContext";
 import { InviteModal } from "@/components/molecules";
+import { useTheme } from "styled-components";
 
 const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const { isDarkMode, toggleTheme } = useApp();
   const router = useRouter();
   const { user } = useApp();
+  const theme = useTheme();
+
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showInviteModal, setShowInviteModal] = useState(false);
 
   useEffect(() => {
@@ -53,7 +55,10 @@ const Header = () => {
   return (
     <HeaderContainer>
       <LeftSection>
-        <Title>Destination Quest</Title>
+        <div>
+          <Title>Globetrotter</Title>
+          <Credit style={{ marginTop: theme.spacing.sm }} />
+        </div>
       </LeftSection>
       <RightSection ref={menuRef}>
         <ChallengeButton onClick={handleChallengeClick}>

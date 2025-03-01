@@ -9,9 +9,9 @@ export const createGameStatsHelper = async (
 };
 
 export const getGameStatsHelper = async (
-  username: string
+  userId: string
 ): Promise<IGameStats | null> => {
-  return await GameStats.findOne({ username });
+  return await GameStats.findOne({ userId });
 };
 
 export const updateGameStatsHelper = async (

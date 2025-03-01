@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { GameContainer } from "./index.styled";
+import { BackgroundWrapper, GameContainer } from "./index.styled";
 import GameCard from "./components/GameCard";
 import StartGame from "./components/StartGame";
 import AppLayout from "@/layouts/AppLayout";
@@ -8,6 +8,7 @@ import { RequestError } from "@/types/error";
 import { useRequestState } from "@/hooks";
 import { useApp } from "@/context/AppContext";
 import { showErrorMessage } from "@/utils/notifications";
+import { FloatingElements } from "@/components/molecules";
 
 const GAME_CARD_DIMENSIONS = {
   width: "600px",
@@ -40,6 +41,10 @@ const Game = () => {
     }
   };
 
+  const handleBack = () => {
+    setIsGameStarted(false);
+  };
+
   let nodeToRender;
 
   if (startGameRequestStates.isFulfilled) {
@@ -47,22 +52,26 @@ const Game = () => {
       <GameCard
         game={startGameRequestStates.data}
         onCreateNewGame={handleGameStart}
+        onBack={handleBack}
       />
     );
   }
 
   return (
     <AppLayout>
-      <GameContainer>
-        {!isGameStarted ? (
-          <StartGame
-            onStart={handleGameStart}
-            isLoading={startGameRequestStates.isPending}
-          />
-        ) : (
-          nodeToRender
-        )}
-      </GameContainer>
+      <BackgroundWrapper>
+        <FloatingElements />
+        <GameContainer>
+          {!isGameStarted ? (
+            <StartGame
+              onStart={handleGameStart}
+              isLoading={startGameRequestStates.isPending}
+            />
+          ) : (
+            nodeToRender
+          )}
+        </GameContainer>
+      </BackgroundWrapper>
     </AppLayout>
   );
 };

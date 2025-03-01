@@ -56,5 +56,5 @@ export const InstructionItem = styled.li`
 export const ErrorMessage = styled.div`
   color: ${({ theme }) => theme.colors.error};
   margin-bottom: ${({ theme }) => theme.spacing.md};
-  font-size: ${({ theme }) => theme.typography.fontSize.sm};
+  font-size: ${({ theme }) => theme.typography.fontSize.body};
 `;

@@ -23,8 +23,8 @@ export const createGameStatsController = async (
 
 export const getGameStatsController = async (req: Request, res: Response) => {
   try {
-    const { username } = req.params;
-    const stats = await getGameStatsHelper(username);
+    const { userId } = req.params;
+    const stats = await getGameStatsHelper(userId);
     if (!stats) {
       return res
         .status(404)

@@ -8,7 +8,7 @@ import {
 const router = Router();
 
 router.post("/", createGameStatsController);
-router.get("/:username", getGameStatsController);
-router.patch("/:username", updateGameStatsController);
+router.get("/:userId", getGameStatsController);
+router.patch("/:userId", updateGameStatsController);
 
 export default router;

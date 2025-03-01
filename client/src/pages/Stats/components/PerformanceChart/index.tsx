@@ -17,19 +17,31 @@ interface ChartData {
   wrong: number;
 }
 
-const PerformanceChart = () => {
+interface PerformanceChartProps {
+  totalCorrectAnswersWithFirstClue: number;
+  totalWrongAnswersWithFirstClue: number;
+  totalCorrectAnswersWithMultipleClues: number;
+  totalWrongAnswersWithMultipleClues: number;
+}
+
+const PerformanceChart = ({
+  totalCorrectAnswersWithFirstClue,
+  totalWrongAnswersWithFirstClue,
+  totalCorrectAnswersWithMultipleClues,
+  totalWrongAnswersWithMultipleClues,
+}: PerformanceChartProps) => {
   const theme = useTheme();
 
   const data: ChartData[] = [
     {
-      name: "First Try",
-      correct: 8,
-      wrong: 3,
+      name: "First Clue",
+      correct: totalCorrectAnswersWithFirstClue,
+      wrong: totalWrongAnswersWithFirstClue,
     },
     {
-      name: "Multiple Tries",
-      correct: 5,
-      wrong: 4,
+      name: "Multiple Clues",
+      correct: totalCorrectAnswersWithMultipleClues,
+      wrong: totalWrongAnswersWithMultipleClues,
     },
   ];
 

@@ -27,39 +27,36 @@ const StartGame = ({ onStart, isLoading }: StartGameProps) => {
   };
 
   return (
-    <BackgroundWrapper>
-      <FloatingElements />
-      <ContentWrapper>
-        <StartGameContainer>
-          <Title>Ready to Begin?</Title>
-          <Instructions>
-            <InstructionItem>
-              🎯 Find hidden destinations using clues
-            </InstructionItem>
-            <InstructionItem>
-              🤔 Each clue reveals more information
-            </InstructionItem>
-            <InstructionItem>
-              ⭐ Score points by finding destinations quickly
-            </InstructionItem>
-            <InstructionItem>
-              🌟 Compete with others on the leaderboard
-            </InstructionItem>
-          </Instructions>
-          <Button
-            onClick={handleClick}
-            className={isAnimating ? "animate" : ""}
-            disabled={isAnimating}
-            loading={isLoading}
-            loadingText="Starting Game..."
-            size="large"
-            fullWidth
-          >
-            Start Adventure
-          </Button>
-        </StartGameContainer>
-      </ContentWrapper>
-    </BackgroundWrapper>
+    <ContentWrapper>
+      <StartGameContainer>
+        <Title>Ready to Begin?</Title>
+        <Instructions>
+          <InstructionItem>
+            🎯 Find hidden destinations using clues
+          </InstructionItem>
+          <InstructionItem>
+            🤔 Each clue reveals more information
+          </InstructionItem>
+          <InstructionItem>
+            ⭐ Score points by finding destinations quickly
+          </InstructionItem>
+          <InstructionItem>
+            🌟 Compete with others on the leaderboard
+          </InstructionItem>
+        </Instructions>
+        <Button
+          onClick={handleClick}
+          className={isAnimating ? "animate" : ""}
+          disabled={isAnimating}
+          loading={isLoading}
+          loadingText="Starting Game..."
+          size="large"
+          fullWidth
+        >
+          Start Adventure
+        </Button>
+      </StartGameContainer>
+    </ContentWrapper>
   );
 };
 

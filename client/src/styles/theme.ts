@@ -54,6 +54,11 @@ declare module "styled-components" {
       lg: string;
       xl: string;
     };
+    shadows: {
+      small: string;
+      medium: string;
+      large: string;
+    };
   }
 }
 
@@ -91,6 +96,11 @@ const baseTheme = {
     md: "768px",
     lg: "992px",
     xl: "1200px",
+  },
+  shadows: {
+    small: "0 2px 8px rgba(0, 0, 0, 0.1)",
+    medium: "0 4px 16px rgba(0, 0, 0, 0.1)",
+    large: "0 8px 32px rgba(0, 0, 0, 0.1)",
   },
 };
 
@@ -135,6 +145,11 @@ export const darkTheme: DefaultTheme = {
       base: "#1F2937",
       highlight: "#374151",
     },
+  },
+  shadows: {
+    small: "0 2px 8px rgba(0, 0, 0, 0.3)",
+    medium: "0 4px 16px rgba(0, 0, 0, 0.3)",
+    large: "0 8px 32px rgba(0, 0, 0, 0.3)",
   },
 };
 

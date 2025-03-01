@@ -15,7 +15,6 @@ export const Container = styled.div`
   display: flex;
   gap: ${({ theme }) => theme.spacing.lg};
   margin-bottom: ${({ theme }) => theme.spacing.xl};
-  overflow-x: auto;
   padding: ${({ theme }) => theme.spacing.sm};
 
   &::-webkit-scrollbar {

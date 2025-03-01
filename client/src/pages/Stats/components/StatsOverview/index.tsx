@@ -12,14 +12,14 @@ interface StatsOverviewProps {
   totalCorrect: number;
   totalWrong: number;
   bestScore: number;
-  correctFirstTry: number;
+  totalCorrectAnswersWithSingleClue: number;
 }
 
 const StatsOverview = ({
   totalCorrect,
   totalWrong,
   bestScore,
-  correctFirstTry,
+  totalCorrectAnswersWithSingleClue,
 }: StatsOverviewProps) => {
   const accuracy = useMemo(() => {
     const total = totalCorrect + totalWrong;
@@ -46,8 +46,8 @@ const StatsOverview = ({
         <StatIcon $type="primary">
           <Eye size={24} />
         </StatIcon>
-        <StatValue>{correctFirstTry}</StatValue>
-        <StatLabel>First Try Correct</StatLabel>
+        <StatValue>{totalCorrectAnswersWithSingleClue}</StatValue>
+        <StatLabel>Correct with Single Clue</StatLabel>
       </StatCard>
       <StatCard>
         <StatIcon $type="secondary">

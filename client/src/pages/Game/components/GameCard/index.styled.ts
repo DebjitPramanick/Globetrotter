@@ -24,6 +24,15 @@ const float = keyframes`
   }
 `;
 
+// export const BackgroundWrapper = styled.div`
+//   position: relative;
+//   width: 100%;
+//   height: 100%;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+// `;
+
 export const Card = styled.div`
   display: flex;
   flex-direction: column;
@@ -39,6 +48,7 @@ export const Card = styled.div`
   margin: 0 auto;
   position: relative;
   overflow: hidden;
+  z-index: 1;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     height: calc(100vh - 150px);
@@ -369,4 +379,25 @@ export const Score = styled.div`
   border-radius: ${({ theme }) => theme.borderRadius.small};
   font-size: ${({ theme }) => theme.typography.fontSize.small};
   font-weight: ${({ theme }) => theme.typography.fontWeight.medium};
+`;
+
+export const BackButton = styled.button`
+  top: ${({ theme }) => theme.spacing.md};
+  left: ${({ theme }) => theme.spacing.md};
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.xs};
+  background: none;
+  border: none;
+  color: ${({ theme }) => theme.colors.textSecondary};
+  font-size: ${({ theme }) => theme.typography.fontSize.body};
+  cursor: pointer;
+  padding: ${({ theme }) => theme.spacing.sm};
+  border-radius: ${({ theme }) => theme.borderRadius.medium};
+  transition: all 0.2s ease;
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.text};
+    background: ${({ theme }) => theme.colors.surfaceLight};
+  }
 `;

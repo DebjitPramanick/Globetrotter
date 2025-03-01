@@ -1,8 +1,8 @@
 import { CreditWrapper, Link } from "./index.styled";
 
-const Credit = () => {
+const Credit = ({ ...rest }) => {
   return (
-    <CreditWrapper>
+    <CreditWrapper {...rest}>
       Created by{" "}
       <Link
         href="https://my-portfolio-teal-zeta.vercel.app/"

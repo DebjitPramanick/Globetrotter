@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { Button, Error, ShimmerLoader, Spinner } from "@/components/atoms";
-import { Eye } from "react-feather";
+import { Eye, ArrowLeft } from "react-feather";
 import Confetti from "react-confetti";
-
+import { FloatingElements } from "@/components/molecules";
 import {
   Card,
   CluesSection,
@@ -25,6 +25,7 @@ import {
   StatNumber,
   StatText,
   SpinnerContainer,
+  BackButton,
 } from "./index.styled";
 import { useGame } from "@/hooks";
 import { Game } from "@/types";
@@ -33,6 +34,7 @@ import { Modal } from "@/components/molecules";
 interface GameCardProps {
   game: Game;
   onCreateNewGame: () => void;
+  onBack: () => void;
 }
 
 const GAME_CARD_DIMENSIONS = {
@@ -40,7 +42,7 @@ const GAME_CARD_DIMENSIONS = {
   height: "400px",
 };
 
-const GameCard = ({ game, onCreateNewGame }: GameCardProps) => {
+const GameCard = ({ game, onCreateNewGame, onBack }: GameCardProps) => {
   const {
     destinationsRequestStates,
     fetchNextClueRequestStates,
@@ -121,17 +123,29 @@ const GameCard = ({ game, onCreateNewGame }: GameCardProps) => {
     if (currentClueIdx === totalClues - 1) {
       revealBtnNode = null;
     } else {
-      revealBtnNode = (
-        <RevealButton onClick={handleRevealClick}>
-          <Eye size={16} />
-          Reveal Next Clue (-{scoreDeduction} pts)
-        </RevealButton>
-      );
+      if (fetchNextClueRequestStates.isPending) {
+        revealBtnNode = (
+          <RevealButton onClick={handleRevealClick}>
+            <Spinner size={12} color="currentColor" />
+          </RevealButton>
+        );
+      } else {
+        revealBtnNode = (
+          <RevealButton onClick={handleRevealClick}>
+            <Eye size={16} />
+            Reveal Next Clue (-{scoreDeduction} pts)
+          </RevealButton>
+        );
+      }
     }
     nodeToRender = (
       <>
         <ScoresContainer>
           <StatsGroup>
+            <BackButton onClick={onBack}>
+              <ArrowLeft size={18} />
+              Exit Game
+            </BackButton>
             <StatBox>
               <StatNumber $type="correct">{stats.correct}</StatNumber>
               <StatText>Correct</StatText>
@@ -213,12 +227,12 @@ const GameCard = ({ game, onCreateNewGame }: GameCardProps) => {
           onConfettiComplete={() => setShowConfetti(false)}
         />
       )}
+
       <Card>{nodeToRender}</Card>
 
       <Modal
         isOpen={showModal}
         onClose={() => {}}
-        // title={isSelectedAnswerCorrect ? "Correct!" : "Wrong Answer"}
         description={
           isSelectedAnswerCorrect
             ? "Great job! You've found the right destination."

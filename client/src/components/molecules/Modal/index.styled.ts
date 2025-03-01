@@ -79,6 +79,17 @@ const popIn = keyframes`
   }
 `;
 
+const fadeSlideUp = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
 export const ModalOverlay = styled.div`
   position: fixed;
   top: 0;
@@ -257,7 +268,7 @@ export const FunFactContainer = styled.div`
     color: ${({ theme }) => theme.colors.text};
     font-size: ${({ theme }) => theme.typography.fontSize.h3};
     line-height: 1.5;
-    animation: ${revealText} 0.8s ease-out forwards;
+    animation: ${fadeSlideUp} 0.5s ease-out forwards;
     animation-delay: 0.3s;
     opacity: 0;
   }

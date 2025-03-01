@@ -1,5 +1,11 @@
 import styled from "styled-components";
 
+export const BackgroundWrapper = styled.div`
+  position: relative;
+  height: calc(100vh - 126px);
+  overflow: hidden;
+`;
+
 export const GameContainer = styled.div`
   padding: ${({ theme }) => theme.spacing.lg};
   max-width: 1200px;

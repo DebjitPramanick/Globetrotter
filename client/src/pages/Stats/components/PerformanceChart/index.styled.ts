@@ -11,7 +11,6 @@ export const Container = styled.div`
   border-radius: ${({ theme }) => theme.borderRadius.large};
   padding: ${({ theme }) => theme.spacing.xl};
   border: 1px solid ${({ theme }) => theme.colors.border};
-  height: 100%;
 
   &:hover {
     box-shadow: 0 8px 32px ${({ theme }) => `${theme.colors.primary}10`};

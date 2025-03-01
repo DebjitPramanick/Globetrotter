@@ -37,8 +37,14 @@ export interface Stats {
   totalScore: number;
   averageScore: number;
   bestScore: number;
-  totalTimePlayed: number; // in seconds
+  totalTimePlayed: number;
   destinationsFound: number;
+  totalCorrectAnswers: number;
+  totalWrongAnswers: number;
+  nCorrectAnswersOnFirstClue: number;
+  nWrongAnswersOnFirstClue: number;
+  nCorrectAnswersOnMultipleClues: number;
+  nWrongAnswersOnMultipleClues: number;
 }
 
 export interface ApiResponse<T> {
