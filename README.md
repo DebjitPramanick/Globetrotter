@@ -2,7 +2,7 @@
 
 A geography quiz game that challenges players to guess cities around the world through progressive clues. Test your geography knowledge while competing with friends!
 
-[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen.svg)](https://globetrotter.vercel.app)
+[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen.svg)](https://globetrotter-one.vercel.app/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-4.9-blue.svg)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-18.2-blue.svg)](https://reactjs.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-18.x-green.svg)](https://nodejs.org/)
