@@ -5,7 +5,7 @@ import Head from "next/head";
 const OG_IMAGE_URL =
   "https://og.railway.app/api/image?fileType=png&layoutName=Simple&theme=dark&text=Join%20Globetrotter!&subtitle=Test%20your%20geography%20knowledge%20in%20this%20exciting%20game!&left=%230037ff&right=%23ff0909";
 
-const InvitePage = () => {
+const InvitePageView = () => {
   const router = useRouter();
 
   useEffect(() => {
@@ -62,4 +62,4 @@ const InvitePage = () => {
   );
 };
 
-export default InvitePage;
+export default InvitePageView;

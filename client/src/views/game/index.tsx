@@ -16,7 +16,7 @@ const GAME_CARD_DIMENSIONS = {
   height: "400px",
 };
 
-const Game = () => {
+const GamePageView = () => {
   const { user, createAnonymousUser } = useApp();
   const [isGameStarted, setIsGameStarted] = useState(false);
   const [startGameRequestStates, startGameRequestStatesHandler] =
@@ -78,4 +78,4 @@ const Game = () => {
   );
 };
 
-export default Game;
+export default GamePageView;

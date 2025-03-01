@@ -18,7 +18,7 @@ import { showErrorToast } from "@/utils/notifications";
 import { extractErrorMessage } from "@/utils/error";
 import { useTheme } from "styled-components";
 
-const Welcome = () => {
+const WelcomePageView = () => {
   const router = useRouter();
   const { setUser } = useApp();
   const theme = useTheme();
@@ -78,4 +78,4 @@ const Welcome = () => {
   );
 };
 
-export default Welcome;
+export default WelcomePageView;

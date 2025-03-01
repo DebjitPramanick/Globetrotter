@@ -10,7 +10,7 @@ import { useRequestState } from "@/hooks";
 import { RequestError } from "@/types/error";
 import { ShimmerLoader } from "@/components/atoms";
 
-const Stats = () => {
+const StatsPageView = () => {
   const { user } = useApp();
   const [stats, setStats] = useState<StatsType | null>(null);
   const [statsRequestStates, statsRequestStatesHandler] = useRequestState();
@@ -71,4 +71,4 @@ const Stats = () => {
   );
 };
 
-export default Stats;
+export default StatsPageView;
