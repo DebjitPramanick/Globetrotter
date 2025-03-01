@@ -110,7 +110,9 @@ const Modal = ({
           </FunFactContainer>
           <ButtonGroup>
             <ActionButton onClick={onPlayAgain}>Play Again</ActionButton>
-            <ActionButton onClick={onNext}>Next</ActionButton>
+            {submissionResult.isGameCompleted ? null : (
+              <ActionButton onClick={onNext}>Next</ActionButton>
+            )}
           </ButtonGroup>
         </ModalContent>
       </ModalContainer>
