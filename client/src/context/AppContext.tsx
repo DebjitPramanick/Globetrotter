@@ -18,11 +18,9 @@ import "react-toastify/dist/ReactToastify.css";
 interface AppContextType {
   isDarkMode: boolean;
   toggleTheme: () => void;
-  username: string;
-  setUsername: (username: string) => void;
-  clearUsername: () => void;
   user: User;
   setUser: (user: User) => void;
+  createAnonymousUser: () => Promise<User | null>;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -35,7 +33,6 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
   const router = useRouter();
 
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [username, setUsernameState] = useState<string>("");
   const [user, setUser] = useState<User>({
     username: "",
     _id: "",
@@ -45,6 +42,10 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
 
   const [fetchUserRequestStates, fetchUserRequestStatesHandler] =
     useRequestState<any>();
+  const [
+    createAnonymousUserRequestStates,
+    createAnonymousUserRequestStatesHandler,
+  ] = useRequestState<any>();
 
   const fetchUser = async () => {
     try {
@@ -66,19 +67,29 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
     localStorage.setItem("theme", !isDarkMode ? "dark" : "light");
   };
 
-  const setUsername = (newUsername: string) => {
-    setUsernameState(newUsername);
-    localStorage.setItem("username", newUsername);
-  };
-
   const handleSetUser = (newUser: User) => {
     setUser(newUser);
     localStorage.setItem("userId", newUser._id);
   };
 
-  const clearUsername = () => {
-    setUsernameState("");
-    localStorage.removeItem("username");
+  const generateUniqueAnonymousUsername = () => {
+    const timestamp = Date.now().toString(36); // Convert timestamp to base36
+    const random = Math.random().toString(36).substring(2, 8); // Get 6 random chars
+    return `anonymous-${timestamp}-${random}`;
+  };
+
+  const createAnonymousUser = async () => {
+    try {
+      const uniqueUsername = generateUniqueAnonymousUsername();
+      const response = await userApi.auth({
+        username: uniqueUsername,
+      });
+      setUser(response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error creating anonymous user:", error);
+      return null;
+    }
   };
 
   useEffect(() => {
@@ -89,14 +100,14 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
     }
   }, []);
 
-  useEffect(() => {
-    // Load saved username
-    const savedUsername = localStorage.getItem("username");
-    if (savedUsername) {
-      setUsernameState(savedUsername);
-      router.push("/game");
-    }
-  }, []);
+  // useEffect(() => {
+  //   // Load saved username
+  //   const savedUsername = localStorage.getItem("username");
+  //   if (savedUsername) {
+  //     setUsernameState(savedUsername);
+  //     router.push("/game");
+  //   }
+  // }, []);
 
   useEffect(() => {
     fetchUser();
@@ -106,12 +117,10 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
     isDarkMode,
     toggleTheme,
 
-    username,
-    setUsername,
-    clearUsername,
-
     user,
     setUser: handleSetUser,
+
+    createAnonymousUser,
   };
 
   return (

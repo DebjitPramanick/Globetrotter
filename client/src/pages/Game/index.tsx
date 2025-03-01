@@ -7,7 +7,6 @@ import { gameApi } from "@/api";
 import { RequestError } from "@/types/error";
 import { useRequestState } from "@/hooks";
 import { useApp } from "@/context/AppContext";
-import { ShimmerLoader } from "@/components/atoms";
 import { showErrorMessage } from "@/utils/notifications";
 
 const GAME_CARD_DIMENSIONS = {
@@ -16,13 +15,18 @@ const GAME_CARD_DIMENSIONS = {
 };
 
 const Game = () => {
-  const { user } = useApp();
+  const { user, createAnonymousUser } = useApp();
   const [isGameStarted, setIsGameStarted] = useState(false);
   const [startGameRequestStates, startGameRequestStatesHandler] =
     useRequestState();
 
   const handleGameStart = async () => {
-    const payload = { userId: user._id };
+    let userId = user._id;
+    if (!userId) {
+      const anonymousUser = await createAnonymousUser();
+      userId = anonymousUser?._id || "";
+    }
+    const payload = { userId };
     try {
       startGameRequestStatesHandler.pending();
       const response = await gameApi.startGame({

@@ -16,7 +16,6 @@ import {
 } from "./index.styled";
 import { useRouter } from "next/router";
 import { useApp } from "@/context/AppContext";
-import { IconButton } from "@/components/atoms";
 import { InviteModal } from "@/components/molecules";
 
 const Header = () => {
@@ -24,7 +23,7 @@ const Header = () => {
   const menuRef = useRef<HTMLDivElement>(null);
   const { isDarkMode, toggleTheme } = useApp();
   const router = useRouter();
-  const { username } = useApp();
+  const { user } = useApp();
   const [showInviteModal, setShowInviteModal] = useState(false);
 
   useEffect(() => {
@@ -43,14 +42,12 @@ const Header = () => {
     setIsMenuOpen(false);
   };
 
-  const getInviteUrl = () => {
-    const baseUrl = window.location.origin;
-    return `${baseUrl}/play/invite`;
-  };
-
-  const handleCopyInvite = async () => {
-    await navigator.clipboard.writeText(getInviteUrl());
-    // TODO: Show toast notification
+  const handleChallengeClick = () => {
+    if (!user.username || user.username.toLowerCase().startsWith("anonymous")) {
+      router.push("/");
+      return;
+    }
+    setShowInviteModal(true);
   };
 
   return (
@@ -59,12 +56,12 @@ const Header = () => {
         <Title>Destination Quest</Title>
       </LeftSection>
       <RightSection ref={menuRef}>
-        <ChallengeButton onClick={() => setShowInviteModal(true)}>
+        <ChallengeButton onClick={handleChallengeClick}>
           <Share2 />
           Challenge Friend
         </ChallengeButton>
         <Avatar
-          name={username || ""}
+          name={user.username || "A"}
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         />
         <AvatarMenu isOpen={isMenuOpen}>

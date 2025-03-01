@@ -49,7 +49,7 @@ interface GameState {
 
 export const useGame = ({ game }: { game: Game }): UseGameReturn => {
   const router = useRouter();
-  const { username } = useApp();
+  const { user } = useApp();
 
   const [destinationsRequestStates, destinationsRequestStatesHandler] =
     useRequestState<Destination[]>();
@@ -161,12 +161,6 @@ export const useGame = ({ game }: { game: Game }): UseGameReturn => {
       }
     });
   };
-
-  useEffect(() => {
-    if (!username) {
-      router.push("/");
-    }
-  }, [username]);
 
   useEffect(() => {
     fetchDestinations();

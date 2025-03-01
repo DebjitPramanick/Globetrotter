@@ -17,7 +17,7 @@ import { useApp } from "@/context/AppContext";
 
 const Welcome = () => {
   const router = useRouter();
-  const { setUsername: setUsernameInContext, setUser } = useApp();
+  const { setUser } = useApp();
 
   const [username, setUsername] = useState("");
 
@@ -33,7 +33,6 @@ const Welcome = () => {
         });
         submitRequestStateHandler.fulfilled(response.data);
         setUser(response.data);
-        setUsernameInContext(response.data.username);
         router.push("/game");
       } catch (error) {
         submitRequestStateHandler.rejected(new RequestError(error));
