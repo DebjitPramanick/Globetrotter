@@ -8,20 +8,23 @@ import {
   InstructionItem,
   BackgroundWrapper,
   ContentWrapper,
+  ErrorMessage,
 } from "./index.styled";
 
 interface StartGameProps {
   onStart: () => void;
+  isLoading: boolean;
+  error?: string;
 }
 
-const StartGame = ({ onStart }: StartGameProps) => {
+const StartGame = ({ onStart, isLoading, error }: StartGameProps) => {
   const [isAnimating, setIsAnimating] = useState(false);
 
   const handleClick = () => {
     setIsAnimating(true);
-    setTimeout(() => {
-      onStart();
-    }, 800);
+    onStart();
+    // Reset animation after completion
+    setTimeout(() => setIsAnimating(false), 800);
   };
 
   return (
@@ -44,14 +47,15 @@ const StartGame = ({ onStart }: StartGameProps) => {
               🌟 Compete with others on the leaderboard
             </InstructionItem>
           </Instructions>
+          {error && <ErrorMessage>{error}</ErrorMessage>}
           <Button
             onClick={handleClick}
             className={isAnimating ? "animate" : ""}
-            disabled={isAnimating}
+            disabled={isLoading || isAnimating}
             size="large"
             fullWidth
           >
-            Start Adventure
+            {isLoading ? "Starting Game..." : "Start Adventure"}
           </Button>
         </StartGameContainer>
       </ContentWrapper>

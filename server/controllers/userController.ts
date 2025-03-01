@@ -48,28 +48,22 @@ export const createOrGetUserController = async (
 
     if (!username || typeof username !== "string") {
       return res.status(400).json({
-        success: false,
         message: "Username is required",
       });
     }
 
     if (username.length < 3 || username.length > 15) {
       return res.status(400).json({
-        success: false,
         message: "Username must be between 3 and 15 characters",
       });
     }
 
     const user = await createOrGetUser(username.trim());
 
-    return res.status(200).json({
-      success: true,
-      data: user,
-    });
+    return res.status(200).json(user);
   } catch (error) {
     console.error("Error in createOrGetUserController:", error);
     return res.status(500).json({
-      success: false,
       message: "Internal server error",
     });
   }

@@ -25,29 +25,25 @@ import {
   StatNumber,
   StatText,
 } from "./index.styled";
-import { Destination } from "@/constants";
+import { useGame } from "@/hooks";
+import { Game } from "@/types";
 
 interface GameCardProps {
-  destination: Destination;
-  clues: string[];
-  options: string[];
-  currentClue: number;
-  currentScore: number;
-  totalScore: number;
-  onSubmit: (answer: string) => void;
-  onRevealNextClue: () => void;
+  game: Game;
 }
 
-const GameCard = ({
-  destination,
-  clues,
-  options,
-  currentClue,
-  currentScore,
-  totalScore,
-  onSubmit,
-  onRevealNextClue,
-}: GameCardProps) => {
+const GameCard = ({ game }: GameCardProps) => {
+  const {
+    currentDestination,
+    currentClues,
+    currentClueIdx,
+    totalClues,
+    currentScore,
+    totalScore,
+    submitAnswer,
+    revealNextClue,
+  } = useGame({ game });
+
   const [isDecreasing, setIsDecreasing] = useState(false);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
@@ -64,7 +60,7 @@ const GameCard = ({
 
   const handleRevealClick = () => {
     setIsDecreasing(true);
-    onRevealNextClue();
+    revealNextClue();
   };
 
   const handleOptionClick = (option: string) => {
@@ -72,19 +68,20 @@ const GameCard = ({
   };
 
   const handleConfirm = () => {
-    if (selectedOption) {
-      const correct =
-        selectedOption.toLowerCase() === destination.name.toLowerCase();
-      setIsCorrect(correct);
-      setShowModal(true);
-      setStats((prev) => ({
-        correct: prev.correct + (correct ? 1 : 0),
-        wrong: prev.wrong + (correct ? 0 : 1),
-      }));
-      if (correct) {
-        setShowConfetti(true);
-      }
-    }
+    submitAnswer(selectedOption!);
+    // if (selectedOption) {
+    //   const correct =
+    //     selectedOption.toLowerCase() === currentDestination.name.toLowerCase();
+    //   setIsCorrect(correct);
+    //   setShowModal(true);
+    //   setStats((prev) => ({
+    //     correct: prev.correct + (correct ? 1 : 0),
+    //     wrong: prev.wrong + (correct ? 0 : 1),
+    //   }));
+    //   if (correct) {
+    //     setShowConfetti(true);
+    //   }
+    // }
   };
 
   const handlePlayAgain = () => {
@@ -94,7 +91,7 @@ const GameCard = ({
   };
 
   const handleNext = () => {
-    onSubmit(selectedOption!);
+    submitAnswer(selectedOption!);
     setSelectedOption(null);
     setShowModal(false);
     setShowConfetti(false);
@@ -141,16 +138,16 @@ const GameCard = ({
               </ScoreDisplay>
               <RevealButton
                 onClick={handleRevealClick}
-                disabled={currentClue === clues.length - 1}
+                disabled={currentClueIdx === totalClues - 1}
               >
                 <Eye size={16} />
                 Reveal Next Clue (-25 pts)
               </RevealButton>
             </CluesHeader>
             <CluesContainer>
-              {clues.map((clue, index) => (
-                <ClueBox key={index} isRevealed={index <= currentClue}>
-                  {index <= currentClue && <ClueText>{clue}</ClueText>}
+              {currentClues.map((clue, index) => (
+                <ClueBox key={index} isRevealed={index <= currentClueIdx}>
+                  {index <= currentClueIdx && <ClueText>{clue}</ClueText>}
                 </ClueBox>
               ))}
             </CluesContainer>
@@ -158,7 +155,7 @@ const GameCard = ({
 
           <AnswerSection>
             <OptionsContainer>
-              {options.map((option) => (
+              {currentDestination.options.map((option) => (
                 <OptionButton
                   key={option}
                   onClick={() => handleOptionClick(option)}

@@ -52,3 +52,9 @@ export const InstructionItem = styled.li`
   text-align: center;
   width: 100%;
 `;
+
+export const ErrorMessage = styled.div`
+  color: ${({ theme }) => theme.colors.error};
+  margin-bottom: ${({ theme }) => theme.spacing.md};
+  font-size: ${({ theme }) => theme.typography.fontSize.sm};
+`;

@@ -118,7 +118,7 @@ export const getNextClueController = async (req: Request, res: Response) => {
     if (!clue) {
       return res.status(404).json({ error: ERROR_MESSAGES.GAME.NO_MORE_CLUES });
     }
-    res.status(200).json({ clue });
+    res.status(200).json(clue);
   } catch (error: any) {
     if (error.message === ERROR_MESSAGES.SERVER.INVALID_ID) {
       return res.status(400).json({ error: error.message });

@@ -2,23 +2,34 @@ import { Destination, Coordinates, ApiResponse } from "../types";
 import { axiosInstance } from "./axios";
 
 export const destinationApi = {
-  getAllDestinations: async (): Promise<ApiResponse<Destination[]>> => {
-    const response = await axiosInstance.get("/destinations");
-    return response.data;
+  getListOfDestinations: async ({
+    options,
+  }: {
+    options?: any;
+  } = {}): Promise<ApiResponse<Destination[]>> => {
+    return await axiosInstance.get("/destinations/list", options);
   },
 
-  getDestination: async (id: string): Promise<ApiResponse<Destination>> => {
-    const response = await axiosInstance.get(`/destinations/${id}`);
-    return response.data;
+  getDestinationOptions: async ({
+    id,
+    options,
+  }: {
+    id: string;
+    options?: any;
+  }): Promise<ApiResponse<Destination[]>> => {
+    return await axiosInstance.get(`/destinations/${id}/options`, options);
   },
 
-  checkDestination: async (
-    coordinates: Coordinates & { destinationId: string }
-  ): Promise<ApiResponse<{ found: boolean; distance: number }>> => {
-    const response = await axiosInstance.post(
-      "/destinations/check",
-      coordinates
+  getNextClue: async ({
+    payload,
+    options,
+  }: {
+    payload: { id: string; currentClueIndex: number };
+    options?: any;
+  }): Promise<ApiResponse<{ clue: string; totalClues: number }>> => {
+    return await axiosInstance.get(
+      `/destinations/${payload.id}/clue?currentClueIndex=${payload.currentClueIndex}`,
+      options
     );
-    return response.data;
   },
 };

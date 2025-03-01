@@ -12,7 +12,7 @@ import { useRouter } from "next/router";
 interface AppContextType {
   isDarkMode: boolean;
   toggleTheme: () => void;
-  username: string | null;
+  username: string;
   setUsername: (username: string) => void;
   clearUsername: () => void;
 }
@@ -27,7 +27,7 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
   const router = useRouter();
 
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [username, setUsernameState] = useState<string | null>(null);
+  const [username, setUsernameState] = useState<string>("");
 
   useEffect(() => {
     // Load saved theme preference
@@ -57,7 +57,7 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
   };
 
   const clearUsername = () => {
-    setUsernameState(null);
+    setUsernameState("");
     localStorage.removeItem("username");
   };
 

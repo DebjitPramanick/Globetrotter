@@ -14,18 +14,18 @@ export interface Destination {
   longitude: number;
   radius: number; // meters within which the destination is considered "found"
   points: number;
+  clues: string[];
+  totalClues: number;
   image?: string;
 }
 
 export interface Game {
   id: string;
-  userId: string;
-  status: "active" | "completed";
-  score: number;
-  startTime: string;
-  endTime?: string;
-  timeSpent?: number; // in seconds
-  destinationsFound: string[]; // array of destination IDs
+  username: string;
+  correctAnswers: number;
+  wrongAnswers: number;
+  destinationIds: string[];
+  clueIndices: { [key: string]: number };
 }
 
 export interface Stats {
@@ -59,7 +59,6 @@ export interface Coordinates {
 }
 
 export interface ApiResponse<T> {
-  success: boolean;
   data: T;
   message?: string;
 }

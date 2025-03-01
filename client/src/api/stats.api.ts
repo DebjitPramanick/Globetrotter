@@ -3,17 +3,14 @@ import { axiosInstance } from "./axios";
 
 export const statsApi = {
   getUserStats: async (): Promise<ApiResponse<Stats>> => {
-    const response = await axiosInstance.get("/stats/user");
-    return response.data;
+    return await axiosInstance.get("/stats/user");
   },
 
   getLeaderboard: async (): Promise<ApiResponse<LeaderboardEntry[]>> => {
-    const response = await axiosInstance.get("/stats/leaderboard");
-    return response.data;
+    return await axiosInstance.get("/stats/leaderboard");
   },
 
   getGameHistory: async (): Promise<ApiResponse<GameHistory[]>> => {
-    const response = await axiosInstance.get("/stats/history");
-    return response.data;
+    return await axiosInstance.get("/stats/history");
   },
 };

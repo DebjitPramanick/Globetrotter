@@ -41,19 +41,39 @@ export const getDestinationListHelper = async () => {
       {
         $project: {
           _id: 1,
-          city: 1,
           firstClue: { $arrayElemAt: ["$clues", 0] },
           totalClues: { $size: "$clues" },
         },
       },
     ]);
 
-    return destinations.map((dest) => ({
-      id: dest._id,
-      city: dest.city,
-      firstClue: dest.firstClue,
-      totalClues: dest.totalClues,
-    }));
+    // Get all destination names for options
+    const allDestinationNames = destinations.map((dest) => dest.name);
+
+    return Promise.all(
+      destinations.map(async (dest) => {
+        // Get 3 random destination names excluding current destination
+        const otherDestinations = allDestinationNames.filter(
+          (name) => name !== dest.name
+        );
+        const randomOptions = otherDestinations
+          .sort(() => Math.random() - 0.5)
+          .slice(0, 3);
+
+        // Add correct answer at random position
+        const position = Math.floor(Math.random() * 4);
+        const options = [...randomOptions];
+        options.splice(position, 0, dest.name);
+
+        return {
+          id: dest._id,
+          name: dest.name,
+          clues: [dest.firstClue],
+          totalClues: dest.totalClues,
+          options,
+        };
+      })
+    );
   } catch (error) {
     throw error;
   }
@@ -120,7 +140,7 @@ export const getDestinationOptionsHelper = async (destinationId: string) => {
 export const getNextClueHelper = async (
   destinationId: string,
   currentClueIndex: number
-): Promise<string | null> => {
+): Promise<{ clue: string; totalClues: number } | null> => {
   if (!mongoose.Types.ObjectId.isValid(destinationId)) {
     throw new Error(ERROR_MESSAGES.SERVER.INVALID_ID);
   }
@@ -134,5 +154,8 @@ export const getNextClueHelper = async (
     return null;
   }
 
-  return destination.clues[currentClueIndex];
+  return {
+    clue: destination.clues[currentClueIndex],
+    totalClues: destination.clues.length,
+  };
 };
