@@ -14,6 +14,7 @@ const slideInRight = keyframes`
 export const BackgroundWrapper = styled.div`
   position: relative;
   height: calc(100vh - 126px);
+  height: calc(100dvh - 126px);
   overflow: hidden;
 `;
 
@@ -21,6 +22,7 @@ export const ContentWrapper = styled.div`
   position: relative;
   z-index: 1;
   height: calc(100vh - 126px);
+  height: calc(100dvh - 126px);
   display: flex;
   justify-content: center;
   align-items: center;

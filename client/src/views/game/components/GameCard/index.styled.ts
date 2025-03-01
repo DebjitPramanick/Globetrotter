@@ -37,6 +37,7 @@ export const Card = styled.div`
   animation: ${fadeIn} 0.5s ease-out;
   max-width: 1200px;
   height: calc(100vh - 126px);
+  height: calc(100dvh - 126px);
   margin: 0 auto;
   position: relative;
   overflow: hidden;

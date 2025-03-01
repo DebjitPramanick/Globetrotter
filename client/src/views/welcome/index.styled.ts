@@ -40,6 +40,7 @@ export const WelcomeContainer = styled.div`
   align-items: center;
   justify-content: center;
   min-height: 100vh;
+  height: 100dvh;
   padding: 0px ${({ theme }) => theme.spacing.lg};
   position: relative;
   background: ${({ theme }) => theme.colors.background};
