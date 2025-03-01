@@ -34,8 +34,7 @@ export const Card = styled.div`
   box-shadow: 0 8px 32px 0 ${({ theme }) => `${theme.colors.primary}10`};
   border: 1px solid ${({ theme }) => `${theme.colors.border}`};
   animation: ${fadeIn} 0.5s ease-out;
-  max-width: 1000px;
-  width: 100%;
+  width: 900px;
   height: calc(100vh - 200px);
   margin: 0 auto;
   position: relative;
@@ -58,6 +57,13 @@ export const Card = styled.div`
       ${({ theme }) => theme.colors.secondary}
     );
   }
+`;
+
+export const SpinnerContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 `;
 
 export const CluesSection = styled.div`
@@ -198,8 +204,8 @@ export const ClueText = styled.p`
     font-size: 4em;
     color: ${({ theme }) => `${theme.colors.primary}20`};
     position: absolute;
-    top: -0.3em;
-    left: -0.2em;
+    top: -50px;
+    left: -20px;
   }
 
   &::after {
@@ -207,8 +213,8 @@ export const ClueText = styled.p`
     font-size: 4em;
     color: ${({ theme }) => `${theme.colors.primary}20`};
     position: absolute;
-    bottom: -0.7em;
-    right: -0.2em;
+    bottom: -90px;
+    right: -20px;
   }
 `;
 
@@ -343,4 +349,24 @@ export const ConfirmSection = styled.div`
   margin-top: ${({ theme }) => theme.spacing.md};
   padding-top: ${({ theme }) => theme.spacing.md};
   border-top: 1px solid ${({ theme }) => theme.colors.border};
+`;
+
+export const GameCardContainer = styled.div`
+  position: relative;
+  padding: ${({ theme }) => theme.spacing.xl};
+  background: ${({ theme }) => theme.colors.surface};
+  border-radius: ${({ theme }) => theme.borderRadius.medium};
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+`;
+
+export const Score = styled.div`
+  position: absolute;
+  top: ${({ theme }) => theme.spacing.xs};
+  left: ${({ theme }) => theme.spacing.xs};
+  padding: ${({ theme }) => `${theme.spacing.xs} ${theme.spacing.sm}`};
+  background: ${({ theme }) => theme.colors.primary};
+  color: white;
+  border-radius: ${({ theme }) => theme.borderRadius.small};
+  font-size: ${({ theme }) => theme.typography.fontSize.small};
+  font-weight: ${({ theme }) => theme.typography.fontWeight.medium};
 `;

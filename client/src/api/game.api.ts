@@ -20,12 +20,18 @@ export const gameApi = {
     payload,
     options,
   }: {
-    payload: { gameId: string; destinationId: string; answer: string };
+    payload: {
+      gameId: string;
+      destinationId: string;
+      answer: string;
+      cluesUsed: number;
+    };
     options?: any;
   }): Promise<ApiResponse<Game>> => {
     const body = {
       answer: payload.answer,
       destinationId: payload.destinationId,
+      cluesUsed: payload.cluesUsed,
     };
 
     return await axiosInstance.post(

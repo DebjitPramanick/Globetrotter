@@ -49,7 +49,8 @@ export const createGameStatsHelper = async (
 export const submitAnswerHelper = async (
   gameId: string,
   destinationId: string,
-  answer: string
+  answer: string,
+  cluesUsed: number
 ) => {
   if (
     !mongoose.Types.ObjectId.isValid(gameId) ||
@@ -69,7 +70,6 @@ export const submitAnswerHelper = async (
   }
 
   const isCorrect = destination.city.toLowerCase() === answer.toLowerCase();
-  const cluesUsed = game.clueIndices?.[destinationId] || 1;
 
   // Calculate score based on clues used
   const score = calculateScore({
@@ -95,7 +95,7 @@ export const submitAnswerHelper = async (
   });
 
   // Update user stats if answer is correct
-  updateGameStats({ game, isCorrect, score });
+  updateGameStats({ game, isCorrect, score, cluesUsed });
 
   return {
     isCorrect,
@@ -124,6 +124,8 @@ const calculateScore = ({
     ? Math.max(baseScore - (cluesUsed - 1) * scoreDeduction, 0)
     : 0;
 
+  console.log("scoreDeduction", cluesUsed, scoreDeduction, score);
+
   return score;
 };
 
@@ -131,10 +133,12 @@ const updateGameStats = async ({
   game,
   isCorrect,
   score,
+  cluesUsed,
 }: {
   game: IGame;
   isCorrect: boolean;
   score: number;
+  cluesUsed: number;
 }) => {
   const updateData = {
     $max: { bestScore: score },
@@ -149,15 +153,19 @@ const updateGameStats = async ({
   };
 
   if (isCorrect) {
-    updateData["$inc"] = {
-      ...updateData["$inc"],
-      totalCorrectAnswers: 1,
-    };
+    updateData["$inc"]["totalCorrectAnswers"] = 1;
+    if (cluesUsed === 1) {
+      updateData["$inc"]["nCorrectAnswersOnFirstClue"] = 1;
+    } else {
+      updateData["$inc"]["nCorrectAnswersOnMultipleClues"] = 1;
+    }
   } else {
-    updateData["$inc"] = {
-      ...updateData["$inc"],
-      totalWrongAnswers: 1,
-    };
+    updateData["$inc"]["totalWrongAnswers"] = 1;
+    if (cluesUsed === 1) {
+      updateData["$inc"]["nWrongAnswersOnFirstClue"] = 1;
+    } else {
+      updateData["$inc"]["nWrongAnswersOnMultipleClues"] = 1;
+    }
   }
 
   await GameStats.findOneAndUpdate({ userId: game.userId }, updateData, {

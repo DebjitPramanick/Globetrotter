@@ -7,12 +7,18 @@ declare module "styled-components" {
       secondary: string;
       background: string;
       surface: string;
+      surfaceLight: string;
+      surfaceDark: string;
       text: string;
       textSecondary: string;
       border: string;
       error: string;
       success: string;
       accent: string;
+      shimmer: {
+        base: string;
+        highlight: string;
+      };
     };
     spacing: {
       xs: string;
@@ -93,6 +99,8 @@ export const lightTheme: DefaultTheme = {
   colors: {
     background: "#F5F5F5",
     surface: "#FFFFFF",
+    surfaceLight: "#FFFFFF",
+    surfaceDark: "#F8FAFC",
     primary: "#6366F1",
     secondary: "#8B5CF6",
     success: "#86EFAC",
@@ -101,6 +109,10 @@ export const lightTheme: DefaultTheme = {
     textSecondary: "#6B7280",
     border: "#E5E7EB",
     accent: "#818CF8",
+    shimmer: {
+      base: "#CBD5E1",
+      highlight: "#F1F5F9",
+    },
   },
 };
 
@@ -109,6 +121,8 @@ export const darkTheme: DefaultTheme = {
   colors: {
     background: "#111827",
     surface: "#1F2937",
+    surfaceLight: "#374151",
+    surfaceDark: "#111827",
     primary: "#818CF8",
     secondary: "#A78BFA",
     success: "#86EFAC",
@@ -117,5 +131,18 @@ export const darkTheme: DefaultTheme = {
     textSecondary: "#9CA3AF",
     border: "#374151",
     accent: "#A78BFA",
+    shimmer: {
+      base: "#1F2937",
+      highlight: "#374151",
+    },
+  },
+};
+
+// Add toast styles to match your theme
+export const toastTheme = {
+  dark: {
+    background: darkTheme.colors.surface,
+    text: darkTheme.colors.text,
+    error: darkTheme.colors.error,
   },
 };

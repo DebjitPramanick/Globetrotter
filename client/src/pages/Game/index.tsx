@@ -1,13 +1,19 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { GameContainer } from "./index.styled";
 import GameCard from "./components/GameCard";
 import StartGame from "./components/StartGame";
 import AppLayout from "@/layouts/AppLayout";
 import { gameApi } from "@/api";
-import { destinationApi } from "@/api";
 import { RequestError } from "@/types/error";
 import { useRequestState } from "@/hooks";
 import { useApp } from "@/context/AppContext";
+import { ShimmerLoader } from "@/components/atoms";
+import { showErrorMessage } from "@/utils/notifications";
+
+const GAME_CARD_DIMENSIONS = {
+  width: "600px",
+  height: "400px",
+};
 
 const Game = () => {
   const { user } = useApp();
@@ -26,11 +32,19 @@ const Game = () => {
       setIsGameStarted(true);
     } catch (error) {
       startGameRequestStatesHandler.rejected(new RequestError(error));
+      showErrorMessage(error);
     }
   };
 
-  if (startGameRequestStates.isPending) {
-    return <p>Loading...</p>;
+  let nodeToRender;
+
+  if (startGameRequestStates.isFulfilled) {
+    nodeToRender = (
+      <GameCard
+        game={startGameRequestStates.data}
+        onCreateNewGame={handleGameStart}
+      />
+    );
   }
 
   return (
@@ -40,13 +54,9 @@ const Game = () => {
           <StartGame
             onStart={handleGameStart}
             isLoading={startGameRequestStates.isPending}
-            error={startGameRequestStates.error?.message}
           />
         ) : (
-          <GameCard
-            game={startGameRequestStates.data}
-            onCreateNewGame={handleGameStart}
-          />
+          nodeToRender
         )}
       </GameContainer>
     </AppLayout>

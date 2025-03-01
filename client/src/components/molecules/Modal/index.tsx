@@ -60,14 +60,14 @@ const Modal = ({
   if (!isOpen) return null;
 
   return (
-    <ModalOverlay onClick={onClose}>
+    <ModalOverlay>
       <ModalContainer
         onClick={(e) => e.stopPropagation()}
         $isCorrect={isCorrect}
       >
-        <CloseButton onClick={onClose}>
+        {/* <CloseButton onClick={onClose}>
           <X size={24} />
-        </CloseButton>
+        </CloseButton> */}
         <ModalContent>
           <ModalTitle>{title}</ModalTitle>
           <ModalDescription>{description}</ModalDescription>

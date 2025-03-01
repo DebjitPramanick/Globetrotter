@@ -26,6 +26,9 @@ export const StyledButton = styled.button<{
   size: ButtonSize;
   fullWidth?: boolean;
 }>`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   background: linear-gradient(
     45deg,
     ${({ theme }) => theme.colors.primary},
@@ -51,7 +54,7 @@ export const StyledButton = styled.button<{
 
   &:disabled {
     background: ${({ theme }) => theme.colors.textSecondary};
-    opacity: 0.6;
+    opacity: 0.7;
     cursor: not-allowed;
     transform: none;
     box-shadow: none;

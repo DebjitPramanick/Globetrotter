@@ -8,7 +8,6 @@ import {
   InstructionItem,
   BackgroundWrapper,
   ContentWrapper,
-  ErrorMessage,
 } from "./index.styled";
 
 interface StartGameProps {
@@ -17,7 +16,7 @@ interface StartGameProps {
   error?: string;
 }
 
-const StartGame = ({ onStart, isLoading, error }: StartGameProps) => {
+const StartGame = ({ onStart, isLoading }: StartGameProps) => {
   const [isAnimating, setIsAnimating] = useState(false);
 
   const handleClick = () => {
@@ -47,15 +46,16 @@ const StartGame = ({ onStart, isLoading, error }: StartGameProps) => {
               🌟 Compete with others on the leaderboard
             </InstructionItem>
           </Instructions>
-          {error && <ErrorMessage>{error}</ErrorMessage>}
           <Button
             onClick={handleClick}
             className={isAnimating ? "animate" : ""}
-            disabled={isLoading || isAnimating}
+            disabled={isAnimating}
+            loading={isLoading}
+            loadingText="Starting Game..."
             size="large"
             fullWidth
           >
-            {isLoading ? "Starting Game..." : "Start Adventure"}
+            Start Adventure
           </Button>
         </StartGameContainer>
       </ContentWrapper>

@@ -12,6 +12,8 @@ import { User } from "@/types";
 import { userApi } from "@/api";
 import { useRequestState } from "@/hooks";
 import { RequestError } from "@/types/error";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface AppContextType {
   isDarkMode: boolean;
@@ -115,6 +117,14 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
   return (
     <AppContext.Provider value={value}>
       <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
+        <ToastContainer
+          position="top-center"
+          autoClose={3000}
+          hideProgressBar={false}
+          closeOnClick
+          pauseOnHover
+          theme={isDarkMode ? "dark" : "light"}
+        />
         {children}
       </ThemeProvider>
     </AppContext.Provider>

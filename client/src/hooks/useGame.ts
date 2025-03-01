@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useRouter } from "next/router";
 import { useApp } from "@/context/AppContext";
 import { Destination, Game } from "@/types";
@@ -10,6 +10,7 @@ interface UseGameReturn {
   destinationsRequestStates: RequestState<Destination[]>;
   fetchNextClueRequestStates: RequestState<any>;
   submitAnswerRequestStates: RequestState<any>;
+  scoreDeduction: number;
   currentDestination: Destination;
   currentClueIdx: number;
   currentClues: string[];
@@ -35,8 +36,6 @@ interface GameState {
   hasSubmittedAnswer: boolean;
 }
 
-const SCORE_DEDUCTION = 25;
-
 export const useGame = ({ game }: { game: Game }): UseGameReturn => {
   const router = useRouter();
   const { username } = useApp();
@@ -59,6 +58,8 @@ export const useGame = ({ game }: { game: Game }): UseGameReturn => {
     isSelectedAnswerCorrect: false,
     hasSubmittedAnswer: false,
   });
+
+  const scoreDeduction = Math.floor(state.scoreToObtain / state.totalClues);
 
   const fetchDestinations = async () => {
     try {
@@ -97,7 +98,7 @@ export const useGame = ({ game }: { game: Game }): UseGameReturn => {
           draft.currentClueIdx = draft.currentClueIdx + 1;
           draft.scoreToObtain = Math.max(
             0,
-            draft.scoreToObtain - SCORE_DEDUCTION
+            draft.scoreToObtain - scoreDeduction
           );
           draft.currentClues = [...draft.currentClues, clue];
         });
@@ -115,6 +116,7 @@ export const useGame = ({ game }: { game: Game }): UseGameReturn => {
         gameId: game._id,
         destinationId: currentDestination._id,
         answer,
+        cluesUsed: state.currentClueIdx + 1,
       };
       submitAnswerRequestStatesHandler.pending();
       const response = await gameApi.submitAnswer({
@@ -165,6 +167,7 @@ export const useGame = ({ game }: { game: Game }): UseGameReturn => {
     destinationsRequestStates,
     fetchNextClueRequestStates,
     submitAnswerRequestStates,
+    scoreDeduction,
     currentDestination: state.destinations[state.currentDestinationIdx],
     currentClueIdx: state.currentClueIdx,
     currentClues: state.currentClues,

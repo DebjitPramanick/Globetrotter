@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Button } from "@/components/atoms";
+import { Button, Error, ShimmerLoader, Spinner } from "@/components/atoms";
 import { Eye } from "react-feather";
 import Confetti from "react-confetti";
 import Modal from "@/components/molecules/Modal";
@@ -24,6 +24,7 @@ import {
   StatBox,
   StatNumber,
   StatText,
+  SpinnerContainer,
 } from "./index.styled";
 import { useGame } from "@/hooks";
 import { Game } from "@/types";
@@ -33,11 +34,17 @@ interface GameCardProps {
   onCreateNewGame: () => void;
 }
 
+const GAME_CARD_DIMENSIONS = {
+  width: "600px",
+  height: "400px",
+};
+
 const GameCard = ({ game, onCreateNewGame }: GameCardProps) => {
   const {
     destinationsRequestStates,
     fetchNextClueRequestStates,
     submitAnswerRequestStates,
+    scoreDeduction,
     currentDestination,
     currentClues,
     currentClueIdx,
@@ -101,10 +108,26 @@ const GameCard = ({ game, onCreateNewGame }: GameCardProps) => {
   let nodeToRender;
 
   if (destinationsRequestStates.isPending) {
-    return <p>Loading...</p>;
-  } else if (destinationsRequestStates.isFulfilled) {
     nodeToRender = (
-      <Card>
+      <SpinnerContainer>
+        <Spinner size={64} color="currentColor" />
+      </SpinnerContainer>
+    );
+  } else if (destinationsRequestStates.isFulfilled) {
+    let revealBtnNode;
+
+    if (currentClueIdx === totalClues - 1) {
+      revealBtnNode = null;
+    } else {
+      revealBtnNode = (
+        <RevealButton onClick={handleRevealClick}>
+          <Eye size={16} />
+          Reveal Next Clue (-{scoreDeduction} pts)
+        </RevealButton>
+      );
+    }
+    nodeToRender = (
+      <>
         <ScoresContainer>
           <StatsGroup>
             <StatBox>
@@ -130,13 +153,7 @@ const GameCard = ({ game, onCreateNewGame }: GameCardProps) => {
                 </ScoreNumber>
                 pts
               </ScoreDisplay>
-              <RevealButton
-                onClick={handleRevealClick}
-                disabled={currentClueIdx === totalClues - 1}
-              >
-                <Eye size={16} />
-                Reveal Next Clue (-25 pts)
-              </RevealButton>
+              {revealBtnNode}
             </CluesHeader>
             <CluesContainer>
               {currentClues.map((clue, index) => (
@@ -162,34 +179,24 @@ const GameCard = ({ game, onCreateNewGame }: GameCardProps) => {
             </OptionsContainer>
             {selectedOption && (
               <ConfirmSection>
-                <Button onClick={handleConfirm} fullWidth>
+                <Button
+                  onClick={handleConfirm}
+                  fullWidth
+                  loading={submitAnswerRequestStates.isPending}
+                >
                   Confirm Answer
                 </Button>
               </ConfirmSection>
             )}
           </AnswerSection>
         </GameContent>
-        <Modal
-          isOpen={showModal}
-          onClose={() => setShowModal(false)}
-          title={isSelectedAnswerCorrect ? "Correct!" : "Wrong Answer"}
-          description={
-            isSelectedAnswerCorrect
-              ? "Great job! You've found the right destination."
-              : "That's not the right destination. Try again!"
-          }
-          onPlayAgain={onCreateNewGame}
-          onNext={handleNext}
-          isCorrect={isSelectedAnswerCorrect}
-          stats={stats}
-        />
-      </Card>
+      </>
     );
   } else if (destinationsRequestStates.isRejected) {
-    return <p>Error loading game</p>;
+    const errorMessage =
+      destinationsRequestStates.error?.message || "Error loading game";
+    nodeToRender = <Error message={errorMessage} />;
   }
-
-  console.log(currentDestination);
 
   return (
     <>
@@ -204,7 +211,22 @@ const GameCard = ({ game, onCreateNewGame }: GameCardProps) => {
           onConfettiComplete={() => setShowConfetti(false)}
         />
       )}
-      {nodeToRender}
+      <Card>{nodeToRender}</Card>
+
+      <Modal
+        isOpen={showModal}
+        onClose={() => {}}
+        title={isSelectedAnswerCorrect ? "Correct!" : "Wrong Answer"}
+        description={
+          isSelectedAnswerCorrect
+            ? "Great job! You've found the right destination."
+            : "That's not the right destination. Try again!"
+        }
+        onPlayAgain={onCreateNewGame}
+        onNext={handleNext}
+        isCorrect={isSelectedAnswerCorrect}
+        stats={stats}
+      />
     </>
   );
 };
