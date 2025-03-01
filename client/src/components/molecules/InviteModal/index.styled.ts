@@ -100,7 +100,7 @@ export const ImageLoader = styled.div`
   position: absolute;
   width: 40px;
   height: 40px;
-  border: 3px solid ${({ theme }) => theme.colors.border};
+  border: 2px solid ${({ theme }) => theme.colors.border};
   border-top-color: ${({ theme }) => theme.colors.primary};
   border-radius: 50%;
   animation: ${spin} 1s linear infinite;

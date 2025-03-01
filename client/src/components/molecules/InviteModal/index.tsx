@@ -87,8 +87,20 @@ const InviteModal = ({ isOpen, onClose }: InviteModalProps) => {
   let nodeToRender = null;
 
   if (statsRequestStates.isPending) {
-    nodeToRender = <Spinner />;
-  } else if (statsRequestStates.isFulfilled) {
+    nodeToRender = (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          width: "100%",
+          height: "200px",
+        }}
+      >
+        <Spinner size={40} />
+      </div>
+    );
+  } else if (!statsRequestStates.isIdle) {
     nodeToRender = (
       <>
         <Title>Challenge a Friend</Title>
@@ -124,10 +136,6 @@ const InviteModal = ({ isOpen, onClose }: InviteModalProps) => {
         </InputWrapper>
       </>
     );
-  } else if (statsRequestStates.isRejected) {
-    const errorMessage =
-      statsRequestStates.error?.message || "Something went wrong";
-    nodeToRender = <Error message={errorMessage} />;
   }
 
   return (
