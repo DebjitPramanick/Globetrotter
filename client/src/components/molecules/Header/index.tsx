@@ -86,10 +86,9 @@ const Header = () => {
           <MenuDivider />
           <ThemeToggleWrapper onClick={toggleTheme}>
             <IconWrapper isDarkMode={isDarkMode}>
-              <Moon size={18} />
-              <Sun size={18} />
+              {isDarkMode ? <Sun size={18} /> : <Moon size={18} />}
             </IconWrapper>
-            Dark Mode
+            {isDarkMode ? "Light Mode" : "Dark Mode"}
           </ThemeToggleWrapper>
         </AvatarMenu>
       </RightSection>

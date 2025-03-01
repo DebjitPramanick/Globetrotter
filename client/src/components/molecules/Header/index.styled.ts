@@ -85,16 +85,9 @@ export const IconWrapper = styled.div<{ isDarkMode: boolean }>`
 
   svg {
     position: absolute;
-    opacity: ${({ isDarkMode }) => (isDarkMode ? 1 : 0)};
     transform: ${({ isDarkMode }) =>
-      isDarkMode ? "scale(1) rotate(0)" : "scale(0) rotate(-180deg)"};
+      isDarkMode ? "scale(1) rotate(0)" : "scale(1) rotate(0)"};
     transition: all 0.3s ease;
-
-    &:last-child {
-      opacity: ${({ isDarkMode }) => (isDarkMode ? 0 : 1)};
-      transform: ${({ isDarkMode }) =>
-        isDarkMode ? "scale(0) rotate(180deg)" : "scale(1) rotate(0)"};
-    }
   }
 `;
 

@@ -21,6 +21,11 @@ const fadeIn = keyframes`
   }
 `;
 
+const spin = keyframes`
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+`;
+
 export const Overlay = styled.div`
   position: fixed;
   top: 0;
@@ -91,25 +96,41 @@ export const Input = styled.input`
   }
 `;
 
-export const AnimationWrapper = styled.div`
-  margin: -${({ theme }) => theme.spacing.xl} 0 ${({ theme }) => theme.spacing.md};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  ${mediaQueryMobileOrTablet} {
-    margin: -${({ theme }) => theme.spacing.lg} 0 ${({ theme }) => theme.spacing.sm};
-  }
+export const ImageLoader = styled.div`
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border: 3px solid ${({ theme }) => theme.colors.border};
+  border-top-color: ${({ theme }) => theme.colors.primary};
+  border-radius: 50%;
+  animation: ${spin} 1s linear infinite;
 `;
 
-export const AvatarImage = styled.img`
+export const AvatarImage = styled.img<{ $isLoaded: boolean }>`
   width: 180px;
   height: 180px;
   border-radius: ${({ theme }) => theme.borderRadius.large};
-  animation: ${fadeIn} 0.3s ease-out;
+  opacity: ${({ $isLoaded }) => ($isLoaded ? 1 : 0)};
+  transition: opacity 0.3s ease-out;
 
   ${mediaQueryMobileOrTablet} {
     width: 140px;
     height: 140px;
+  }
+`;
+
+export const AnimationWrapper = styled.div`
+  margin: ${({ theme }) => theme.spacing.xl} 0
+    ${({ theme }) => theme.spacing.md};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  min-height: 180px;
+
+  ${mediaQueryMobileOrTablet} {
+    margin: ${({ theme }) => theme.spacing.lg} 0
+      ${({ theme }) => theme.spacing.sm};
+    min-height: 140px;
   }
 `;
