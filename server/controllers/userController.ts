@@ -52,10 +52,10 @@ export const createOrGetUserController = async (
       });
     }
 
-    if (username.length < 3 || username.length > 15) {
-      return res.status(400).json({
-        message: "Username must be between 3 and 15 characters",
-      });
+    if (username.length < 3 || username.length > 30) {
+      return res
+        .status(400)
+        .json({ error: ERROR_MESSAGES.USER.INVALID_USERNAME });
     }
 
     const user = await createOrGetUser(username.trim());

@@ -1,5 +1,6 @@
 import styled, { keyframes, css } from "styled-components";
 import { Button } from "@/components/atoms";
+import { mediaQueryMobileOrTablet } from "@/styles/mixins";
 
 const fadeIn = keyframes`
   from {
@@ -54,17 +55,6 @@ const floatIn = keyframes`
   }
 `;
 
-const revealText = keyframes`
-  0% {
-    clip-path: inset(0 100% 0 0);
-    opacity: 0;
-  }
-  100% {
-    clip-path: inset(0 0 0 0);
-    opacity: 1;
-  }
-`;
-
 const popIn = keyframes`
   0% {
     transform: scale(0.8);
@@ -114,12 +104,16 @@ export const ModalContainer = styled.div<{ $isCorrect: boolean }>`
   border-radius: ${({ theme }) => theme.borderRadius.large};
   padding: ${({ theme }) => theme.spacing.xl};
   min-width: 400px;
-  max-width: 90vw;
+  max-width: 80vw;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   border: 1px solid
     ${({ theme, $isCorrect }) =>
       $isCorrect ? theme.colors.success : theme.colors.error};
   animation: ${slideIn} 0.3s ease-out;
+
+  ${mediaQueryMobileOrTablet} {
+    min-width: 90vw;
+  }
 `;
 
 export const ModalContent = styled.div`

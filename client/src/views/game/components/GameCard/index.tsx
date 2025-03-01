@@ -15,17 +15,16 @@ import {
   RevealButton,
   ScoreDisplay,
   ScoreNumber,
-  TotalScore,
   ScoresContainer,
   GameContent,
   CluesHeader,
   ConfirmSection,
   StatsGroup,
-  StatBox,
-  StatNumber,
-  StatText,
   SpinnerContainer,
   BackButton,
+  StatPill,
+  StatLabel,
+  StatValue,
 } from "./index.styled";
 import { useGame } from "@/hooks";
 import { Game } from "@/types";
@@ -141,23 +140,24 @@ const GameCard = ({ game, onCreateNewGame, onBack }: GameCardProps) => {
     nodeToRender = (
       <>
         <ScoresContainer>
+          <BackButton onClick={onBack}>
+            <ArrowLeft size={18} />
+            Exit Game
+          </BackButton>
           <StatsGroup>
-            <BackButton onClick={onBack}>
-              <ArrowLeft size={18} />
-              Exit Game
-            </BackButton>
-            <StatBox>
-              <StatNumber $type="correct">{stats.correct}</StatNumber>
-              <StatText>Correct</StatText>
-            </StatBox>
-            <StatBox>
-              <StatNumber $type="wrong">{stats.wrong}</StatNumber>
-              <StatText>Wrong</StatText>
-            </StatBox>
+            <StatPill $type="correct">
+              <StatLabel>Correct</StatLabel>
+              <StatValue>{stats.correct}</StatValue>
+            </StatPill>
+            <StatPill $type="wrong">
+              <StatLabel>Wrong</StatLabel>
+              <StatValue>{stats.wrong}</StatValue>
+            </StatPill>
+            <StatPill $type="total">
+              <StatLabel>Score</StatLabel>
+              <StatValue>{totalScore}</StatValue>
+            </StatPill>
           </StatsGroup>
-          <TotalScore>
-            <span>Total Score:</span> {totalScore} <span>pts</span>
-          </TotalScore>
         </ScoresContainer>
 
         <GameContent>

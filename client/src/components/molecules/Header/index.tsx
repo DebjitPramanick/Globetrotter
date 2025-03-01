@@ -12,6 +12,7 @@ import {
   ThemeToggleWrapper,
   IconWrapper,
   ChallengeButton,
+  MobileMenuItem,
 } from "./index.styled";
 import { useRouter } from "next/router";
 import { useApp } from "@/context/AppContext";
@@ -70,7 +71,7 @@ const Header = () => {
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         />
         <AvatarMenu isOpen={isMenuOpen}>
-          <MenuItem onClick={() => handleNavigation("/game")}>
+          <MenuItem onClick={() => handleNavigation("/")}>
             <Play size={18} />
             Game
           </MenuItem>
@@ -78,6 +79,10 @@ const Header = () => {
             <BarChart2 />
             Stats
           </MenuItem>
+          <MobileMenuItem onClick={handleChallengeClick}>
+            <Share2 size={18} />
+            Challenge Friend
+          </MobileMenuItem>
           <MenuDivider />
           <ThemeToggleWrapper onClick={toggleTheme}>
             <IconWrapper isDarkMode={isDarkMode}>

@@ -1,3 +1,4 @@
+import { mediaQueryMobileOrTablet } from "@/styles/mixins";
 import Link from "next/link";
 import styled, { keyframes } from "styled-components";
 
@@ -108,6 +109,10 @@ export const HeaderContainer = styled.header`
   position: sticky;
   top: 0;
   z-index: 100;
+
+  ${mediaQueryMobileOrTablet} {
+    padding: 0 ${({ theme }) => theme.spacing.sm};
+  }
 `;
 
 export const LeftSection = styled.div`
@@ -251,11 +256,16 @@ export const ChallengeButton = styled.button`
     transform: translateY(-1px);
   }
 
-  svg {
-    width: 18px;
-    height: 18px;
-    animation: ${wiggle} 2s ease-in-out infinite;
-    transform-origin: center;
+  ${mediaQueryMobileOrTablet} {
+    display: none;
+  }
+`;
+
+export const MobileMenuItem = styled(MenuItem)`
+  display: none;
+
+  ${mediaQueryMobileOrTablet} {
+    display: flex;
   }
 `;
 

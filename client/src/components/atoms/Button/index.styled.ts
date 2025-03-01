@@ -44,7 +44,7 @@ export const StyledButton = styled.button<{
   ${({ size }) => getSizeStyles(size)};
 
   &:hover {
-    transform: translateY(-2px);
+    transform: translateY(2px);
     box-shadow: 0 4px 12px ${({ theme }) => `${theme.colors.primary}40`};
   }
 

@@ -1,3 +1,4 @@
+import { mediaQueryMobileOrTablet } from "@/styles/mixins";
 import styled, { keyframes } from "styled-components";
 
 const slideIn = keyframes`
@@ -47,6 +48,10 @@ export const Container = styled.div`
   max-width: 90vw;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   animation: ${slideIn} 0.3s ease-out;
+
+  ${mediaQueryMobileOrTablet} {
+    min-width: 90vw;
+  }
 `;
 
 export const Title = styled.h2`

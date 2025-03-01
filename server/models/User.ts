@@ -14,7 +14,7 @@ const userSchema = new Schema(
       unique: true,
       trim: true,
       minlength: 3,
-      maxlength: 15,
+      maxlength: 30,
     },
   },
   { timestamps: true }

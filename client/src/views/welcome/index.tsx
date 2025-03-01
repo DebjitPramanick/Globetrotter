@@ -37,7 +37,7 @@ const WelcomePageView = () => {
         });
         submitRequestStateHandler.fulfilled(response.data);
         setUser(response.data);
-        router.push("/game");
+        router.push("/");
       } catch (error) {
         const errorMessage = extractErrorMessage(error);
         submitRequestStateHandler.rejected(new RequestError(errorMessage));

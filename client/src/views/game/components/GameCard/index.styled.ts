@@ -1,5 +1,6 @@
 import styled, { keyframes, css } from "styled-components";
 import { Button } from "@/components/atoms";
+import { mediaQueryMobileOrTablet } from "@/styles/mixins";
 
 const fadeIn = keyframes`
   from {
@@ -24,15 +25,6 @@ const float = keyframes`
   }
 `;
 
-// export const BackgroundWrapper = styled.div`
-//   position: relative;
-//   width: 100%;
-//   height: 100%;
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-// `;
-
 export const Card = styled.div`
   display: flex;
   flex-direction: column;
@@ -43,15 +35,17 @@ export const Card = styled.div`
   box-shadow: 0 8px 32px 0 ${({ theme }) => `${theme.colors.primary}10`};
   border: 1px solid ${({ theme }) => `${theme.colors.border}`};
   animation: ${fadeIn} 0.5s ease-out;
-  width: 900px;
-  height: calc(100vh - 200px);
+  max-width: 1200px;
+  height: calc(100vh - 126px);
   margin: 0 auto;
   position: relative;
   overflow: hidden;
   z-index: 1;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
-    height: calc(100vh - 150px);
+  ${mediaQueryMobileOrTablet} {
+    height: auto;
+    padding: ${({ theme }) => theme.spacing.sm};
+    gap: ${({ theme }) => theme.spacing.xs};
   }
 
   &::before {
@@ -82,6 +76,10 @@ export const CluesSection = styled.div`
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.lg};
   height: 100%;
+
+  ${mediaQueryMobileOrTablet} {
+    gap: 0;
+  }
 `;
 
 export const CluesHeader = styled.div`
@@ -89,6 +87,10 @@ export const CluesHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: ${({ theme }) => theme.spacing.md};
+
+  ${mediaQueryMobileOrTablet} {
+    margin-bottom: ${({ theme }) => theme.spacing.md};
+  }
 `;
 
 export const AnswerSection = styled.div`
@@ -99,10 +101,11 @@ export const AnswerSection = styled.div`
   padding-left: ${({ theme }) => theme.spacing.xl};
   border-left: 1px solid ${({ theme }) => theme.colors.border};
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+  ${mediaQueryMobileOrTablet} {
     width: 100%;
     padding-left: 0;
-    padding-top: ${({ theme }) => theme.spacing.xl};
+    gap: 0;
+    padding-top: ${({ theme }) => theme.spacing.md};
     border-left: none;
     border-top: 1px solid ${({ theme }) => theme.colors.border};
   }
@@ -113,25 +116,14 @@ export const CluesContainer = styled.div`
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.md};
   overflow-y: auto;
-  padding-right: ${({ theme }) => theme.spacing.md};
   height: calc(100% - 48px);
 
-  &::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: ${({ theme }) => theme.colors.background};
-    border-radius: 4px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: ${({ theme }) => theme.colors.border};
-    border-radius: 4px;
-
-    &:hover {
-      background: ${({ theme }) => theme.colors.primary}40;
-    }
+  ${mediaQueryMobileOrTablet} {
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: ${({ theme }) => theme.spacing.md};
+    height: auto;
   }
 `;
 
@@ -155,6 +147,17 @@ export const ClueBox = styled.div<{ isRevealed: boolean }>`
 
   &:first-child {
     animation: ${float} 3s ease-in-out infinite;
+  }
+
+  ${mediaQueryMobileOrTablet} {
+    display: flex;
+    align-items: center;
+    min-width: 100%;
+    min-height: 176px;
+
+    &:first-child {
+      animation: none;
+    }
   }
 `;
 
@@ -258,45 +261,70 @@ export const ScoresContainer = styled.div`
   padding-bottom: ${({ theme }) => theme.spacing.md};
   border-bottom: 1px solid ${({ theme }) => theme.colors.border};
   margin-bottom: ${({ theme }) => theme.spacing.lg};
+
+  ${mediaQueryMobileOrTablet} {
+    padding: ${({ theme }) => theme.spacing.xs} 0;
+    margin-bottom: ${({ theme }) => theme.spacing.sm};
+  }
 `;
 
 export const StatsGroup = styled.div`
   display: flex;
-  gap: ${({ theme }) => theme.spacing.xl};
-`;
-
-export const StatBox = styled.div`
-  display: flex;
   align-items: center;
-  gap: ${({ theme }) => theme.spacing.sm};
+  gap: ${({ theme }) => theme.spacing.md};
 `;
 
-export const StatNumber = styled.span<{ $type: "correct" | "wrong" }>`
-  font-size: ${({ theme }) => theme.typography.fontSize.h3};
-  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
-  color: ${({ theme, $type }) =>
-    $type === "correct" ? theme.colors.success : theme.colors.error};
-`;
-
-export const StatText = styled.span`
-  font-size: ${({ theme }) => theme.typography.fontSize.small};
-  color: ${({ theme }) => theme.colors.textSecondary};
-  text-transform: uppercase;
-  letter-spacing: 1px;
-`;
-
-export const TotalScore = styled.div`
-  font-size: ${({ theme }) => theme.typography.fontSize.h3};
-  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
-  color: ${({ theme }) => theme.colors.primary};
+export const StatPill = styled.div<{ $type?: "correct" | "wrong" | "total" }>`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.xs};
+  padding: ${({ theme }) => `${theme.spacing.xs} ${theme.spacing.md}`};
+  border-radius: 20px;
+  font-weight: ${({ theme }) => theme.typography.fontWeight.medium};
+  font-size: ${({ theme }) => theme.typography.fontSize.small};
 
-  span {
-    color: ${({ theme }) => theme.colors.textSecondary};
+  ${({ theme, $type }) => {
+    switch ($type) {
+      case "correct":
+        return css`
+          background: ${theme.colors.success}15;
+          color: ${theme.colors.success};
+          border: 1px solid ${theme.colors.success}30;
+        `;
+      case "wrong":
+        return css`
+          background: ${theme.colors.error}15;
+          color: ${theme.colors.error};
+          border: 1px solid ${theme.colors.error}30;
+        `;
+      default:
+        return css`
+          background: ${theme.colors.primary}15;
+          color: ${theme.colors.primary};
+          border: 1px solid ${theme.colors.primary}30;
+        `;
+    }
+  }}
+
+  ${mediaQueryMobileOrTablet} {
+    padding: ${({ theme }) => `${theme.spacing.xs} ${theme.spacing.sm}`};
     font-size: ${({ theme }) => theme.typography.fontSize.small};
   }
+`;
+
+export const StatLabel = styled.span`
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: ${({ theme }) => theme.typography.fontSize.small};
+  opacity: 0.8;
+
+  ${mediaQueryMobileOrTablet} {
+    display: none;
+  }
+`;
+
+export const StatValue = styled.span`
+  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
 `;
 
 export const GameContent = styled.div`
@@ -304,8 +332,9 @@ export const GameContent = styled.div`
   gap: ${({ theme }) => theme.spacing.xl};
   height: calc(100% - 80px);
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+  ${mediaQueryMobileOrTablet} {
     flex-direction: column;
+    gap: 0;
   }
 `;
 
@@ -331,6 +360,8 @@ export const OptionsContainer = styled.div`
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.md};
   width: 100%;
+  height: calc(100% - 65px);
+  overflow-y: auto;
 `;
 
 export const OptionButton = styled(Button)<{ isSelected?: boolean }>`

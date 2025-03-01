@@ -2,7 +2,7 @@ export const ERROR_MESSAGES = {
   USER: {
     NOT_FOUND: "User not found",
     ALREADY_EXISTS: "Username already exists",
-    INVALID_USERNAME: "Username must be between 3 and 20 characters",
+    INVALID_USERNAME: "Username must be between 3 and 30 characters",
     REQUIRED: "Username is required",
     ID_REQUIRED: "User ID is required",
   },

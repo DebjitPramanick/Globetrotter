@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
 import AppLayout from "@/layouts/AppLayout";
-import { Container, Title } from "./index.styled";
+import {
+  Container,
+  Title,
+  ErrorContainer,
+  ErrorMessage,
+  RetryButton,
+} from "./index.styled";
 import StatsOverview from "./components/StatsOverview";
 import PerformanceChart from "./components/PerformanceChart";
 import { useApp } from "@/context/AppContext";
@@ -9,10 +15,10 @@ import { Stats as StatsType } from "@/types";
 import { useRequestState } from "@/hooks";
 import { RequestError } from "@/types/error";
 import { ShimmerLoader } from "@/components/atoms";
+import { AlertCircle } from "react-feather";
 
 const StatsPageView = () => {
   const { user } = useApp();
-  const [stats, setStats] = useState<StatsType | null>(null);
   const [statsRequestStates, statsRequestStatesHandler] = useRequestState();
 
   const fetchStats = async () => {
@@ -21,7 +27,6 @@ const StatsPageView = () => {
       const response = await statsApi.getUserStats({
         userId: user._id,
       });
-      setStats(response.data);
       statsRequestStatesHandler.fulfilled(response.data);
     } catch (error) {
       statsRequestStatesHandler.rejected(new RequestError(error));
@@ -34,21 +39,25 @@ const StatsPageView = () => {
     }
   }, [user._id]);
 
+  let nodeToRender = null;
+
   if (statsRequestStates.isPending) {
-    return (
-      <AppLayout>
-        <Container>
-          <ShimmerLoader height="400px" />
-        </Container>
-      </AppLayout>
+    nodeToRender = <ShimmerLoader height="400px" />;
+  } else if (statsRequestStates.isRejected) {
+    nodeToRender = (
+      <ErrorContainer>
+        <AlertCircle size={48} />
+        <ErrorMessage>
+          Oops! We couldn't load your stats right now.
+          <span>Please try again later.</span>
+        </ErrorMessage>
+        <RetryButton onClick={fetchStats}>Try Again</RetryButton>
+      </ErrorContainer>
     );
-  }
-
-  if (!stats) return null;
-
-  return (
-    <AppLayout>
-      <Container>
+  } else if (statsRequestStates.isFulfilled) {
+    const stats = statsRequestStates.data;
+    nodeToRender = (
+      <>
         <Title>Game Statistics</Title>
         <StatsOverview
           totalCorrect={stats.totalCorrectAnswers}
@@ -66,7 +75,13 @@ const StatsPageView = () => {
             stats.nWrongAnswersOnMultipleClues
           }
         />
-      </Container>
+      </>
+    );
+  }
+
+  return (
+    <AppLayout>
+      <Container>{nodeToRender}</Container>
     </AppLayout>
   );
 };

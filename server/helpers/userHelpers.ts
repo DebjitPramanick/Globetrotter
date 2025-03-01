@@ -9,7 +9,7 @@ export const createUserHelper = async (username: string): Promise<IUser> => {
       throw new Error(ERROR_MESSAGES.USER.ALREADY_EXISTS);
     }
 
-    if (!username || username.length < 3 || username.length > 20) {
+    if (!username || username.length < 3 || username.length > 30) {
       throw new Error(ERROR_MESSAGES.USER.INVALID_USERNAME);
     }
 

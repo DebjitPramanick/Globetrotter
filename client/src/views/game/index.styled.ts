@@ -4,7 +4,6 @@ import { mediaQueryMobile, mediaQueryTablet } from "@/styles/mixins";
 export const BackgroundWrapper = styled.div`
   position: relative;
   height: calc(100vh - 126px);
-  overflow: hidden;
 `;
 
 export const GameContainer = styled.div`
