@@ -37,7 +37,23 @@ export const getDestinationHelper = async (
 
 export const getDestinationListHelper = async () => {
   try {
-    return await Destination.find({}, "_id city clues");
+    const destinations = await Destination.aggregate([
+      {
+        $project: {
+          _id: 1,
+          city: 1,
+          firstClue: { $arrayElemAt: ["$clues", 0] },
+          totalClues: { $size: "$clues" },
+        },
+      },
+    ]);
+
+    return destinations.map((dest) => ({
+      id: dest._id,
+      city: dest.city,
+      firstClue: dest.firstClue,
+      totalClues: dest.totalClues,
+    }));
   } catch (error) {
     throw error;
   }
@@ -76,4 +92,47 @@ export const bulkCreateDestinationsHelper = async (
   } catch (error) {
     throw error;
   }
+};
+
+export const getDestinationOptionsHelper = async (destinationId: string) => {
+  if (!mongoose.Types.ObjectId.isValid(destinationId)) {
+    throw new Error(ERROR_MESSAGES.SERVER.INVALID_ID);
+  }
+
+  const currentDestination = await Destination.findById(destinationId);
+  if (!currentDestination) {
+    throw new Error(ERROR_MESSAGES.DESTINATION.NOT_FOUND);
+  }
+
+  const otherOptions = await Destination.aggregate([
+    { $match: { _id: { $ne: new mongoose.Types.ObjectId(destinationId) } } },
+    { $sample: { size: 3 } },
+    { $project: { city: 1 } },
+  ]);
+
+  const options = [{ city: currentDestination.city }, ...otherOptions].sort(
+    () => Math.random() - 0.5
+  );
+
+  return options;
+};
+
+export const getNextClueHelper = async (
+  destinationId: string,
+  currentClueIndex: number
+): Promise<string | null> => {
+  if (!mongoose.Types.ObjectId.isValid(destinationId)) {
+    throw new Error(ERROR_MESSAGES.SERVER.INVALID_ID);
+  }
+
+  const destination = await Destination.findById(destinationId);
+  if (!destination) {
+    throw new Error(ERROR_MESSAGES.DESTINATION.NOT_FOUND);
+  }
+
+  if (currentClueIndex >= destination.clues.length) {
+    return null;
+  }
+
+  return destination.clues[currentClueIndex];
 };

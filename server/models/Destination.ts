@@ -24,7 +24,7 @@ const destinationSchema = new Schema(
         "Clues array cannot be empty",
       ],
     },
-    fun_fact: {
+    funFact: {
       type: [String],
       required: [true, "At least one fun fact is required"],
       validate: [

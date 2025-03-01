@@ -19,5 +19,7 @@ export const ERROR_MESSAGES = {
     STATS_NOT_FOUND: "Game stats not found",
     STATS_EXISTS: "Game stats already exist for this user",
     INVALID_DATA: "Invalid game data",
+    NO_MORE_CLUES: "No more clues available",
+    ANSWER_REQUIRED: "Answer is required",
   },
 };

@@ -21,7 +21,7 @@ export interface IDestination extends BaseDocument {
   city: string;
   country: string;
   clues: string[];
-  fun_fact: string[];
+  funFact: string[];
   trivia: string[];
 }
 
@@ -45,7 +45,7 @@ export interface IDestinationResponse extends BaseResponse {
   city: string;
   country: string;
   clues: string[];
-  fun_fact: string[];
+  funFact: string[];
   trivia: string[];
 }
 
@@ -53,7 +53,8 @@ export interface IDestinationResponse extends BaseResponse {
 export interface IDestinationListResponse {
   id: string;
   city: string;
-  clues: string[];
+  firstClue: string;
+  totalClues: number;
 }
 
 export interface IGame extends BaseDocument {
@@ -61,6 +62,7 @@ export interface IGame extends BaseDocument {
   correctAnswers: number;
   wrongAnswers: number;
   destinationIds: ObjectId[];
+  clueIndices: { [key: string]: number };
 }
 
 export interface IGameStats extends BaseDocument {

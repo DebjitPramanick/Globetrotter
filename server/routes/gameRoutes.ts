@@ -2,14 +2,14 @@ import { Router } from "express";
 import {
   createGameController,
   getGameController,
-  updateGameController,
+  submitAnswerController,
 } from "../controllers/gameController";
 
 const router = Router();
 
 // Game routes
-router.post("/", createGameController);
+router.post("/start", createGameController);
 router.get("/:id", getGameController);
-router.patch("/:id", updateGameController);
+router.post("/:id/answer", submitAnswerController);
 
 export default router;

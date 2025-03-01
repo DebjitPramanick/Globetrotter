@@ -4,6 +4,8 @@ import {
   getDestinationHelper,
   getDestinationListHelper,
   bulkCreateDestinationsHelper,
+  getDestinationOptionsHelper,
+  getNextClueHelper,
 } from "../helpers/destinationHelpers";
 import { ERROR_MESSAGES } from "../constants/errors";
 
@@ -82,6 +84,42 @@ export const bulkCreateDestinationsController = async (
       return res.status(409).json({ error: error.message });
     }
     if (error.message.includes("validation failed")) {
+      return res.status(400).json({ error: error.message });
+    }
+    res.status(500).json({ error: ERROR_MESSAGES.SERVER.INTERNAL });
+  }
+};
+
+export const getDestinationOptionsController = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const { id } = req.params;
+    const options = await getDestinationOptionsHelper(id);
+    res.status(200).json(options);
+  } catch (error: any) {
+    if (error.message === ERROR_MESSAGES.SERVER.INVALID_ID) {
+      return res.status(400).json({ error: error.message });
+    }
+    if (error.message === ERROR_MESSAGES.DESTINATION.NOT_FOUND) {
+      return res.status(404).json({ error: error.message });
+    }
+    res.status(500).json({ error: ERROR_MESSAGES.SERVER.INTERNAL });
+  }
+};
+
+export const getNextClueController = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { currentClueIndex = 0 } = req.query;
+    const clue = await getNextClueHelper(id, Number(currentClueIndex));
+    if (!clue) {
+      return res.status(404).json({ error: ERROR_MESSAGES.GAME.NO_MORE_CLUES });
+    }
+    res.status(200).json({ clue });
+  } catch (error: any) {
+    if (error.message === ERROR_MESSAGES.SERVER.INVALID_ID) {
       return res.status(400).json({ error: error.message });
     }
     res.status(500).json({ error: ERROR_MESSAGES.SERVER.INTERNAL });

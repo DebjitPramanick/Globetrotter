@@ -27,6 +27,10 @@ const gameSchema = new Schema(
         required: true,
       },
     ],
+    clueIndices: {
+      type: Object,
+      default: {},
+    },
   },
   { timestamps: true }
 );
