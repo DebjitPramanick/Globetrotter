@@ -83,7 +83,7 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
       const response = await userApi.auth({
         username: uniqueUsername,
       });
-      setUser(response.data);
+      handleSetUser(response.data);
       return response.data;
     } catch (error) {
       console.error("Error creating anonymous user:", error);

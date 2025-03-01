@@ -1,12 +1,11 @@
 import mongoose, { Schema } from "mongoose";
 import { IGameStats } from "../types";
 
-const gameStatsSchema = new Schema(
+const gameStatsSchema = new Schema<IGameStats>(
   {
     userId: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-      required: [true, "User ID is required"],
+      type: String,
+      required: true,
       unique: true,
     },
     bestScore: {
@@ -38,10 +37,12 @@ const gameStatsSchema = new Schema(
       default: 0,
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
-// Index for faster lookups
-gameStatsSchema.index({ userId: 1 });
+// Only keep the userId index
+gameStatsSchema.index({ userId: 1 }, { unique: true });
 
 export default mongoose.model<IGameStats>("GameStats", gameStatsSchema);

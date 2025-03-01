@@ -148,3 +148,49 @@ export const Input = styled.input`
     box-shadow: 0 0 0 3px ${({ theme }) => `${theme.colors.primary}20`};
   }
 `;
+
+export const OrDivider = styled.div`
+  position: relative;
+  text-align: center;
+  margin: ${({ theme }) => theme.spacing.lg} 0;
+  color: ${({ theme }) => theme.colors.textSecondary};
+  font-size: ${({ theme }) => theme.typography.fontSize.small};
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: calc(50% - 20px);
+    height: 1px;
+    background: ${({ theme }) => theme.colors.border};
+  }
+
+  &::before {
+    left: 0;
+  }
+
+  &::after {
+    right: 0;
+  }
+`;
+
+export const GuestLink = styled.button`
+  background: none;
+  border: none;
+  color: ${({ theme }) => theme.colors.primary};
+  font-size: ${({ theme }) => theme.typography.fontSize.body};
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  opacity: 0.8;
+  transition: all 0.2s ease;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+`;
