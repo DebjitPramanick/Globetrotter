@@ -1,4 +1,5 @@
 import styled, { keyframes, css } from "styled-components";
+import { mediaQueryMobile, mediaQueryTablet } from "@/styles/mixins";
 
 const fadeIn = keyframes`
   from {
@@ -44,8 +45,8 @@ export const WelcomeContainer = styled.div`
   background: ${({ theme }) => theme.colors.background};
   overflow: hidden;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    padding: 0px ${({ theme }) => theme.spacing.md};
+  ${mediaQueryMobile()} {
+    padding: 0px ${({ theme }) => theme.spacing.sm};
   }
 `;
 
@@ -64,9 +65,14 @@ export const ContentWrapper = styled.div`
   margin: ${({ theme }) => theme.spacing.md};
   box-shadow: 0 8px 32px 0 ${({ theme }) => `${theme.colors.primary}10`};
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+  ${mediaQueryMobile()} {
     padding: ${({ theme }) => theme.spacing.md};
     margin: ${({ theme }) => theme.spacing.sm};
+    max-width: 320px;
+  }
+
+  ${mediaQueryTablet()} {
+    max-width: 360px;
   }
 `;
 
@@ -110,8 +116,9 @@ export const Form = styled.form`
   max-width: 400px;
   margin: 0 auto;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+  ${mediaQueryMobile()} {
     gap: ${({ theme }) => theme.spacing.sm};
+    max-width: 100%;
   }
 `;
 
@@ -124,6 +131,15 @@ export const Input = styled.input`
   background: ${({ theme }) => theme.colors.surface};
   color: ${({ theme }) => theme.colors.text};
   transition: all 0.3s ease;
+
+  ${mediaQueryMobile()} {
+    padding: ${({ theme }) => `${theme.spacing.md} ${theme.spacing.lg}`};
+    font-size: ${({ theme }) => theme.typography.fontSize.body};
+  }
+
+  ${mediaQueryTablet()} {
+    padding: ${({ theme }) => `${theme.spacing.md} ${theme.spacing.xl}`};
+  }
 
   &:focus {
     outline: none;

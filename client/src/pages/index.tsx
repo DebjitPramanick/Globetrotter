@@ -16,10 +16,12 @@ import { ApiError, RequestError } from "@/types/error";
 import { useApp } from "@/context/AppContext";
 import { showErrorToast } from "@/utils/notifications";
 import { extractErrorMessage } from "@/utils/error";
+import { useTheme } from "styled-components";
 
 const Welcome = () => {
   const router = useRouter();
   const { setUser } = useApp();
+  const theme = useTheme();
 
   const [username, setUsername] = useState("");
 
@@ -71,7 +73,7 @@ const Welcome = () => {
           </Button>
         </Form>
       </ContentWrapper>
-      <Credit />
+      <Credit style={{ marginTop: theme.spacing.lg }} />
     </WelcomeContainer>
   );
 };
