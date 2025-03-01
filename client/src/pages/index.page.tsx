@@ -33,7 +33,7 @@ const Welcome = () => {
       try {
         submitRequestStateHandler.pending();
         const response = await userApi.auth({
-          username: "",
+          username: username.trim(),
         });
         submitRequestStateHandler.fulfilled(response.data);
         setUser(response.data);
