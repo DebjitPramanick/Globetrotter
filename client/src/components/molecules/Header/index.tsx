@@ -46,7 +46,7 @@ const Header = () => {
 
   const handleChallengeClick = () => {
     if (!user.username || user.username.toLowerCase().startsWith("anonymous")) {
-      router.push("/");
+      router.push("/welcome");
       return;
     }
     setShowInviteModal(true);

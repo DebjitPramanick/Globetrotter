@@ -74,8 +74,7 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
 
   const generateUniqueAnonymousUsername = () => {
     const timestamp = Date.now().toString(36); // Convert timestamp to base36
-    const random = Math.random().toString(36).substring(2, 8); // Get 6 random chars
-    return `anonymous-${timestamp}-${random}`;
+    return `anonymous-${timestamp}`;
   };
 
   const createAnonymousUser = async () => {

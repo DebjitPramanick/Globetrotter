@@ -1,7 +1,7 @@
-import WelcomePageView from "@/views/welcome";
+import GamePageView from "@/views/game";
 
-const WelcomePage = () => {
-  return <WelcomePageView />;
+const GamePage = () => {
+  return <GamePageView />;
 };
 
-export default WelcomePage;
+export default GamePage;
