@@ -44,6 +44,8 @@ export const Card = styled.div`
   z-index: 1;
 
   ${mediaQueryMobileOrTablet} {
+    min-height: 100vh;
+    min-height: 100dvh;
     height: auto;
     padding: ${({ theme }) => theme.spacing.sm};
     gap: ${({ theme }) => theme.spacing.xs};
