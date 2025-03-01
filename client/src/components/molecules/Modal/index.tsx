@@ -1,44 +1,38 @@
 import { useEffect } from "react";
-import { X } from "react-feather";
+import { CheckCircle, Frown } from "react-feather";
 import {
   ModalOverlay,
   ModalContainer,
   ModalContent,
-  CloseButton,
-  ModalTitle,
   ModalDescription,
   ButtonGroup,
   ActionButton,
-  StatsContainer,
-  StatItem,
-  StatLabel,
-  StatValue,
+  FeedbackContainer,
+  StatsMessage,
+  FunFactContainer,
 } from "./index.styled";
+import { SubmissionResult } from "@/types";
 
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
-  title: string;
   description: string;
   onPlayAgain: () => void;
   onNext: () => void;
-  isCorrect: boolean;
-  stats: {
-    correct: number;
-    wrong: number;
-  };
+  submissionResult: SubmissionResult;
 }
 
 const Modal = ({
   isOpen,
   onClose,
-  title,
   description,
   onPlayAgain,
   onNext,
-  isCorrect,
-  stats,
+  submissionResult,
 }: ModalProps) => {
+  const { isCorrect, correctAnswers, wrongAnswers, funFact } =
+    submissionResult || {};
+
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -57,6 +51,34 @@ const Modal = ({
     };
   }, [isOpen, onClose]);
 
+  const getStatsMessage = () => {
+    const total = correctAnswers + wrongAnswers;
+    const percentage = Math.round((correctAnswers / total) * 100) || 0;
+
+    if (percentage >= 80) {
+      return (
+        <>
+          <span className="highlight">{percentage}% Accuracy!</span>{" "}
+          <span className="text">You're on fire! 🔥</span>
+        </>
+      );
+    } else if (percentage >= 50) {
+      return (
+        <>
+          <span className="highlight">{percentage}% Accuracy</span>{" "}
+          <span className="text">Keep it up! 💪</span>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <span className="highlight">{percentage}% Accuracy</span>{" "}
+          <span className="text">Practice makes perfect! 🎯</span>
+        </>
+      );
+    }
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -65,22 +87,27 @@ const Modal = ({
         onClick={(e) => e.stopPropagation()}
         $isCorrect={isCorrect}
       >
-        {/* <CloseButton onClick={onClose}>
-          <X size={24} />
-        </CloseButton> */}
         <ModalContent>
-          <ModalTitle>{title}</ModalTitle>
-          <ModalDescription>{description}</ModalDescription>
-          <StatsContainer>
-            <StatItem>
-              <StatValue $type="correct">{stats.correct}</StatValue>
-              <StatLabel>Correct</StatLabel>
-            </StatItem>
-            <StatItem>
-              <StatValue $type="wrong">{stats.wrong}</StatValue>
-              <StatLabel>Wrong</StatLabel>
-            </StatItem>
-          </StatsContainer>
+          <FeedbackContainer $isCorrect={isCorrect}>
+            {isCorrect ? (
+              <>
+                <CheckCircle />
+                <span>Correct!</span>
+              </>
+            ) : (
+              <>
+                <Frown />
+                <span>Wrong Answer</span>
+              </>
+            )}
+          </FeedbackContainer>
+          <StatsMessage $isCorrect={isCorrect}>
+            {getStatsMessage()}
+          </StatsMessage>
+          <FunFactContainer>
+            <div className="label">Fun Fact</div>
+            <div className="fact">{funFact}</div>
+          </FunFactContainer>
           <ButtonGroup>
             <ActionButton onClick={onPlayAgain}>Play Again</ActionButton>
             <ActionButton onClick={onNext}>Next</ActionButton>

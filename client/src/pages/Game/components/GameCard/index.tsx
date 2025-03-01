@@ -53,6 +53,7 @@ const GameCard = ({ game, onCreateNewGame }: GameCardProps) => {
     totalScore,
     isSelectedAnswerCorrect,
     hasSubmittedAnswer,
+    submissionResult,
     submitAnswer,
     revealNextClue,
     moveToNextDestination,
@@ -216,16 +217,15 @@ const GameCard = ({ game, onCreateNewGame }: GameCardProps) => {
       <Modal
         isOpen={showModal}
         onClose={() => {}}
-        title={isSelectedAnswerCorrect ? "Correct!" : "Wrong Answer"}
+        // title={isSelectedAnswerCorrect ? "Correct!" : "Wrong Answer"}
         description={
           isSelectedAnswerCorrect
             ? "Great job! You've found the right destination."
-            : "That's not the right destination. Try again!"
+            : "That's not the right destination."
         }
         onPlayAgain={onCreateNewGame}
         onNext={handleNext}
-        isCorrect={isSelectedAnswerCorrect}
-        stats={stats}
+        submissionResult={submissionResult}
       />
     </>
   );

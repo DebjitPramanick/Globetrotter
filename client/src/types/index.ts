@@ -17,6 +17,7 @@ export interface Destination {
   totalClues: number;
   image?: string;
   options: string[];
+  funFact: string;
 }
 
 export interface Game {
@@ -43,4 +44,16 @@ export interface Stats {
 export interface ApiResponse<T> {
   data: T;
   message?: string;
+}
+
+export interface SubmissionResult {
+  isCorrect: boolean;
+  cluesUsed: number;
+  score: number;
+  totalScore: number;
+  correctAnswer: string | undefined;
+  isGameCompleted: boolean;
+  correctAnswers: number;
+  wrongAnswers: number;
+  funFact: string;
 }

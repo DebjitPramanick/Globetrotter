@@ -1,12 +1,14 @@
-import styled, { keyframes } from "styled-components";
+import styled, { keyframes, css } from "styled-components";
 import { Button } from "@/components/atoms";
 
 const fadeIn = keyframes`
   from {
     opacity: 0;
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
+    transform: translateY(0);
   }
 `;
 
@@ -17,6 +19,62 @@ const slideIn = keyframes`
   }
   to {
     transform: translate(-50%, -50%);
+    opacity: 1;
+  }
+`;
+
+const shake = keyframes`
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+`;
+
+const scaleIn = keyframes`
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+`;
+
+const floatIn = keyframes`
+  0% {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+`;
+
+const revealText = keyframes`
+  0% {
+    clip-path: inset(0 100% 0 0);
+    opacity: 0;
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+`;
+
+const popIn = keyframes`
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
     opacity: 1;
   }
 `;
@@ -131,4 +189,76 @@ export const StatLabel = styled.div`
   color: ${({ theme }) => theme.colors.textSecondary};
   text-transform: uppercase;
   letter-spacing: 1px;
+`;
+
+export const FeedbackContainer = styled.div<{ $isCorrect?: boolean }>`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: ${({ theme }) => theme.spacing.sm};
+  color: ${({ theme, $isCorrect }) =>
+    $isCorrect ? theme.colors.success : theme.colors.error};
+  font-size: ${({ theme }) => theme.typography.fontSize.h2};
+  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
+  margin-bottom: ${({ theme }) => theme.spacing.lg};
+  animation: ${({ $isCorrect }) =>
+    $isCorrect
+      ? css`
+          ${fadeIn} 0.5s ease-out
+        `
+      : css`
+          ${shake} 0.5s ease-in-out
+        `};
+
+  svg {
+    width: 32px;
+    height: 32px;
+  }
+`;
+
+export const StatsMessage = styled.div<{ $isCorrect: boolean }>`
+  text-align: center;
+  margin-bottom: ${({ theme }) => theme.spacing.xs};
+
+  .highlight {
+    display: inline-block;
+    color: ${({ theme, $isCorrect }) =>
+      $isCorrect ? theme.colors.success : theme.colors.error};
+    font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
+    animation: ${scaleIn} 0.5s ease-out forwards;
+    animation-delay: 0.3s;
+    opacity: 0;
+  }
+
+  .text {
+    display: inline-block;
+    animation: ${floatIn} 0.5s ease-out forwards;
+    animation-delay: 0.5s;
+    opacity: 0;
+  }
+`;
+
+export const FunFactContainer = styled.div`
+  text-align: center;
+  margin: ${({ theme }) => theme.spacing.sm} auto;
+  max-width: 400px;
+
+  .label {
+    color: ${({ theme }) => theme.colors.primary};
+    font-size: ${({ theme }) => theme.typography.fontSize.small};
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
+    margin-bottom: ${({ theme }) => theme.spacing.sm};
+    animation: ${popIn} 0.5s ease-out forwards;
+  }
+
+  .fact {
+    color: ${({ theme }) => theme.colors.text};
+    font-size: ${({ theme }) => theme.typography.fontSize.h3};
+    line-height: 1.5;
+    animation: ${revealText} 0.8s ease-out forwards;
+    animation-delay: 0.3s;
+    opacity: 0;
+  }
 `;

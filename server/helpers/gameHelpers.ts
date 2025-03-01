@@ -70,6 +70,8 @@ export const submitAnswerHelper = async (
   }
 
   const isCorrect = destination.city.toLowerCase() === answer.toLowerCase();
+  const randomFunFact =
+    destination.funFact[Math.floor(Math.random() * destination.funFact.length)];
 
   // Calculate score based on clues used
   const score = calculateScore({
@@ -106,6 +108,7 @@ export const submitAnswerHelper = async (
     isGameCompleted: updatedGame?.destinationIds.length === TOTAL_DESTINATIONS,
     correctAnswers: updatedGame?.correctAnswers,
     wrongAnswers: updatedGame?.wrongAnswers,
+    funFact: randomFunFact,
   };
 };
 
@@ -123,8 +126,6 @@ const calculateScore = ({
   const score = isCorrect
     ? Math.max(baseScore - (cluesUsed - 1) * scoreDeduction, 0)
     : 0;
-
-  console.log("scoreDeduction", cluesUsed, scoreDeduction, score);
 
   return score;
 };

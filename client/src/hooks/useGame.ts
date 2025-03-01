@@ -19,6 +19,17 @@ interface UseGameReturn {
   totalScore: number;
   isSelectedAnswerCorrect: boolean;
   hasSubmittedAnswer: boolean;
+  submissionResult: {
+    isCorrect: boolean;
+    cluesUsed: number;
+    score: number;
+    totalScore: number;
+    correctAnswer: string | undefined;
+    isGameCompleted: boolean;
+    correctAnswers: number;
+    wrongAnswers: number;
+    funFact: string;
+  };
   submitAnswer: (answer: string) => void;
   revealNextClue: () => void;
   moveToNextDestination: () => void;
@@ -176,6 +187,7 @@ export const useGame = ({ game }: { game: Game }): UseGameReturn => {
     scoreToObtain: state.scoreToObtain,
     isSelectedAnswerCorrect: state.isSelectedAnswerCorrect,
     hasSubmittedAnswer: state.hasSubmittedAnswer,
+    submissionResult: submitAnswerRequestStates.data,
     submitAnswer: handleSubmitAnswer,
     revealNextClue: fetchNextClue,
     moveToNextDestination,
