@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BackgroundWrapper, GameContainer } from "./index.styled";
 import GameCard from "./components/GameCard";
 import StartGame from "./components/StartGame";
@@ -10,19 +10,25 @@ import { useApp } from "@/context/AppContext";
 import { showErrorToast, showInfoToast } from "@/utils/notifications";
 import { FloatingElements } from "@/components/molecules";
 import { extractErrorMessage } from "@/utils/error";
-
-const GAME_CARD_DIMENSIONS = {
-  width: "600px",
-  height: "400px",
-};
+import { useRouter } from "next/router";
+import ChallengeModal from "@/components/molecules/ChallengeModal";
 
 const SLOW_RESPONSE_THRESHOLD = 2000; // 2 seconds
 
 const GamePageView = () => {
+  const router = useRouter();
+  const { challenge, from, score } = router.query;
   const { user, createAnonymousUser } = useApp();
   const [isGameStarted, setIsGameStarted] = useState(false);
   const [startGameRequestStates, startGameRequestStatesHandler] =
     useRequestState();
+  const [showChallengeModal, setShowChallengeModal] = useState(false);
+
+  useEffect(() => {
+    if (challenge === "true" && from && score) {
+      setShowChallengeModal(true);
+    }
+  }, [challenge, from, score]);
 
   const handleGameStart = async () => {
     let userId = user._id;
@@ -98,6 +104,12 @@ const GamePageView = () => {
           )}
         </GameContainer>
       </BackgroundWrapper>
+      <ChallengeModal
+        isOpen={showChallengeModal}
+        onClose={() => setShowChallengeModal(false)}
+        inviterName={from as string}
+        inviterScore={Number(score)}
+      />
     </AppLayout>
   );
 };

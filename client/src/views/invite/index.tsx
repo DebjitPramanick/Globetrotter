@@ -7,24 +7,33 @@ const OG_IMAGE_URL =
 
 const InvitePageView = () => {
   const router = useRouter();
+  const { from, score } = router.query;
 
   useEffect(() => {
-    // Redirect to home after a short delay
+    // Redirect to home with challenge params
     const timer = setTimeout(() => {
-      router.push("/");
+      router.push({
+        pathname: "/",
+        query: {
+          challenge: "true",
+          from: from,
+          score: score,
+        },
+      });
     }, 100);
 
     return () => clearTimeout(timer);
-  }, [router]);
+  }, [router, from, score]);
+
+  const inviterName = from ? decodeURIComponent(from as string) : "Someone";
+  const inviterScore = score ? `with a best score of ${score}` : "";
+  const description = `${inviterName} has challenged you to play Globetrotter ${inviterScore}. Can you beat their score?`;
 
   return (
     <>
       <Head>
         <title>Join Globetrotter - Challenge Accepted!</title>
-        <meta
-          name="description"
-          content="Your friend has challenged you to play Globetrotter. Can you guess the destinations faster?"
-        />
+        <meta name="description" content={description} />
 
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
@@ -36,10 +45,7 @@ const InvitePageView = () => {
           property="og:title"
           content="Join Globetrotter - Challenge Accepted!"
         />
-        <meta
-          property="og:description"
-          content="Your friend has challenged you to play Globetrotter. Can you guess the destinations faster?"
-        />
+        <meta property="og:description" content={description} />
         <meta property="og:image" content={OG_IMAGE_URL} />
 
         {/* Twitter */}
@@ -52,10 +58,7 @@ const InvitePageView = () => {
           property="twitter:title"
           content="Join Globetrotter - Challenge Accepted!"
         />
-        <meta
-          property="twitter:description"
-          content="Your friend has challenged you to play Globetrotter. Can you guess the destinations faster?"
-        />
+        <meta property="twitter:description" content={description} />
         <meta property="twitter:image" content={OG_IMAGE_URL} />
       </Head>
     </>
