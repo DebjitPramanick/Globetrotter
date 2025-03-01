@@ -55,7 +55,9 @@ export const FloatingElement = styled.div<{
   top: ${({ top }) => top}%;
   left: ${({ left }) => left}%;
   background: ${({ color, theme }) =>
-    `${theme.colors[color]}20` || `${theme.colors.primary}20`};
+    theme.colors[color as keyof typeof theme.colors]
+      ? `${theme.colors[color as keyof typeof theme.colors]}20`
+      : `${theme.colors.primary}20`};
   ${({ shape }) => getShapeStyles(shape)};
   animation: ${float} ${({ duration }) => duration}s ease-in-out infinite;
   animation-delay: ${({ delay }) => delay}s;
@@ -70,7 +72,9 @@ export const FloatingElement = styled.div<{
     ${({ shape }) => getShapeStyles(shape)};
     border: 2px solid
       ${({ color, theme }) =>
-        `${theme.colors[color]}40` || `${theme.colors.primary}40`};
+        theme.colors[color as keyof typeof theme.colors]
+          ? `${theme.colors[color as keyof typeof theme.colors]}40`
+          : `${theme.colors.primary}40`};
     animation: ${pulse} 3s ease-in-out infinite;
     animation-delay: ${({ delay }) => delay + 1}s;
   }

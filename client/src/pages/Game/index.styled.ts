@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { mediaQueryMobile, mediaQueryTablet } from "@/styles/mixins";
 
 export const BackgroundWrapper = styled.div`
   position: relative;
@@ -11,11 +12,11 @@ export const GameContainer = styled.div`
   max-width: 1200px;
   margin: 0 auto;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+  ${mediaQueryTablet()} {
     padding: ${({ theme }) => theme.spacing.md};
   }
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+  ${mediaQueryMobile()} {
     padding: ${({ theme }) => theme.spacing.sm};
   }
 `;
@@ -26,7 +27,7 @@ export const Title = styled.h1`
   margin-bottom: ${({ theme }) => theme.spacing.xl};
   text-align: center;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+  ${mediaQueryMobile()} {
     font-size: ${({ theme }) => theme.typography.fontSize.h2};
     margin-bottom: ${({ theme }) => theme.spacing.md};
   }
