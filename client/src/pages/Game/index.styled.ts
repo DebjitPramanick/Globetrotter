@@ -4,7 +4,6 @@ export const GameContainer = styled.div`
   padding: ${({ theme }) => theme.spacing.lg};
   max-width: 1200px;
   margin: 0 auto;
-  width: 100%;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     padding: ${({ theme }) => theme.spacing.md};

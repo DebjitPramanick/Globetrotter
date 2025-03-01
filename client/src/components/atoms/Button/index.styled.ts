@@ -6,17 +6,17 @@ const getSizeStyles = (size: ButtonSize) => {
   switch (size) {
     case "small":
       return css`
-        padding: ${({ theme }) => `${theme.spacing.sm} ${theme.spacing.xs}`};
+        padding: ${({ theme }) => `${theme.spacing.sm} ${theme.spacing.sm}`};
         font-size: ${({ theme }) => theme.typography.fontSize.small};
       `;
     case "large":
       return css`
-        padding: ${({ theme }) => `${theme.spacing.lg} ${theme.spacing.md}`};
+        padding: ${({ theme }) => `${theme.spacing.lg} ${theme.spacing.lg}`};
         font-size: ${({ theme }) => theme.typography.fontSize.h3};
       `;
     default:
       return css`
-        padding: ${({ theme }) => `${theme.spacing.md} ${theme.spacing.sm}`};
+        padding: ${({ theme }) => `${theme.spacing.md} ${theme.spacing.md}`};
         font-size: ${({ theme }) => theme.typography.fontSize.body};
       `;
   }

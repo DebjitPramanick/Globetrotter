@@ -7,6 +7,7 @@ import {
 } from "react";
 import { ThemeProvider } from "styled-components";
 import { lightTheme, darkTheme } from "@/styles/theme";
+import { useRouter } from "next/router";
 
 interface AppContextType {
   isDarkMode: boolean;
@@ -23,6 +24,8 @@ interface AppContextProviderProps {
 }
 
 export const AppContextProvider = ({ children }: AppContextProviderProps) => {
+  const router = useRouter();
+
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [username, setUsernameState] = useState<string | null>(null);
 
@@ -32,11 +35,14 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
     if (savedTheme === "dark") {
       setIsDarkMode(true);
     }
+  }, []);
 
+  useEffect(() => {
     // Load saved username
     const savedUsername = localStorage.getItem("username");
     if (savedUsername) {
       setUsernameState(savedUsername);
+      router.push("/game");
     }
   }, []);
 
