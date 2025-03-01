@@ -3,7 +3,7 @@ import { RequestError } from "@/types/error";
 
 type RequestStatus = "idle" | "pending" | "fulfilled" | "rejected";
 
-interface RequestState<T> {
+export interface RequestState<T> {
   status: RequestStatus;
   data: T | null;
   error: RequestError | null;

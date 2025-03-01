@@ -30,24 +30,30 @@ import { Game } from "@/types";
 
 interface GameCardProps {
   game: Game;
+  onCreateNewGame: () => void;
 }
 
-const GameCard = ({ game }: GameCardProps) => {
+const GameCard = ({ game, onCreateNewGame }: GameCardProps) => {
   const {
+    destinationsRequestStates,
+    fetchNextClueRequestStates,
+    submitAnswerRequestStates,
     currentDestination,
     currentClues,
     currentClueIdx,
     totalClues,
-    currentScore,
+    scoreToObtain,
     totalScore,
+    isSelectedAnswerCorrect,
+    hasSubmittedAnswer,
     submitAnswer,
     revealNextClue,
+    moveToNextDestination,
   } = useGame({ game });
 
   const [isDecreasing, setIsDecreasing] = useState(false);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
-  const [isCorrect, setIsCorrect] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const [stats, setStats] = useState({ correct: 0, wrong: 0 });
 
@@ -69,47 +75,35 @@ const GameCard = ({ game }: GameCardProps) => {
 
   const handleConfirm = () => {
     submitAnswer(selectedOption!);
-    // if (selectedOption) {
-    //   const correct =
-    //     selectedOption.toLowerCase() === currentDestination.name.toLowerCase();
-    //   setIsCorrect(correct);
-    //   setShowModal(true);
-    //   setStats((prev) => ({
-    //     correct: prev.correct + (correct ? 1 : 0),
-    //     wrong: prev.wrong + (correct ? 0 : 1),
-    //   }));
-    //   if (correct) {
-    //     setShowConfetti(true);
-    //   }
-    // }
-  };
-
-  const handlePlayAgain = () => {
-    setSelectedOption(null);
-    setShowModal(false);
-    setShowConfetti(false);
   };
 
   const handleNext = () => {
-    submitAnswer(selectedOption!);
     setSelectedOption(null);
     setShowModal(false);
     setShowConfetti(false);
+    moveToNextDestination();
   };
 
-  return (
-    <>
-      {showConfetti && (
-        <Confetti
-          width={window.innerWidth}
-          height={window.innerHeight}
-          recycle={false}
-          numberOfPieces={1000}
-          gravity={0.1}
-          style={{ zIndex: 3 }}
-          onConfettiComplete={() => setShowConfetti(false)}
-        />
-      )}
+  useEffect(() => {
+    if (hasSubmittedAnswer) {
+      setShowModal(true);
+      setStats((prev) => ({
+        // TODO: Should come from backend and be stored in Game schema
+        correct: prev.correct + (isSelectedAnswerCorrect ? 1 : 0),
+        wrong: prev.wrong + (isSelectedAnswerCorrect ? 0 : 1),
+      }));
+      if (isSelectedAnswerCorrect) {
+        setShowConfetti(true);
+      }
+    }
+  }, [hasSubmittedAnswer]);
+
+  let nodeToRender;
+
+  if (destinationsRequestStates.isPending) {
+    return <p>Loading...</p>;
+  } else if (destinationsRequestStates.isFulfilled) {
+    nodeToRender = (
       <Card>
         <ScoresContainer>
           <StatsGroup>
@@ -132,7 +126,7 @@ const GameCard = ({ game }: GameCardProps) => {
             <CluesHeader>
               <ScoreDisplay>
                 <ScoreNumber isDecreasing={isDecreasing}>
-                  {currentScore}
+                  {scoreToObtain}
                 </ScoreNumber>
                 pts
               </ScoreDisplay>
@@ -178,18 +172,39 @@ const GameCard = ({ game }: GameCardProps) => {
         <Modal
           isOpen={showModal}
           onClose={() => setShowModal(false)}
-          title={isCorrect ? "Correct!" : "Wrong Answer"}
+          title={isSelectedAnswerCorrect ? "Correct!" : "Wrong Answer"}
           description={
-            isCorrect
+            isSelectedAnswerCorrect
               ? "Great job! You've found the right destination."
               : "That's not the right destination. Try again!"
           }
-          onPlayAgain={handlePlayAgain}
+          onPlayAgain={onCreateNewGame}
           onNext={handleNext}
-          isCorrect={isCorrect}
+          isCorrect={isSelectedAnswerCorrect}
           stats={stats}
         />
       </Card>
+    );
+  } else if (destinationsRequestStates.isRejected) {
+    return <p>Error loading game</p>;
+  }
+
+  console.log(currentDestination);
+
+  return (
+    <>
+      {showConfetti && (
+        <Confetti
+          width={window.innerWidth}
+          height={window.innerHeight}
+          recycle={false}
+          numberOfPieces={1000}
+          gravity={0.1}
+          style={{ zIndex: 3 }}
+          onConfettiComplete={() => setShowConfetti(false)}
+        />
+      )}
+      {nodeToRender}
     </>
   );
 };

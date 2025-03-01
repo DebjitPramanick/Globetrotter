@@ -38,7 +38,7 @@ export const getGameController = async (req: Request, res: Response) => {
 
 export const submitAnswerController = async (req: Request, res: Response) => {
   try {
-    const { gameId } = req.params;
+    const { id: gameId } = req.params;
     const { destinationId, answer } = req.body;
 
     if (!answer) {

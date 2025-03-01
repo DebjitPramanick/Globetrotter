@@ -8,7 +8,7 @@ import {
 const router = Router();
 
 router.post("/", createUserController);
-router.get("/:username", getUserController);
+router.get("/:id", getUserController);
 router.post("/auth", createOrGetUserController);
 
 export default router;

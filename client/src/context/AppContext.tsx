@@ -8,6 +8,10 @@ import {
 import { ThemeProvider } from "styled-components";
 import { lightTheme, darkTheme } from "@/styles/theme";
 import { useRouter } from "next/router";
+import { User } from "@/types";
+import { userApi } from "@/api";
+import { useRequestState } from "@/hooks";
+import { RequestError } from "@/types/error";
 
 interface AppContextType {
   isDarkMode: boolean;
@@ -15,6 +19,8 @@ interface AppContextType {
   username: string;
   setUsername: (username: string) => void;
   clearUsername: () => void;
+  user: User;
+  setUser: (user: User) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -28,6 +34,50 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
 
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [username, setUsernameState] = useState<string>("");
+  const [user, setUser] = useState<User>({
+    username: "",
+    _id: "",
+    createdAt: "",
+    updatedAt: "",
+  });
+
+  const [fetchUserRequestStates, fetchUserRequestStatesHandler] =
+    useRequestState<any>();
+
+  const fetchUser = async () => {
+    try {
+      let userId = "";
+      if (window) {
+        userId = localStorage.getItem("userId") || "";
+      }
+      fetchUserRequestStatesHandler.pending();
+      const response = await userApi.getCurrentUser({ id: userId });
+      setUser(response.data);
+      fetchUserRequestStatesHandler.fulfilled(response.data);
+    } catch (error) {
+      fetchUserRequestStatesHandler.rejected(new RequestError(error));
+    }
+  };
+
+  const toggleTheme = () => {
+    setIsDarkMode(!isDarkMode);
+    localStorage.setItem("theme", !isDarkMode ? "dark" : "light");
+  };
+
+  const setUsername = (newUsername: string) => {
+    setUsernameState(newUsername);
+    localStorage.setItem("username", newUsername);
+  };
+
+  const handleSetUser = (newUser: User) => {
+    setUser(newUser);
+    localStorage.setItem("userId", newUser._id);
+  };
+
+  const clearUsername = () => {
+    setUsernameState("");
+    localStorage.removeItem("username");
+  };
 
   useEffect(() => {
     // Load saved theme preference
@@ -46,27 +96,20 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
     }
   }, []);
 
-  const toggleTheme = () => {
-    setIsDarkMode(!isDarkMode);
-    localStorage.setItem("theme", !isDarkMode ? "dark" : "light");
-  };
-
-  const setUsername = (newUsername: string) => {
-    setUsernameState(newUsername);
-    localStorage.setItem("username", newUsername);
-  };
-
-  const clearUsername = () => {
-    setUsernameState("");
-    localStorage.removeItem("username");
-  };
+  useEffect(() => {
+    fetchUser();
+  }, []);
 
   const value = {
     isDarkMode,
     toggleTheme,
+
     username,
     setUsername,
     clearUsername,
+
+    user,
+    setUser: handleSetUser,
   };
 
   return (

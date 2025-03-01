@@ -1,4 +1,4 @@
-import { Destination, Coordinates, ApiResponse } from "../types";
+import { Destination, ApiResponse } from "../types";
 import { axiosInstance } from "./axios";
 
 export const destinationApi = {

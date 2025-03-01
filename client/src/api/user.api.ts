@@ -6,11 +6,13 @@ export const userApi = {
     return await axiosInstance.post("/users/auth", userData);
   },
 
-  logout: async (): Promise<ApiResponse<null>> => {
-    return await axiosInstance.post("/auth/logout");
-  },
-
-  getCurrentUser: async (): Promise<ApiResponse<User>> => {
-    return await axiosInstance.get("/auth/current-user");
+  getCurrentUser: async ({
+    id,
+    options,
+  }: {
+    id: string;
+    options?: any;
+  }): Promise<ApiResponse<User>> => {
+    return await axiosInstance.get(`/users/${id}`, options);
   },
 };

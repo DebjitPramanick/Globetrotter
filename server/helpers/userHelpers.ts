@@ -20,11 +20,9 @@ export const createUserHelper = async (username: string): Promise<IUser> => {
   }
 };
 
-export const getUserHelper = async (
-  username: string
-): Promise<IUser | null> => {
+export const getUserHelper = async (id: string): Promise<IUser | null> => {
   try {
-    const user = await User.findOne({ username });
+    const user = await User.findById(id);
     return user;
   } catch (error) {
     throw error;

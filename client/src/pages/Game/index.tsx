@@ -8,25 +8,30 @@ import { destinationApi } from "@/api";
 import { RequestError } from "@/types/error";
 import { useRequestState } from "@/hooks";
 import { useApp } from "@/context/AppContext";
-import { Destination } from "@/types";
 
 const Game = () => {
-  const { username } = useApp();
+  const { user } = useApp();
   const [isGameStarted, setIsGameStarted] = useState(false);
   const [startGameRequestStates, startGameRequestStatesHandler] =
     useRequestState();
 
   const handleGameStart = async () => {
-    const payload = { username };
+    const payload = { userId: user._id };
     try {
       startGameRequestStatesHandler.pending();
-      const response = await gameApi.startGame({ payload });
+      const response = await gameApi.startGame({
+        payload,
+      });
       startGameRequestStatesHandler.fulfilled(response.data);
       setIsGameStarted(true);
     } catch (error) {
       startGameRequestStatesHandler.rejected(new RequestError(error));
     }
   };
+
+  if (startGameRequestStates.isPending) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <AppLayout>
@@ -38,7 +43,10 @@ const Game = () => {
             error={startGameRequestStates.error?.message}
           />
         ) : (
-          <GameCard game={startGameRequestStates.data} />
+          <GameCard
+            game={startGameRequestStates.data}
+            onCreateNewGame={handleGameStart}
+          />
         )}
       </GameContainer>
     </AppLayout>

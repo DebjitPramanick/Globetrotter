@@ -6,7 +6,7 @@ export const gameApi = {
     payload,
     options,
   }: {
-    payload: { username: string };
+    payload: { userId: string };
     options?: any;
   }): Promise<ApiResponse<Game>> => {
     return await axiosInstance.post("/games/start", payload, options);

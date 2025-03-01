@@ -60,6 +60,7 @@ export interface IDestinationListResponse {
 export interface IGame {
   _id: string;
   userId: string;
+  isCompleted: boolean;
   correctAnswers: number;
   wrongAnswers: number;
   destinationIds: string[];

@@ -41,6 +41,7 @@ export const getDestinationListHelper = async () => {
       {
         $project: {
           _id: 1,
+          city: 1,
           firstClue: { $arrayElemAt: ["$clues", 0] },
           totalClues: { $size: "$clues" },
         },
@@ -48,7 +49,7 @@ export const getDestinationListHelper = async () => {
     ]);
 
     // Get all destination names for options
-    const allDestinationNames = destinations.map((dest) => dest.name);
+    const allDestinationNames = destinations.map((dest) => dest.city);
 
     return Promise.all(
       destinations.map(async (dest) => {
@@ -63,11 +64,10 @@ export const getDestinationListHelper = async () => {
         // Add correct answer at random position
         const position = Math.floor(Math.random() * 4);
         const options = [...randomOptions];
-        options.splice(position, 0, dest.name);
+        options.splice(position, 0, dest.city);
 
         return {
           _id: dest._id,
-          name: dest.name,
           clues: [dest.firstClue],
           totalClues: dest.totalClues,
           options,

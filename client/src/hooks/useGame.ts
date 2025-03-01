@@ -1,21 +1,26 @@
 import { useEffect } from "react";
-import { DESTINATIONS } from "@/constants";
 import { useRouter } from "next/router";
 import { useApp } from "@/context/AppContext";
 import { Destination, Game } from "@/types";
 import { useImmer } from "use-immer";
 import { destinationApi, gameApi } from "@/api";
 import { RequestError } from "@/types/error";
-import { useRequestState } from "./useRequestState";
+import { RequestState, useRequestState } from "./useRequestState";
 interface UseGameReturn {
-  currentDestination: (typeof DESTINATIONS)[0];
+  destinationsRequestStates: RequestState<Destination[]>;
+  fetchNextClueRequestStates: RequestState<any>;
+  submitAnswerRequestStates: RequestState<any>;
+  currentDestination: Destination;
   currentClueIdx: number;
   currentClues: string[];
   totalClues: number;
-  currentScore: number;
+  scoreToObtain: number;
   totalScore: number;
+  isSelectedAnswerCorrect: boolean;
+  hasSubmittedAnswer: boolean;
   submitAnswer: (answer: string) => void;
   revealNextClue: () => void;
+  moveToNextDestination: () => void;
 }
 
 interface GameState {
@@ -25,10 +30,11 @@ interface GameState {
   currentDestinationIdx: number;
   currentClueIdx: number;
   totalScore: number;
-  currentScore: number;
+  scoreToObtain: number;
+  isSelectedAnswerCorrect: boolean;
+  hasSubmittedAnswer: boolean;
 }
 
-const MAX_SCORE_PER_QUESTION = 100;
 const SCORE_DEDUCTION = 25;
 
 export const useGame = ({ game }: { game: Game }): UseGameReturn => {
@@ -48,8 +54,10 @@ export const useGame = ({ game }: { game: Game }): UseGameReturn => {
     totalClues: 0,
     currentDestinationIdx: 0,
     currentClueIdx: 0,
-    currentScore: MAX_SCORE_PER_QUESTION,
+    scoreToObtain: game.maxScorePerDestination,
     totalScore: 0,
+    isSelectedAnswerCorrect: false,
+    hasSubmittedAnswer: false,
   });
 
   const fetchDestinations = async () => {
@@ -71,25 +79,27 @@ export const useGame = ({ game }: { game: Game }): UseGameReturn => {
   const fetchNextClue = async () => {
     try {
       const payload = {
-        id: state.destinations[state.currentDestinationIdx].id,
-        currentClueIndex: state.currentClueIdx,
+        id: state.destinations[state.currentDestinationIdx]._id,
+        currentClueIndex: state.currentClueIdx + 1,
       };
       fetchNextClueRequestStatesHandler.pending();
       const response = await destinationApi.getNextClue({
         payload,
       });
 
-      const { totalClues }: { totalClues: number } = response.data;
+      const { clue, totalClues }: { clue: string; totalClues: number } =
+        response.data;
 
       fetchNextClueRequestStatesHandler.fulfilled(response.data);
 
       if (state.currentClueIdx < totalClues - 1) {
         setState((draft) => {
           draft.currentClueIdx = draft.currentClueIdx + 1;
-          draft.currentScore = Math.max(
+          draft.scoreToObtain = Math.max(
             0,
-            draft.currentScore - SCORE_DEDUCTION
+            draft.scoreToObtain - SCORE_DEDUCTION
           );
+          draft.currentClues = [...draft.currentClues, clue];
         });
       }
     } catch (error) {
@@ -102,30 +112,41 @@ export const useGame = ({ game }: { game: Game }): UseGameReturn => {
       const currentDestination =
         state.destinations[state.currentDestinationIdx];
       const payload = {
-        gameId: game.id,
-        destinationId: currentDestination.id,
+        gameId: game._id,
+        destinationId: currentDestination._id,
         answer,
       };
-      console.log(game);
       submitAnswerRequestStatesHandler.pending();
       const response = await gameApi.submitAnswer({
         payload,
       });
+      const { isCorrect, totalScore } = response.data as any; // TODO: fix type
       submitAnswerRequestStatesHandler.fulfilled(response.data);
 
       setState((draft) => {
-        draft.totalScore = draft.totalScore + draft.currentScore;
-        draft.currentClueIdx = 0;
-        draft.currentScore = MAX_SCORE_PER_QUESTION;
-        draft.currentClues = [];
-
-        if (draft.currentDestinationIdx < DESTINATIONS.length - 1) {
-          draft.currentDestinationIdx = draft.currentDestinationIdx + 1;
-        }
+        draft.hasSubmittedAnswer = true;
+        draft.totalScore = totalScore;
+        draft.isSelectedAnswerCorrect = isCorrect;
       });
     } catch (error) {
       submitAnswerRequestStatesHandler.rejected(new RequestError(error));
     }
+  };
+
+  const moveToNextDestination = () => {
+    setState((draft) => {
+      draft.currentClueIdx = 0;
+      draft.scoreToObtain = game.maxScorePerDestination;
+      draft.hasSubmittedAnswer = false;
+      draft.isSelectedAnswerCorrect = false;
+
+      if (draft.currentDestinationIdx < state.destinations.length - 1) {
+        draft.currentDestinationIdx = draft.currentDestinationIdx + 1;
+        const nextDestination = draft.destinations[draft.currentDestinationIdx];
+        draft.currentClues = nextDestination.clues;
+        draft.totalClues = nextDestination.totalClues;
+      }
+    });
   };
 
   useEffect(() => {
@@ -138,14 +159,22 @@ export const useGame = ({ game }: { game: Game }): UseGameReturn => {
     fetchDestinations();
   }, []);
 
+  const isLoadingGame = destinationsRequestStates.isPending;
+
   return {
-    currentDestination: DESTINATIONS[state.currentDestinationIdx],
+    destinationsRequestStates,
+    fetchNextClueRequestStates,
+    submitAnswerRequestStates,
+    currentDestination: state.destinations[state.currentDestinationIdx],
     currentClueIdx: state.currentClueIdx,
     currentClues: state.currentClues,
     totalClues: state.totalClues,
     totalScore: state.totalScore,
-    currentScore: state.currentScore,
+    scoreToObtain: state.scoreToObtain,
+    isSelectedAnswerCorrect: state.isSelectedAnswerCorrect,
+    hasSubmittedAnswer: state.hasSubmittedAnswer,
     submitAnswer: handleSubmitAnswer,
     revealNextClue: fetchNextClue,
+    moveToNextDestination,
   };
 };

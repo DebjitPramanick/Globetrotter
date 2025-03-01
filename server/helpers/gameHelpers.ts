@@ -95,7 +95,7 @@ export const submitAnswerHelper = async (
   });
 
   // Update user stats if answer is correct
-  await updateGameStats({ game, isCorrect, score });
+  updateGameStats({ game, isCorrect, score });
 
   return {
     isCorrect,
@@ -104,6 +104,8 @@ export const submitAnswerHelper = async (
     totalScore: updatedGame?.score,
     correctAnswer: isCorrect ? undefined : destination.city,
     isGameCompleted: updatedGame?.destinationIds.length === TOTAL_DESTINATIONS,
+    correctAnswers: updatedGame?.correctAnswers,
+    wrongAnswers: updatedGame?.wrongAnswers,
   };
 };
 

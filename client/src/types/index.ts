@@ -1,13 +1,12 @@
 export interface User {
-  id: string;
-  email: string;
+  _id: string;
   username: string;
   createdAt: string;
   updatedAt: string;
 }
 
 export interface Destination {
-  id: string;
+  _id: string;
   name: string;
   description: string;
   latitude: number;
@@ -17,15 +16,19 @@ export interface Destination {
   clues: string[];
   totalClues: number;
   image?: string;
+  options: string[];
 }
 
 export interface Game {
-  id: string;
+  _id: string;
   username: string;
   correctAnswers: number;
   wrongAnswers: number;
   destinationIds: string[];
   clueIndices: { [key: string]: number };
+  score: number;
+  maxScorePerDestination: number;
+  isCompleted: boolean;
 }
 
 export interface Stats {
@@ -35,27 +38,6 @@ export interface Stats {
   bestScore: number;
   totalTimePlayed: number; // in seconds
   destinationsFound: number;
-}
-
-export interface LeaderboardEntry {
-  userId: string;
-  username: string;
-  score: number;
-  rank: number;
-}
-
-export interface GameHistory {
-  id: string;
-  score: number;
-  startTime: string;
-  endTime: string;
-  timeSpent: number;
-  destinationsFound: Destination[];
-}
-
-export interface Coordinates {
-  latitude: number;
-  longitude: number;
 }
 
 export interface ApiResponse<T> {

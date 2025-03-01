@@ -26,8 +26,8 @@ export const createUserController = async (req: Request, res: Response) => {
 
 export const getUserController = async (req: Request, res: Response) => {
   try {
-    const { username } = req.params;
-    const user = await getUserHelper(username);
+    const { id } = req.params;
+    const user = await getUserHelper(id);
 
     if (!user) {
       return res.status(404).json({ error: ERROR_MESSAGES.USER.NOT_FOUND });
