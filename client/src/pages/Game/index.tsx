@@ -1,6 +1,6 @@
 import { GameContainer } from "./index.styled";
 import GameCard from "./components/GameCard";
-import { useGame } from "@/hooks/useGame";
+import { useGame } from "@/hooks";
 import AppLayout from "@/layouts/AppLayout";
 
 const Game = () => {

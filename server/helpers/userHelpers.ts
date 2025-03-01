@@ -30,3 +30,27 @@ export const getUserHelper = async (
     throw error;
   }
 };
+
+export const createOrGetUser = async (username: string): Promise<IUser> => {
+  try {
+    // Try to find existing user
+    let user = await User.findOne({
+      username: { $regex: new RegExp(`^${username}$`, "i") }, // Case insensitive search
+    });
+
+    // If user doesn't exist, create new one
+    if (!user) {
+      user = new User({
+        username,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+      await user.save();
+    }
+
+    return user;
+  } catch (error) {
+    console.error("Error in createOrGetUser:", error);
+    throw error;
+  }
+};

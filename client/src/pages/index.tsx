@@ -10,17 +10,33 @@ import {
   Input,
 } from "./index.styled";
 import { useRouter } from "next/router";
+import { userApi } from "@/api";
+import { useRequestState } from "@/hooks";
+import { ApiError, RequestError } from "@/types/error";
+import { useApp } from "@/context/AppContext";
 
 const Welcome = () => {
-  const [username, setUsername] = useState("");
   const router = useRouter();
+  const { setUsername: setUsernameInContext } = useApp();
 
-  const handleSubmit = (e: FormEvent) => {
+  const [username, setUsername] = useState("");
+
+  const [submitRequestState, submitRequestStateHandler] = useRequestState();
+
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (username.trim()) {
-      // You can store the username in context or local storage if needed
-      localStorage.setItem("username", username.trim());
-      router.push("/game");
+      try {
+        submitRequestStateHandler.pending();
+        const response = await userApi.auth({
+          username: username.trim(),
+        });
+        submitRequestStateHandler.fulfilled(response.data);
+        setUsernameInContext(response.data.username);
+        router.push("/game");
+      } catch (error) {
+        submitRequestStateHandler.rejected(new RequestError(error));
+      }
     }
   };
 
@@ -40,11 +56,21 @@ const Welcome = () => {
             minLength={3}
             maxLength={15}
             required
+            disabled={submitRequestState.isPending}
           />
-          <Button type="submit" disabled={!username.trim()} fullWidth>
-            Start Game
+          <Button
+            type="submit"
+            disabled={!username.trim() || submitRequestState.isPending}
+            fullWidth
+          >
+            {submitRequestState.isPending ? "Loading..." : "Start Game"}
           </Button>
         </Form>
+        {submitRequestState.isRejected && (
+          <div className="error-message">
+            {submitRequestState.error?.message || "An error occurred"}
+          </div>
+        )}
       </ContentWrapper>
       <Credit />
     </WelcomeContainer>

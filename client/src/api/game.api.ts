@@ -1,11 +1,10 @@
-import axios from "axios";
 import { Game, ApiResponse } from "../types";
-
-const BASE_URL = process.env.NEXT_PUBLIC_APP_API_URL || "http://localhost:8080";
+import { axiosInstance } from "./axios";
 
 export const gameApi = {
   startGame: async (): Promise<ApiResponse<Game>> => {
-    return await axios.post(`${BASE_URL}/game/start`);
+    const response = await axiosInstance.post("/game/start");
+    return response.data;
   },
 
   endGame: async (gameData: {
@@ -13,10 +12,12 @@ export const gameApi = {
     timeSpent: number;
     destinationsFound: string[];
   }): Promise<ApiResponse<Game>> => {
-    return await axios.post(`${BASE_URL}/game/end`, gameData);
+    const response = await axiosInstance.post("/game/end", gameData);
+    return response.data;
   },
 
   getCurrentGame: async (): Promise<ApiResponse<Game>> => {
-    return await axios.get(`${BASE_URL}/game/current`);
+    const response = await axiosInstance.get("/game/current");
+    return response.data;
   },
 };

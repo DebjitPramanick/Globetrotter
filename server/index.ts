@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import routes from "./routes";
 import connectDB from "./db";
+import cors from "cors";
 
 // Load environment variables
 dotenv.config();
@@ -12,7 +13,16 @@ const port = process.env.PORT || 8080;
 // Connect to database
 connectDB();
 
-// Middleware to parse JSON bodies
+// CORS configuration
+const corsOptions = {
+  origin: process.env.CLIENT_URL || "http://localhost:3000",
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+
+// Middleware
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Register routes

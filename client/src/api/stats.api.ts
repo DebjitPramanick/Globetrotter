@@ -1,18 +1,19 @@
-import axios from "axios";
 import { Stats, LeaderboardEntry, GameHistory, ApiResponse } from "../types";
-
-const BASE_URL = process.env.NEXT_PUBLIC_APP_API_URL || "http://localhost:8080";
+import { axiosInstance } from "./axios";
 
 export const statsApi = {
   getUserStats: async (): Promise<ApiResponse<Stats>> => {
-    return await axios.get(`${BASE_URL}/stats/user`);
+    const response = await axiosInstance.get("/stats/user");
+    return response.data;
   },
 
   getLeaderboard: async (): Promise<ApiResponse<LeaderboardEntry[]>> => {
-    return await axios.get(`${BASE_URL}/stats/leaderboard`);
+    const response = await axiosInstance.get("/stats/leaderboard");
+    return response.data;
   },
 
   getGameHistory: async (): Promise<ApiResponse<GameHistory[]>> => {
-    return await axios.get(`${BASE_URL}/stats/history`);
+    const response = await axiosInstance.get("/stats/history");
+    return response.data;
   },
 };
