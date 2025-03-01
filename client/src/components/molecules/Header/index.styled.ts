@@ -1,5 +1,5 @@
 import Link from "next/link";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 export const Nav = styled.nav`
   padding: ${({ theme }) => theme.spacing.md};
@@ -204,5 +204,73 @@ export const ThemeToggleWrapper = styled.div`
     width: 18px;
     height: 18px;
     color: ${({ theme }) => theme.colors.textSecondary};
+  }
+`;
+
+const pulse = keyframes`
+  0% {
+    box-shadow: 0 0 0 0 ${({ theme }) => `${theme.colors.primary}40`};
+  }
+  70% {
+    box-shadow: 0 0 0 10px ${({ theme }) => `${theme.colors.primary}00`};
+  }
+  100% {
+    box-shadow: 0 0 0 0 ${({ theme }) => `${theme.colors.primary}00`};
+  }
+`;
+
+const wiggle = keyframes`
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-10deg); }
+  75% { transform: rotate(10deg); }
+`;
+
+const shine = keyframes`
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+`;
+
+export const ChallengeButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.sm};
+  padding: ${({ theme }) => `${theme.spacing.sm} ${theme.spacing.md}`};
+  background: ${({ theme }) => `${theme.colors.primary}10`};
+  color: ${({ theme }) => theme.colors.primary};
+  border: 1px solid ${({ theme }) => theme.colors.primary};
+  border-radius: ${({ theme }) => theme.borderRadius.medium};
+  font-size: ${({ theme }) => theme.typography.fontSize.body};
+  font-weight: ${({ theme }) => theme.typography.fontWeight.medium};
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: ${({ theme }) => theme.colors.primary};
+    color: white;
+    transform: translateY(-1px);
+  }
+
+  svg {
+    width: 18px;
+    height: 18px;
+    animation: ${wiggle} 2s ease-in-out infinite;
+    transform-origin: center;
+  }
+`;
+
+export const InviteInput = styled.input`
+  width: 100%;
+  padding: ${({ theme }) => theme.spacing.md};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.borderRadius.medium};
+  font-size: ${({ theme }) => theme.typography.fontSize.body};
+  color: ${({ theme }) => theme.colors.text};
+  background: ${({ theme }) => theme.colors.surfaceLight};
+  cursor: text;
+
+  &:focus {
+    outline: none;
+    border-color: ${({ theme }) => theme.colors.primary};
   }
 `;

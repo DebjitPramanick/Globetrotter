@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Button, Error, ShimmerLoader, Spinner } from "@/components/atoms";
 import { Eye } from "react-feather";
 import Confetti from "react-confetti";
-import Modal from "@/components/molecules/Modal";
+
 import {
   Card,
   CluesSection,
@@ -28,6 +28,7 @@ import {
 } from "./index.styled";
 import { useGame } from "@/hooks";
 import { Game } from "@/types";
+import { Modal } from "@/components/molecules";
 
 interface GameCardProps {
   game: Game;

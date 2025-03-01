@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Moon, Sun, Play, BarChart2 } from "react-feather";
+import { Moon, Sun, Play, BarChart2, Share2, Copy } from "react-feather";
 import { Avatar } from "@/components/atoms";
 import {
   HeaderContainer,
@@ -11,15 +11,21 @@ import {
   MenuDivider,
   ThemeToggleWrapper,
   IconWrapper,
+  ChallengeButton,
+  InviteInput,
 } from "./index.styled";
 import { useRouter } from "next/router";
 import { useApp } from "@/context/AppContext";
+import { IconButton } from "@/components/atoms";
+import { InviteModal } from "@/components/molecules";
+
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const { isDarkMode, toggleTheme } = useApp();
   const router = useRouter();
   const { username } = useApp();
+  const [showInviteModal, setShowInviteModal] = useState(false);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -37,12 +43,26 @@ const Header = () => {
     setIsMenuOpen(false);
   };
 
+  const getInviteUrl = () => {
+    const baseUrl = window.location.origin;
+    return `${baseUrl}/play/invite`;
+  };
+
+  const handleCopyInvite = async () => {
+    await navigator.clipboard.writeText(getInviteUrl());
+    // TODO: Show toast notification
+  };
+
   return (
     <HeaderContainer>
       <LeftSection>
         <Title>Destination Quest</Title>
       </LeftSection>
       <RightSection ref={menuRef}>
+        <ChallengeButton onClick={() => setShowInviteModal(true)}>
+          <Share2 />
+          Challenge Friend
+        </ChallengeButton>
         <Avatar
           name={username || ""}
           onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -66,6 +86,11 @@ const Header = () => {
           </ThemeToggleWrapper>
         </AvatarMenu>
       </RightSection>
+
+      <InviteModal
+        isOpen={showInviteModal}
+        onClose={() => setShowInviteModal(false)}
+      />
     </HeaderContainer>
   );
 };
