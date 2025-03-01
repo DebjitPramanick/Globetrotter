@@ -1,2 +1,2 @@
-// Export all models here
-export {};
+export { default as User } from "./User";
+export { default as Destination } from "./Destination";

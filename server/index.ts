@@ -10,14 +10,7 @@ const app = express();
 const port = process.env.PORT || 8080;
 
 // Connect to database
-connectDB()
-  .then(() => {
-    console.log("Database connection initialized");
-  })
-  .catch((error) => {
-    console.error("Failed to connect to database:", error);
-    process.exit(1);
-  });
+connectDB();
 
 // Middleware to parse JSON bodies
 app.use(express.json());
