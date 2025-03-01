@@ -7,7 +7,7 @@ import { gameApi } from "@/api";
 import { RequestError } from "@/types/error";
 import { useRequestState } from "@/hooks";
 import { useApp } from "@/context/AppContext";
-import { showErrorToast } from "@/utils/notifications";
+import { showErrorToast, showInfoToast } from "@/utils/notifications";
 import { FloatingElements } from "@/components/molecules";
 import { extractErrorMessage } from "@/utils/error";
 
@@ -15,6 +15,8 @@ const GAME_CARD_DIMENSIONS = {
   width: "600px",
   height: "400px",
 };
+
+const SLOW_RESPONSE_THRESHOLD = 2000; // 2 seconds
 
 const GamePageView = () => {
   const { user, createAnonymousUser } = useApp();
@@ -29,14 +31,36 @@ const GamePageView = () => {
       userId = anonymousUser?._id || "";
     }
     const payload = { userId };
+
+    // Start timer for response time check
+    const startTime = Date.now();
+    let timeoutId: NodeJS.Timeout | null = null;
+
     try {
       startGameRequestStatesHandler.pending();
+
+      // Set timeout to check for slow response
+      timeoutId = setTimeout(() => {
+        showInfoToast(
+          "Please wait a moment, our server might be waking up from sleep mode..."
+        );
+      }, SLOW_RESPONSE_THRESHOLD);
+
       const response = await gameApi.startGame({
         payload,
       });
+
+      if (timeoutId) clearTimeout(timeoutId);
       startGameRequestStatesHandler.fulfilled(response.data);
       setIsGameStarted(true);
+
+      // Check if response was slow but successful
+      const responseTime = Date.now() - startTime;
+      if (responseTime > SLOW_RESPONSE_THRESHOLD) {
+        showInfoToast("Thanks for your patience! The game is ready now.");
+      }
     } catch (error) {
+      if (timeoutId) clearTimeout(timeoutId);
       const errorMessage = extractErrorMessage(error);
       startGameRequestStatesHandler.rejected(new RequestError(errorMessage));
       showErrorToast(errorMessage);

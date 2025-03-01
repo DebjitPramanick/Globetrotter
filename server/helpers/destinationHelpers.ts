@@ -46,22 +46,22 @@ export const getDestinationListHelper = async () => {
           totalClues: { $size: "$clues" },
         },
       },
+      { $addFields: { random: { $rand: {} } } },
+      { $sort: { random: 1 } },
+      { $project: { random: 0 } },
     ]);
 
-    // Get all destination names for options
     const allDestinationNames = destinations.map((dest) => dest.city);
 
     return Promise.all(
       destinations.map(async (dest) => {
-        // Get 3 random destination names excluding current destination
         const otherDestinations = allDestinationNames.filter(
-          (name) => name !== dest.name
+          (name) => name !== dest.city
         );
         const randomOptions = otherDestinations
           .sort(() => Math.random() - 0.5)
           .slice(0, 3);
 
-        // Add correct answer at random position
         const position = Math.floor(Math.random() * 4);
         const options = [...randomOptions];
         options.splice(position, 0, dest.city);
@@ -83,10 +83,8 @@ export const bulkCreateDestinationsHelper = async (
   destinationsData: Partial<IDestination>[]
 ): Promise<IDestination[]> => {
   try {
-    // Extract all cities for duplicate check
     const cities = destinationsData.map((dest) => dest.city);
 
-    // Check for existing cities
     const existingDestinations = await Destination.find({
       city: { $in: cities },
     });
@@ -98,13 +96,11 @@ export const bulkCreateDestinationsHelper = async (
       throw new Error(`Cities already exist: ${existingCities}`);
     }
 
-    // Validate all destinations before inserting
     const destinationsToCreate = destinationsData.map(
       (dest) => new Destination(dest)
     );
     await Promise.all(destinationsToCreate.map((dest) => dest.validate()));
 
-    // Create and save all destinations
     const createdDestinations = await Promise.all(
       destinationsToCreate.map((dest) => dest.save())
     );
