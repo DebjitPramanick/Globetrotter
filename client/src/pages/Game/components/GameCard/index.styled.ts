@@ -1,4 +1,5 @@
 import styled, { keyframes, css } from "styled-components";
+import { Button } from "@/components/atoms";
 
 const fadeIn = keyframes`
   from {
@@ -65,12 +66,11 @@ export const CluesSection = styled.div`
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.lg};
   height: 100%;
-  overflow: hidden;
 `;
 
 export const CluesHeader = styled.div`
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
   margin-bottom: ${({ theme }) => theme.spacing.md};
 `;
@@ -244,29 +244,62 @@ export const ScoresContainer = styled.div`
   margin-bottom: ${({ theme }) => theme.spacing.lg};
 `;
 
-export const ScoreDisplay = styled.div`
-  font-size: ${({ theme }) => theme.typography.fontSize.h3};
-  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
-  color: ${({ theme }) => theme.colors.primary};
+export const StatsGroup = styled.div`
+  display: flex;
+  gap: ${({ theme }) => theme.spacing.xl};
+`;
+
+export const StatBox = styled.div`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.sm};
 `;
 
-export const TotalScore = styled.div`
-  font-size: ${({ theme }) => theme.typography.fontSize.body};
+export const StatNumber = styled.span<{ $type: "correct" | "wrong" }>`
+  font-size: ${({ theme }) => theme.typography.fontSize.h3};
+  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
+  color: ${({ theme, $type }) =>
+    $type === "correct" ? theme.colors.success : theme.colors.error};
+`;
+
+export const StatText = styled.span`
+  font-size: ${({ theme }) => theme.typography.fontSize.small};
   color: ${({ theme }) => theme.colors.textSecondary};
+  text-transform: uppercase;
+  letter-spacing: 1px;
+`;
+
+export const TotalScore = styled.div`
+  font-size: ${({ theme }) => theme.typography.fontSize.h3};
+  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
+  color: ${({ theme }) => theme.colors.primary};
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.xs};
+
+  span {
+    color: ${({ theme }) => theme.colors.textSecondary};
+    font-size: ${({ theme }) => theme.typography.fontSize.small};
+  }
 `;
 
 export const GameContent = styled.div`
   display: flex;
   gap: ${({ theme }) => theme.spacing.xl};
   height: calc(100% - 80px);
-  overflow: hidden;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     flex-direction: column;
   }
+`;
+
+export const ScoreDisplay = styled.div`
+  font-size: ${({ theme }) => theme.typography.fontSize.h2};
+  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
+  color: ${({ theme }) => theme.colors.primary};
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.sm};
 `;
 
 export const ScoreNumber = styled.span<{ isDecreasing: boolean }>`
@@ -275,4 +308,39 @@ export const ScoreNumber = styled.span<{ isDecreasing: boolean }>`
     isDecreasing ? "scale(1.2)" : "scale(1)"};
   color: ${({ theme, isDecreasing }) =>
     isDecreasing ? theme.colors.error : theme.colors.primary};
+`;
+
+export const OptionsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.md};
+  width: 100%;
+`;
+
+export const OptionButton = styled(Button)<{ isSelected?: boolean }>`
+  text-align: left;
+  justify-content: flex-start;
+  padding: ${({ theme }) => theme.spacing.lg};
+  font-size: ${({ theme }) => theme.typography.fontSize.body};
+  background: ${({ theme, isSelected }) =>
+    isSelected ? `${theme.colors.primary}10` : theme.colors.surface};
+  border: 1px solid
+    ${({ theme, isSelected }) =>
+      isSelected ? theme.colors.primary : theme.colors.border};
+  color: ${({ theme }) => theme.colors.text};
+
+  &:hover {
+    background: ${({ theme }) => `${theme.colors.primary}10`};
+    border-color: ${({ theme }) => theme.colors.primary};
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+`;
+
+export const ConfirmSection = styled.div`
+  margin-top: ${({ theme }) => theme.spacing.md};
+  padding-top: ${({ theme }) => theme.spacing.md};
+  border-top: 1px solid ${({ theme }) => theme.colors.border};
 `;

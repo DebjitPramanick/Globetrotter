@@ -4,6 +4,7 @@ export interface Destination {
   clues: string[];
   facts: string[];
   image: string;
+  options: string[];
 }
 
 export const DESTINATIONS: Destination[] = [
@@ -21,6 +22,7 @@ export const DESTINATIONS: Destination[] = [
       "The main mausoleum was completed in 1643",
     ],
     image: "taj-mahal.jpg",
+    options: ["Taj Mahal", "Petra", "Colosseum", "Angkor Wat"],
   },
   {
     id: 2,
@@ -36,6 +38,7 @@ export const DESTINATIONS: Destination[] = [
       "Named a UNESCO World Heritage Site in 1983",
     ],
     image: "machu-picchu.jpg",
+    options: ["Machu Picchu", "Chichen Itza", "Great Wall", "Stonehenge"],
   },
-  // Add more destinations...
+  // Add more destinations with options...
 ];

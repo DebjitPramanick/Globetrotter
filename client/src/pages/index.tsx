@@ -8,7 +8,7 @@ import {
   Subtitle,
   Form,
   Input,
-} from "./Welcome/index.styled";
+} from "./index.styled";
 import { useRouter } from "next/router";
 
 const Welcome = () => {
@@ -41,12 +41,7 @@ const Welcome = () => {
             maxLength={15}
             required
           />
-          <Button
-            type="submit"
-            disabled={!username.trim()}
-            size="large"
-            fullWidth
-          >
+          <Button type="submit" disabled={!username.trim()} fullWidth>
             Start Game
           </Button>
         </Form>

@@ -21,7 +21,9 @@ const Game = () => {
     <AppLayout>
       <GameContainer>
         <GameCard
+          destination={destination}
           clues={destination.clues}
+          options={destination.options}
           currentClue={currentClue}
           currentScore={currentScore}
           totalScore={totalScore}
