@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Moon, Sun, Play, BarChart2, Share2 } from "react-feather";
+import { Moon, Sun, Play, BarChart2, Share2, LogOut } from "react-feather";
 import { Avatar, Credit } from "@/components/atoms";
 import {
   HeaderContainer,
@@ -23,7 +23,7 @@ const Header = () => {
   const menuRef = useRef<HTMLDivElement>(null);
   const { isDarkMode, toggleTheme } = useApp();
   const router = useRouter();
-  const { user } = useApp();
+  const { user, setUser } = useApp();
   const theme = useTheme();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -51,6 +51,18 @@ const Header = () => {
       return;
     }
     setShowInviteModal(true);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("userId");
+    setUser({
+      username: "",
+      _id: "",
+      createdAt: "",
+      updatedAt: "",
+    });
+    setIsMenuOpen(false);
+    router.push("/welcome");
   };
 
   return (
@@ -90,6 +102,11 @@ const Header = () => {
             </IconWrapper>
             {isDarkMode ? "Light Mode" : "Dark Mode"}
           </ThemeToggleWrapper>
+          <MenuDivider />
+          <MenuItem onClick={handleLogout}>
+            <LogOut size={18} />
+            Logout
+          </MenuItem>
         </AvatarMenu>
       </RightSection>
 

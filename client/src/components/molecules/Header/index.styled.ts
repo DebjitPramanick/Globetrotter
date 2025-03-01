@@ -249,6 +249,11 @@ export const ChallengeButton = styled.button`
     transform: translateY(-1px);
   }
 
+  svg {
+    animation: ${wiggle} 2s ease-in-out infinite;
+    transform-origin: center;
+  }
+
   ${mediaQueryMobileOrTablet} {
     display: none;
   }
@@ -259,6 +264,11 @@ export const MobileMenuItem = styled(MenuItem)`
 
   ${mediaQueryMobileOrTablet} {
     display: flex;
+  }
+
+  svg {
+    animation: ${wiggle} 2s ease-in-out infinite;
+    transform-origin: center;
   }
 `;
 

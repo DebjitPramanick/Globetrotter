@@ -29,7 +29,7 @@ export const ContentWrapper = styled.div`
 export const StartGameContainer = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   padding: ${({ theme }) => theme.spacing.xl};
   text-align: center;

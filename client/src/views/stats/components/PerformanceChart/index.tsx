@@ -7,6 +7,7 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
+  ReferenceArea,
 } from "recharts";
 import { useTheme } from "styled-components";
 import { Container, Title, ChartContainer, ChartGrid } from "./index.styled";
@@ -53,20 +54,19 @@ const PerformanceChart = ({
           <ResponsiveContainer width="100%" height={400}>
             <BarChart
               data={data}
-              margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+              margin={{ top: 20, right: 20, left: 0, bottom: 4 }}
             >
-              <CartesianGrid
-                strokeDasharray="3 3"
-                stroke={`${theme.colors.border}`}
-              />
               <XAxis
                 dataKey="name"
                 stroke={theme.colors.text}
                 tick={{ fill: theme.colors.text }}
+                tickMargin={24}
               />
               <YAxis
                 stroke={theme.colors.text}
                 tick={{ fill: theme.colors.text }}
+                axisLine={false}
+                tickMargin={24}
               />
               <Tooltip
                 contentStyle={{
@@ -79,7 +79,10 @@ const PerformanceChart = ({
               <Legend
                 wrapperStyle={{
                   color: theme.colors.text,
+                  paddingTop: theme.spacing.xl,
                 }}
+                verticalAlign="bottom"
+                iconType="circle"
               />
               <Bar
                 dataKey="correct"

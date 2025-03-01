@@ -1,9 +1,14 @@
+import { mediaQueryMobileOrTablet } from "@/styles/mixins";
 import styled from "styled-components";
 
 export const ChartGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
   gap: ${({ theme }) => theme.spacing.xl};
+
+  ${mediaQueryMobileOrTablet} {
+    grid-template-columns: 1fr;
+  }
 `;
 
 export const Container = styled.div`
@@ -15,12 +20,21 @@ export const Container = styled.div`
   &:hover {
     box-shadow: 0 8px 32px ${({ theme }) => `${theme.colors.primary}10`};
   }
+
+  ${mediaQueryMobileOrTablet} {
+    padding: ${({ theme }) => theme.spacing.md};
+  }
 `;
 
 export const Title = styled.h2`
   font-size: ${({ theme }) => theme.typography.fontSize.h2};
   color: ${({ theme }) => theme.colors.text};
+  margin-top: 0;
   margin-bottom: ${({ theme }) => theme.spacing.lg};
+
+  ${mediaQueryMobileOrTablet} {
+    margin-bottom: ${({ theme }) => theme.spacing.md};
+  }
 `;
 
 export const ChartContainer = styled.div`

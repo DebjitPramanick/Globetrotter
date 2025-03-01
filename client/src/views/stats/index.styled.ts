@@ -19,7 +19,8 @@ export const Container = styled.div`
   padding: ${({ theme }) => theme.spacing.xl};
 
   ${mediaQueryMobileOrTablet} {
-    padding: ${({ theme }) => theme.spacing.md};
+    margin: 0;
+    padding: ${({ theme }) => theme.spacing.sm};
   }
 `;
 

@@ -330,7 +330,7 @@ export const StatValue = styled.span`
 export const GameContent = styled.div`
   display: flex;
   gap: ${({ theme }) => theme.spacing.xl};
-  height: calc(100% - 80px);
+  height: calc(100% - 100px);
 
   ${mediaQueryMobileOrTablet} {
     flex-direction: column;

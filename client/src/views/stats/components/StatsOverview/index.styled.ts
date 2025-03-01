@@ -1,3 +1,4 @@
+import { mediaQueryMobileOrTablet } from "@/styles/mixins";
 import styled, { keyframes } from "styled-components";
 
 const slideIn = keyframes`
@@ -15,24 +16,11 @@ export const Container = styled.div`
   display: flex;
   gap: ${({ theme }) => theme.spacing.lg};
   margin-bottom: ${({ theme }) => theme.spacing.xl};
-  padding: ${({ theme }) => theme.spacing.sm};
 
-  &::-webkit-scrollbar {
-    height: 8px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: ${({ theme }) => theme.colors.background};
-    border-radius: 4px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: ${({ theme }) => theme.colors.border};
-    border-radius: 4px;
-
-    &:hover {
-      background: ${({ theme }) => theme.colors.primary}40;
-    }
+  ${mediaQueryMobileOrTablet} {
+    flex-direction: column;
+    gap: ${({ theme }) => theme.spacing.sm};
+    margin-bottom: ${({ theme }) => theme.spacing.md};
   }
 `;
 
