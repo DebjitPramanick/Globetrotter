@@ -14,6 +14,8 @@ import { userApi } from "@/api";
 import { useRequestState } from "@/hooks";
 import { ApiError, RequestError } from "@/types/error";
 import { useApp } from "@/context/AppContext";
+import { showErrorToast } from "@/utils/notifications";
+import { extractErrorMessage } from "@/utils/error";
 
 const Welcome = () => {
   const router = useRouter();
@@ -29,13 +31,15 @@ const Welcome = () => {
       try {
         submitRequestStateHandler.pending();
         const response = await userApi.auth({
-          username: username.trim(),
+          username: "",
         });
         submitRequestStateHandler.fulfilled(response.data);
         setUser(response.data);
         router.push("/game");
       } catch (error) {
-        submitRequestStateHandler.rejected(new RequestError(error));
+        const errorMessage = extractErrorMessage(error);
+        submitRequestStateHandler.rejected(new RequestError(errorMessage));
+        showErrorToast(errorMessage);
       }
     }
   };
@@ -66,11 +70,6 @@ const Welcome = () => {
             {submitRequestState.isPending ? "Loading..." : "Start Game"}
           </Button>
         </Form>
-        {submitRequestState.isRejected && (
-          <div className="error-message">
-            {submitRequestState.error?.message || "An error occurred"}
-          </div>
-        )}
       </ContentWrapper>
       <Credit />
     </WelcomeContainer>

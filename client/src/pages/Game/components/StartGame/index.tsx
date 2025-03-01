@@ -22,27 +22,26 @@ const StartGame = ({ onStart, isLoading }: StartGameProps) => {
   const handleClick = () => {
     setIsAnimating(true);
     onStart();
-    // Reset animation after completion
     setTimeout(() => setIsAnimating(false), 800);
   };
+
+  const instructions = [
+    "🎯 Find hidden destinations using clues",
+    "🤔 Each clue reveals more information",
+    "⭐ Score points by finding destinations quickly",
+    "🌟 Check your stats and try to perform better",
+  ];
 
   return (
     <ContentWrapper>
       <StartGameContainer>
         <Title>Ready to Begin?</Title>
         <Instructions>
-          <InstructionItem>
-            🎯 Find hidden destinations using clues
-          </InstructionItem>
-          <InstructionItem>
-            🤔 Each clue reveals more information
-          </InstructionItem>
-          <InstructionItem>
-            ⭐ Score points by finding destinations quickly
-          </InstructionItem>
-          <InstructionItem>
-            🌟 Compete with others on the leaderboard
-          </InstructionItem>
+          {instructions.map((instruction, index) => (
+            <InstructionItem key={index} $delay={0.2 + index * 0.1}>
+              {instruction}
+            </InstructionItem>
+          ))}
         </Instructions>
         <Button
           onClick={handleClick}

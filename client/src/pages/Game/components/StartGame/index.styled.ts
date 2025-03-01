@@ -1,4 +1,15 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
+
+const slideInRight = keyframes`
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+`;
 
 export const BackgroundWrapper = styled.div`
   position: relative;
@@ -41,16 +52,18 @@ export const Instructions = styled.ul`
   max-width: 400px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   gap: ${({ theme }) => theme.spacing.md};
 `;
 
-export const InstructionItem = styled.li`
+export const InstructionItem = styled.li<{ $delay: number }>`
   font-size: ${({ theme }) => theme.typography.fontSize.body};
   color: ${({ theme }) => theme.colors.text};
-  opacity: 0.9;
-  text-align: center;
+  opacity: 0;
+  text-align: left;
   width: 100%;
+  animation: ${slideInRight} 0.5s ease-out forwards;
+  animation-delay: ${({ $delay }) => `${$delay}s`};
 `;
 
 export const ErrorMessage = styled.div`

@@ -6,6 +6,7 @@ import { useImmer } from "use-immer";
 import { destinationApi, gameApi } from "@/api";
 import { RequestError } from "@/types/error";
 import { RequestState, useRequestState } from "./useRequestState";
+import { extractErrorMessage } from "@/utils/error";
 interface UseGameReturn {
   destinationsRequestStates: RequestState<Destination[]>;
   fetchNextClueRequestStates: RequestState<any>;
@@ -84,7 +85,8 @@ export const useGame = ({ game }: { game: Game }): UseGameReturn => {
         draft.totalClues = currentDestination.totalClues;
       });
     } catch (error) {
-      destinationsRequestStatesHandler.rejected(new RequestError(error));
+      const errorMessage = extractErrorMessage(error);
+      destinationsRequestStatesHandler.rejected(new RequestError(errorMessage));
     }
   };
 
@@ -115,7 +117,8 @@ export const useGame = ({ game }: { game: Game }): UseGameReturn => {
         });
       }
     } catch (error) {
-      destinationsRequestStatesHandler.rejected(new RequestError(error));
+      const errorMessage = extractErrorMessage(error);
+      destinationsRequestStatesHandler.rejected(new RequestError(errorMessage));
     }
   };
 
@@ -142,7 +145,8 @@ export const useGame = ({ game }: { game: Game }): UseGameReturn => {
         draft.isSelectedAnswerCorrect = isCorrect;
       });
     } catch (error) {
-      submitAnswerRequestStatesHandler.rejected(new RequestError(error));
+      const errorMessage = extractErrorMessage(error);
+      submitAnswerRequestStatesHandler.rejected(new RequestError(errorMessage));
     }
   };
 
@@ -165,8 +169,6 @@ export const useGame = ({ game }: { game: Game }): UseGameReturn => {
   useEffect(() => {
     fetchDestinations();
   }, []);
-
-  const isLoadingGame = destinationsRequestStates.isPending;
 
   return {
     destinationsRequestStates,

@@ -7,8 +7,9 @@ import { gameApi } from "@/api";
 import { RequestError } from "@/types/error";
 import { useRequestState } from "@/hooks";
 import { useApp } from "@/context/AppContext";
-import { showErrorMessage } from "@/utils/notifications";
+import { showErrorToast } from "@/utils/notifications";
 import { FloatingElements } from "@/components/molecules";
+import { extractErrorMessage } from "@/utils/error";
 
 const GAME_CARD_DIMENSIONS = {
   width: "600px",
@@ -36,8 +37,9 @@ const Game = () => {
       startGameRequestStatesHandler.fulfilled(response.data);
       setIsGameStarted(true);
     } catch (error) {
-      startGameRequestStatesHandler.rejected(new RequestError(error));
-      showErrorMessage(error);
+      const errorMessage = extractErrorMessage(error);
+      startGameRequestStatesHandler.rejected(new RequestError(errorMessage));
+      showErrorToast(errorMessage);
     }
   };
 

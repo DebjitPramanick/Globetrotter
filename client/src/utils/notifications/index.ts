@@ -35,10 +35,3 @@ export const showInfoToast = (message: string, options?: ToastOptions) => {
     ...options,
   });
 };
-
-// Helper to handle error messages from API/RequestError
-export const showErrorMessage = (error: unknown) => {
-  const message =
-    error instanceof Error ? error.message : "Something went wrong";
-  showErrorToast(message);
-};
