@@ -80,6 +80,33 @@ const fadeSlideUp = keyframes`
   }
 `;
 
+const zoomOut = keyframes`
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.1);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+`;
+
+const sadBounce = keyframes`
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+`;
+
 export const ModalOverlay = styled.div`
   position: fixed;
   top: 0;
@@ -206,18 +233,29 @@ export const FeedbackContainer = styled.div<{ $isCorrect?: boolean }>`
   font-size: ${({ theme }) => theme.typography.fontSize.h2};
   font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
   margin-bottom: ${({ theme }) => theme.spacing.lg};
-  animation: ${({ $isCorrect }) =>
-    $isCorrect
-      ? css`
-          ${fadeIn} 0.5s ease-out
-        `
-      : css`
-          ${shake} 0.5s ease-in-out
-        `};
 
   svg {
     width: 32px;
     height: 32px;
+    animation: ${({ $isCorrect }) =>
+      $isCorrect
+        ? css`
+            ${scaleIn} 0.5s ease-out
+          `
+        : css`
+            ${sadBounce} 2s ease-in-out infinite
+          `};
+  }
+
+  span {
+    animation: ${({ $isCorrect }) =>
+      $isCorrect
+        ? css`
+            ${fadeIn} 0.5s ease-out
+          `
+        : css`
+            ${shake} 0.5s ease-in-out
+          `};
   }
 `;
 
@@ -265,5 +303,32 @@ export const FunFactContainer = styled.div`
     animation: ${fadeSlideUp} 0.5s ease-out forwards;
     animation-delay: 0.3s;
     opacity: 0;
+  }
+`;
+
+export const CorrectAnswerContainer = styled.div`
+  margin: ${({ theme }) => theme.spacing.sm} 0;
+  padding: ${({ theme }) => theme.spacing.md};
+  background: ${({ theme }) => `${theme.colors.error}15`};
+  border: 1px solid ${({ theme }) => `${theme.colors.error}30`};
+  border-radius: ${({ theme }) => theme.borderRadius.medium};
+  text-align: center;
+  animation: ${zoomOut} 0.5s ease-out forwards;
+  animation-delay: 0.3s;
+  opacity: 0;
+
+  .label {
+    display: block;
+    color: ${({ theme }) => theme.colors.textSecondary};
+    font-size: ${({ theme }) => theme.typography.fontSize.small};
+    margin-bottom: ${({ theme }) => theme.spacing.xs};
+  }
+
+  .answer {
+    display: block;
+    color: ${({ theme }) => theme.colors.error};
+    font-size: ${({ theme }) => theme.typography.fontSize.h3};
+    font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
+    margin-top: ${({ theme }) => theme.spacing.sm};
   }
 `;

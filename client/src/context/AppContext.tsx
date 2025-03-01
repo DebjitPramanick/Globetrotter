@@ -7,7 +7,6 @@ import {
 } from "react";
 import { ThemeProvider } from "styled-components";
 import { lightTheme, darkTheme } from "@/styles/theme";
-import { useRouter } from "next/router";
 import { User } from "@/types";
 import { userApi } from "@/api";
 import { useRequestState } from "@/hooks";
@@ -30,8 +29,6 @@ interface AppContextProviderProps {
 }
 
 export const AppContextProvider = ({ children }: AppContextProviderProps) => {
-  const router = useRouter();
-
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [user, setUser] = useState<User>({
     username: "",
@@ -96,6 +93,8 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme === "dark") {
       setIsDarkMode(true);
+    } else {
+      setIsDarkMode(false);
     }
   }, []);
 

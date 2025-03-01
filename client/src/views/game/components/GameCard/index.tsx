@@ -28,7 +28,7 @@ import {
 } from "./index.styled";
 import { useGame } from "@/hooks";
 import { Game } from "@/types";
-import { Modal } from "@/components/molecules";
+import { ResultModal } from "@/components/molecules";
 
 interface GameCardProps {
   game: Game;
@@ -235,7 +235,7 @@ const GameCard = ({ game, onCreateNewGame, onBack }: GameCardProps) => {
 
       <Card>{nodeToRender}</Card>
 
-      <Modal
+      <ResultModal
         isOpen={showModal}
         onClose={() => {}}
         description={

@@ -10,10 +10,11 @@ import {
   FeedbackContainer,
   StatsMessage,
   FunFactContainer,
+  CorrectAnswerContainer,
 } from "./index.styled";
 import { SubmissionResult } from "@/types";
 
-interface ModalProps {
+interface ResultModalProps {
   isOpen: boolean;
   onClose: () => void;
   description: string;
@@ -22,15 +23,15 @@ interface ModalProps {
   submissionResult: SubmissionResult;
 }
 
-const Modal = ({
+const ResultModal = ({
   isOpen,
   onClose,
   description,
   onPlayAgain,
   onNext,
   submissionResult,
-}: ModalProps) => {
-  const { isCorrect, correctAnswers, wrongAnswers, funFact } =
+}: ResultModalProps) => {
+  const { isCorrect, correctAnswers, wrongAnswers, funFact, correctAnswer } =
     submissionResult || {};
 
   useEffect(() => {
@@ -104,13 +105,19 @@ const Modal = ({
           <StatsMessage $isCorrect={isCorrect}>
             {getStatsMessage()}
           </StatsMessage>
+          {!isCorrect && correctAnswer && (
+            <CorrectAnswerContainer>
+              <span className="label">Correct Answer:</span>
+              <span className="answer">{correctAnswer}</span>
+            </CorrectAnswerContainer>
+          )}
           <FunFactContainer>
             <div className="label">Fun Fact</div>
             <div className="fact">{funFact}</div>
           </FunFactContainer>
           <ButtonGroup>
             <ActionButton onClick={onPlayAgain}>Play Again</ActionButton>
-            {submissionResult.isGameCompleted ? null : (
+            {!submissionResult.isGameCompleted && (
               <ActionButton onClick={onNext}>Next</ActionButton>
             )}
           </ButtonGroup>
@@ -120,4 +127,4 @@ const Modal = ({
   );
 };
 
-export default Modal;
+export default ResultModal;

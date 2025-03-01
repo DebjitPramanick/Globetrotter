@@ -146,10 +146,10 @@ const updateGameStats = async ({
     $inc: {
       totalCorrectAnswers: 0,
       totalWrongAnswers: 0,
-      nCorrectAnswersOnFirstClue: isCorrect ? 1 : 0,
-      nWrongAnswersOnFirstClue: isCorrect ? 0 : 1,
-      nCorrectAnswersOnMultipleClues: isCorrect ? 1 : 0,
-      nWrongAnswersOnMultipleClues: isCorrect ? 0 : 1,
+      nCorrectAnswersOnFirstClue: 0,
+      nWrongAnswersOnFirstClue: 0,
+      nCorrectAnswersOnMultipleClues: 0,
+      nWrongAnswersOnMultipleClues: 0,
     },
   };
 
