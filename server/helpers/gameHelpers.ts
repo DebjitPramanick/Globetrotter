@@ -2,24 +2,17 @@ import { Game, GameStats, Destination } from "../models";
 import { IGame, IGameStats, IDestination } from "../types";
 import mongoose from "mongoose";
 import { ERROR_MESSAGES } from "../constants/errors";
+import { MAX_SCORE_PER_QUESTION, TOTAL_DESTINATIONS } from "../constants/game";
 
 // Game Helpers
-export const createGameHelper = async (username: string): Promise<IGame> => {
+export const createGameHelper = async (userId: string): Promise<IGame> => {
   try {
-    // Get random destinations
-    const destinations = await Destination.aggregate([
-      { $sample: { size: 5 } },
-    ]);
-
-    if (!destinations.length) {
-      throw new Error(ERROR_MESSAGES.DESTINATION.NOT_FOUND);
-    }
-
     const game = new Game({
-      username,
-      destinationIds: destinations.map((dest) => dest._id),
+      userId,
       correctAnswers: 0,
       wrongAnswers: 0,
+      score: 0,
+      maxScorePerDestination: MAX_SCORE_PER_QUESTION,
     });
 
     return await game.save();
@@ -53,72 +46,6 @@ export const createGameStatsHelper = async (
   return await stats.save();
 };
 
-export const getDestinationOptionsHelper = async (
-  gameId: string,
-  destinationId: string
-) => {
-  if (
-    !mongoose.Types.ObjectId.isValid(gameId) ||
-    !mongoose.Types.ObjectId.isValid(destinationId)
-  ) {
-    throw new Error(ERROR_MESSAGES.SERVER.INVALID_ID);
-  }
-
-  const game = await Game.findById(gameId);
-  if (!game) {
-    throw new Error(ERROR_MESSAGES.GAME.NOT_FOUND);
-  }
-
-  // Get current destination and 3 random ones for options
-  const currentDestination = await Destination.findById(destinationId);
-  const otherOptions = await Destination.aggregate([
-    { $match: { _id: { $ne: new mongoose.Types.ObjectId(destinationId) } } },
-    { $sample: { size: 3 } },
-    { $project: { city: 1 } },
-  ]);
-
-  const options = [{ city: currentDestination?.city }, ...otherOptions].sort(
-    () => Math.random() - 0.5
-  );
-
-  return options;
-};
-
-export const getNextClueHelper = async (
-  gameId: string,
-  destinationId: string
-): Promise<string | null> => {
-  if (
-    !mongoose.Types.ObjectId.isValid(gameId) ||
-    !mongoose.Types.ObjectId.isValid(destinationId)
-  ) {
-    throw new Error(ERROR_MESSAGES.SERVER.INVALID_ID);
-  }
-
-  const destination = await Destination.findById(destinationId);
-  if (!destination) {
-    throw new Error(ERROR_MESSAGES.DESTINATION.NOT_FOUND);
-  }
-
-  const game = await Game.findById(gameId);
-  if (!game) {
-    throw new Error(ERROR_MESSAGES.GAME.NOT_FOUND);
-  }
-
-  // Get next available clue
-  const currentClueIndex = game.clueIndices?.[destinationId] || 0;
-  if (currentClueIndex >= destination.clues.length) {
-    return null;
-  }
-
-  // Update clue index
-  await Game.findByIdAndUpdate(gameId, {
-    [`clueIndices.${destinationId}`]: currentClueIndex + 1,
-  });
-
-  return destination.clues[currentClueIndex];
-};
-
 export const submitAnswerHelper = async (
   gameId: string,
   destinationId: string,
@@ -144,16 +71,94 @@ export const submitAnswerHelper = async (
   const isCorrect = destination.city.toLowerCase() === answer.toLowerCase();
   const cluesUsed = game.clueIndices?.[destinationId] || 1;
 
-  // Update game stats
-  const updateData = isCorrect
-    ? { $inc: { correctAnswers: 1 } }
-    : { $inc: { wrongAnswers: 1 } };
+  // Calculate score based on clues used
+  const score = calculateScore({
+    isCorrect,
+    cluesUsed,
+    destination,
+  });
 
-  await Game.findByIdAndUpdate(gameId, updateData);
+  // Update game stats and destinationIds if answer is correct
+  const updateData: any = {
+    $inc: {
+      ...(isCorrect ? { correctAnswers: 1, score } : { wrongAnswers: 1 }),
+    },
+  };
+
+  // Add destination to destinationIds if correct
+  if (isCorrect) {
+    updateData["$push"] = { destinationIds: destinationId };
+  }
+
+  const updatedGame = await Game.findByIdAndUpdate(gameId, updateData, {
+    new: true,
+  });
+
+  // Update user stats if answer is correct
+  await updateGameStats({ game, isCorrect, score });
 
   return {
-    correct: isCorrect,
+    isCorrect,
     cluesUsed,
+    score: isCorrect ? score : 0,
+    totalScore: updatedGame?.score,
     correctAnswer: isCorrect ? undefined : destination.city,
+    isGameCompleted: updatedGame?.destinationIds.length === TOTAL_DESTINATIONS,
   };
+};
+
+const calculateScore = ({
+  isCorrect,
+  cluesUsed,
+  destination,
+}: {
+  isCorrect: boolean;
+  cluesUsed: number;
+  destination: IDestination;
+}) => {
+  const baseScore = MAX_SCORE_PER_QUESTION;
+  const scoreDeduction = Math.round(baseScore / destination.clues.length);
+  const score = isCorrect
+    ? Math.max(baseScore - (cluesUsed - 1) * scoreDeduction, 0)
+    : 0;
+
+  return score;
+};
+
+const updateGameStats = async ({
+  game,
+  isCorrect,
+  score,
+}: {
+  game: IGame;
+  isCorrect: boolean;
+  score: number;
+}) => {
+  const updateData = {
+    $max: { bestScore: score },
+    $inc: {
+      totalCorrectAnswers: 0,
+      totalWrongAnswers: 0,
+      nCorrectAnswersOnFirstClue: isCorrect ? 1 : 0,
+      nWrongAnswersOnFirstClue: isCorrect ? 0 : 1,
+      nCorrectAnswersOnMultipleClues: isCorrect ? 1 : 0,
+      nWrongAnswersOnMultipleClues: isCorrect ? 0 : 1,
+    },
+  };
+
+  if (isCorrect) {
+    updateData["$inc"] = {
+      ...updateData["$inc"],
+      totalCorrectAnswers: 1,
+    };
+  } else {
+    updateData["$inc"] = {
+      ...updateData["$inc"],
+      totalWrongAnswers: 1,
+    };
+  }
+
+  await GameStats.findOneAndUpdate({ userId: game.userId }, updateData, {
+    upsert: true,
+  });
 };

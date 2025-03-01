@@ -57,22 +57,29 @@ export interface IDestinationListResponse {
   totalClues: number;
 }
 
-export interface IGame extends BaseDocument {
-  username: string;
+export interface IGame {
+  _id: string;
+  userId: string;
   correctAnswers: number;
   wrongAnswers: number;
-  destinationIds: ObjectId[];
+  destinationIds: string[];
   clueIndices: { [key: string]: number };
+  score: number;
+  maxScorePerDestination: number;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
-export interface IGameStats extends BaseDocument {
-  username: string;
+export interface IGameStats {
+  _id: string;
+  userId: string;
   bestScore: number;
-  totalGamesPlayed: number;
-  totalWrongAnswers: number;
   totalCorrectAnswers: number;
+  totalWrongAnswers: number;
   nCorrectAnswersOnFirstClue: number;
   nWrongAnswersOnFirstClue: number;
   nCorrectAnswersOnMultipleClues: number;
   nWrongAnswersOnMultipleClues: number;
+  createdAt: Date;
+  updatedAt: Date;
 }

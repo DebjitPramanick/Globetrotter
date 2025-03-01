@@ -2,8 +2,6 @@ import { Request, Response } from "express";
 import {
   createGameHelper,
   getGameHelper,
-  getDestinationOptionsHelper,
-  getNextClueHelper,
   submitAnswerHelper,
 } from "../helpers/gameHelpers";
 import { ERROR_MESSAGES } from "../constants/errors";
@@ -11,11 +9,11 @@ import { ERROR_MESSAGES } from "../constants/errors";
 // Game Controllers
 export const createGameController = async (req: Request, res: Response) => {
   try {
-    const { username } = req.body;
-    if (!username) {
-      return res.status(400).json({ error: ERROR_MESSAGES.USER.REQUIRED });
+    const { userId } = req.body;
+    if (!userId) {
+      return res.status(400).json({ error: ERROR_MESSAGES.USER.ID_REQUIRED });
     }
-    const game = await createGameHelper(username);
+    const game = await createGameHelper(userId);
     res.status(201).json(game);
   } catch (error: any) {
     res.status(500).json({ error: ERROR_MESSAGES.SERVER.INTERNAL });
@@ -47,6 +45,12 @@ export const submitAnswerController = async (req: Request, res: Response) => {
       return res
         .status(400)
         .json({ error: ERROR_MESSAGES.GAME.ANSWER_REQUIRED });
+    }
+
+    if (!destinationId) {
+      return res
+        .status(400)
+        .json({ error: ERROR_MESSAGES.DESTINATION.ID_REQUIRED });
     }
 
     const result = await submitAnswerHelper(gameId, destinationId, answer);

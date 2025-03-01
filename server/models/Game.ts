@@ -3,10 +3,10 @@ import { IGame } from "../types";
 
 const gameSchema = new Schema(
   {
-    username: {
-      type: String,
-      required: [true, "Username is required"],
-      trim: true,
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: [true, "User ID is required"],
     },
     correctAnswers: {
       type: Number,
@@ -31,11 +31,23 @@ const gameSchema = new Schema(
       type: Object,
       default: {},
     },
+    score: {
+      type: Number,
+      required: true,
+      default: 0,
+      min: 0,
+    },
+    maxScorePerDestination: {
+      type: Number,
+      required: true,
+      default: 0,
+      min: 0,
+    },
   },
   { timestamps: true }
 );
 
 // Index for faster queries
-gameSchema.index({ username: 1, createdAt: -1 });
+gameSchema.index({ userId: 1, createdAt: -1 });
 
 export default mongoose.model<IGame>("Game", gameSchema);

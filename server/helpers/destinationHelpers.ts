@@ -66,7 +66,7 @@ export const getDestinationListHelper = async () => {
         options.splice(position, 0, dest.name);
 
         return {
-          id: dest._id,
+          _id: dest._id,
           name: dest.name,
           clues: [dest.firstClue],
           totalClues: dest.totalClues,

@@ -4,11 +4,13 @@ export const ERROR_MESSAGES = {
     ALREADY_EXISTS: "Username already exists",
     INVALID_USERNAME: "Username must be between 3 and 20 characters",
     REQUIRED: "Username is required",
+    ID_REQUIRED: "User ID is required",
   },
   DESTINATION: {
     NOT_FOUND: "Destination not found",
     ALREADY_EXISTS: "Destination already exists",
     INVALID_DATA: "Invalid destination data",
+    ID_REQUIRED: "Destination ID is required",
   },
   SERVER: {
     INTERNAL: "Internal server error",
