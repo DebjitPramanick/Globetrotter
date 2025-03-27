@@ -50,7 +50,8 @@ export const submitAnswerHelper = async (
   gameId: string,
   destinationId: string,
   answer: string,
-  cluesUsed: number
+  cluesUsed: number,
+  allocatedPoints: number
 ) => {
   if (
     !mongoose.Types.ObjectId.isValid(gameId) ||
@@ -74,11 +75,13 @@ export const submitAnswerHelper = async (
     destination.funFact[Math.floor(Math.random() * destination.funFact.length)];
 
   // Calculate score based on clues used
-  const score = calculateScore({
-    isCorrect,
-    cluesUsed,
-    destination,
-  });
+  // const score = calculateScore({
+  //   isCorrect,
+  //   cluesUsed,
+  //   destination,
+  // });
+
+  const score = isCorrect ? allocatedPoints : 0;
 
   // Update game stats and destinationIds if answer is correct
   const updateData: any = {

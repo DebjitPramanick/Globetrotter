@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import { Button, Error, ShimmerLoader, Spinner } from "@/components/atoms";
 import { Eye, ArrowLeft } from "react-feather";
 import Confetti from "react-confetti";
@@ -26,7 +26,7 @@ import {
   StatLabel,
   StatValue,
 } from "./index.styled";
-import { useGame } from "@/hooks";
+import { useGame, useTimer } from "@/hooks";
 import { Game } from "@/types";
 import { ResultModal } from "@/components/molecules";
 
@@ -36,10 +36,7 @@ interface GameCardProps {
   onBack: () => void;
 }
 
-const GAME_CARD_DIMENSIONS = {
-  width: "600px",
-  height: "400px",
-};
+const MAX_TIME_MS_PER_QUESTION = 15000;
 
 const GameCard = ({ game, onCreateNewGame, onBack }: GameCardProps) => {
   const {
@@ -61,6 +58,12 @@ const GameCard = ({ game, onCreateNewGame, onBack }: GameCardProps) => {
     moveToNextDestination,
   } = useGame({ game });
 
+  const {
+    state: timerState,
+    handler: timerHandler,
+    remainingSeconds,
+  } = useTimer(MAX_TIME_MS_PER_QUESTION);
+
   const [isDecreasing, setIsDecreasing] = useState(false);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
@@ -77,7 +80,21 @@ const GameCard = ({ game, onCreateNewGame, onBack }: GameCardProps) => {
   };
 
   const handleConfirm = () => {
-    submitAnswer(selectedOption!);
+    console.log("remainingSeconds", remainingSeconds);
+    let allocatedPoints = 10;
+
+    if (remainingSeconds > 5 && remainingSeconds <= 10) {
+      allocatedPoints = 5;
+    } else if (remainingSeconds > 0 && remainingSeconds <= 5) {
+      allocatedPoints = 2;
+    } else if (remainingSeconds <= 0) {
+      allocatedPoints = 0;
+    }
+    timerHandler.end();
+    submitAnswer({
+      answer: selectedOption || "EMPTY",
+      allocatedPoints,
+    });
   };
 
   const scrollToTop = () => {
@@ -89,6 +106,7 @@ const GameCard = ({ game, onCreateNewGame, onBack }: GameCardProps) => {
     setShowModal(false);
     setShowConfetti(false);
     moveToNextDestination();
+    timerHandler.start();
     scrollToTop();
   };
 
@@ -98,6 +116,11 @@ const GameCard = ({ game, onCreateNewGame, onBack }: GameCardProps) => {
       return () => clearTimeout(timer);
     }
   }, [isDecreasing]);
+
+  useEffect(() => {
+    // For the first question
+    timerHandler.start();
+  }, []);
 
   useEffect(() => {
     if (hasSubmittedAnswer) {
@@ -113,6 +136,12 @@ const GameCard = ({ game, onCreateNewGame, onBack }: GameCardProps) => {
     }
   }, [hasSubmittedAnswer]);
 
+  useEffect(() => {
+    if (remainingSeconds <= 0) {
+      handleConfirm();
+    }
+  }, [remainingSeconds]);
+
   let nodeToRender;
 
   if (destinationsRequestStates.isPending) {
@@ -127,28 +156,33 @@ const GameCard = ({ game, onCreateNewGame, onBack }: GameCardProps) => {
     if (currentClueIdx === totalClues - 1) {
       revealBtnNode = null;
     } else {
-      if (fetchNextClueRequestStates.isPending) {
-        revealBtnNode = (
-          <RevealButton onClick={handleRevealClick}>
-            <Spinner size={12} color="currentColor" />
-          </RevealButton>
-        );
-      } else {
-        revealBtnNode = (
-          <RevealButton onClick={handleRevealClick}>
-            <Eye size={16} />
-            Reveal Next Clue (-{scoreDeduction} pts)
-          </RevealButton>
-        );
-      }
+      // if (fetchNextClueRequestStates.isPending) {
+      //   revealBtnNode = (
+      //     <RevealButton onClick={handleRevealClick}>
+      //       <Spinner size={12} color="currentColor" />
+      //     </RevealButton>
+      //   );
+      // } else {
+      //   revealBtnNode = (
+      //     <RevealButton onClick={handleRevealClick}>
+      //       <Eye size={16} />
+      //       Reveal Next Clue (-{scoreDeduction} pts)
+      //     </RevealButton>
+      //   );
+      // }
     }
     nodeToRender = (
       <>
         <ScoresContainer>
-          <BackButton onClick={onBack}>
-            <ArrowLeft size={18} />
-            Exit Game
-          </BackButton>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <BackButton onClick={onBack}>
+              <ArrowLeft size={18} />
+              Exit Game
+            </BackButton>
+            <p style={{ marginLeft: "8px" }}>
+              {timerState.isEnded ? 0 : remainingSeconds}s
+            </p>
+          </div>
           <StatsGroup>
             <StatPill $type="correct">
               <StatLabel>Correct</StatLabel>

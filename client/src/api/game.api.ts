@@ -25,6 +25,7 @@ export const gameApi = {
       destinationId: string;
       answer: string;
       cluesUsed: number;
+      allocatedPoints: number;
     };
     options?: any;
   }): Promise<ApiResponse<Game>> => {
@@ -32,6 +33,7 @@ export const gameApi = {
       answer: payload.answer,
       destinationId: payload.destinationId,
       cluesUsed: payload.cluesUsed,
+      allocatedPoints: payload.allocatedPoints,
     };
 
     return await axiosInstance.post(

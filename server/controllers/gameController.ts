@@ -39,7 +39,7 @@ export const getGameController = async (req: Request, res: Response) => {
 export const submitAnswerController = async (req: Request, res: Response) => {
   try {
     const { id: gameId } = req.params;
-    const { destinationId, answer, cluesUsed = 1 } = req.body;
+    const { destinationId, answer, cluesUsed = 1, allocatedPoints } = req.body;
 
     if (!answer) {
       return res
@@ -57,7 +57,8 @@ export const submitAnswerController = async (req: Request, res: Response) => {
       gameId,
       destinationId,
       answer,
-      cluesUsed
+      cluesUsed,
+      allocatedPoints
     );
     res.status(200).json(result);
   } catch (error: any) {

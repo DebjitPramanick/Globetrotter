@@ -31,7 +31,13 @@ interface UseGameReturn {
     wrongAnswers: number;
     funFact: string;
   };
-  submitAnswer: (answer: string) => void;
+  submitAnswer: ({
+    answer,
+    allocatedPoints,
+  }: {
+    answer: string;
+    allocatedPoints: number;
+  }) => void;
   revealNextClue: () => void;
   moveToNextDestination: () => void;
 }
@@ -109,10 +115,7 @@ export const useGame = ({ game }: { game: Game }): UseGameReturn => {
       if (state.currentClueIdx < totalClues - 1) {
         setState((draft) => {
           draft.currentClueIdx = draft.currentClueIdx + 1;
-          draft.scoreToObtain = Math.max(
-            0,
-            draft.scoreToObtain - scoreDeduction
-          );
+          draft.scoreToObtain = draft.scoreToObtain;
           draft.currentClues = [...draft.currentClues, clue];
         });
       }
@@ -122,7 +125,13 @@ export const useGame = ({ game }: { game: Game }): UseGameReturn => {
     }
   };
 
-  const handleSubmitAnswer = async (answer: string) => {
+  const handleSubmitAnswer = async ({
+    answer,
+    allocatedPoints,
+  }: {
+    answer: string;
+    allocatedPoints: number;
+  }) => {
     try {
       const currentDestination =
         state.destinations[state.currentDestinationIdx];
@@ -131,6 +140,7 @@ export const useGame = ({ game }: { game: Game }): UseGameReturn => {
         destinationId: currentDestination._id,
         answer,
         cluesUsed: state.currentClueIdx + 1,
+        allocatedPoints,
       };
       submitAnswerRequestStatesHandler.pending();
       const response = await gameApi.submitAnswer({
