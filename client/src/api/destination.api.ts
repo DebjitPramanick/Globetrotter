@@ -10,16 +10,6 @@ export const destinationApi = {
     return await axiosInstance.get("/destinations/list", options);
   },
 
-  getDestinationOptions: async ({
-    id,
-    options,
-  }: {
-    id: string;
-    options?: any;
-  }): Promise<ApiResponse<Destination[]>> => {
-    return await axiosInstance.get(`/destinations/${id}/options`, options);
-  },
-
   getNextClue: async ({
     payload,
     options,

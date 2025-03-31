@@ -71,7 +71,7 @@ const GameCard = ({ game, onCreateNewGame, onBack }: GameCardProps) => {
   const [stats, setStats] = useState({ correct: 0, wrong: 0 });
 
   const handleRevealClick = () => {
-    setIsDecreasing(true);
+    // setIsDecreasing(true);
     revealNextClue();
   };
 
@@ -156,20 +156,20 @@ const GameCard = ({ game, onCreateNewGame, onBack }: GameCardProps) => {
     if (currentClueIdx === totalClues - 1) {
       revealBtnNode = null;
     } else {
-      // if (fetchNextClueRequestStates.isPending) {
-      //   revealBtnNode = (
-      //     <RevealButton onClick={handleRevealClick}>
-      //       <Spinner size={12} color="currentColor" />
-      //     </RevealButton>
-      //   );
-      // } else {
-      //   revealBtnNode = (
-      //     <RevealButton onClick={handleRevealClick}>
-      //       <Eye size={16} />
-      //       Reveal Next Clue (-{scoreDeduction} pts)
-      //     </RevealButton>
-      //   );
-      // }
+      if (fetchNextClueRequestStates.isPending) {
+        revealBtnNode = (
+          <RevealButton onClick={handleRevealClick}>
+            <Spinner size={12} color="currentColor" />
+          </RevealButton>
+        );
+      } else {
+        revealBtnNode = (
+          <RevealButton onClick={handleRevealClick}>
+            <Eye size={16} />
+            Reveal Next Clue
+          </RevealButton>
+        );
+      }
     }
     nodeToRender = (
       <>
