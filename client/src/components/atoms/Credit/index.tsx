@@ -5,7 +5,7 @@ const Credit = ({ ...rest }) => {
     <CreditWrapper {...rest}>
       Created by{" "}
       <Link
-        href="https://my-portfolio-teal-zeta.vercel.app/"
+        href="https://debjitpramanick.vercel.app/"
         target="_blank"
         rel="noopener noreferrer"
       >
