@@ -1,4 +1,4 @@
-import { useState, useEffect, use } from "react";
+import { useState, useEffect, use, useMemo } from "react";
 import { Button, Error, ShimmerLoader, Spinner } from "@/components/atoms";
 import { Eye, ArrowLeft } from "react-feather";
 import Confetti from "react-confetti";
@@ -25,10 +25,13 @@ import {
   StatPill,
   StatLabel,
   StatValue,
+  ProgressBar,
+  ProgressBarFill,
 } from "./index.styled";
 import { useGame, useTimer } from "@/hooks";
 import { Game } from "@/types";
 import { ResultModal } from "@/components/molecules";
+import { useTheme } from "styled-components";
 
 interface GameCardProps {
   game: Game;
@@ -36,9 +39,10 @@ interface GameCardProps {
   onBack: () => void;
 }
 
-const MAX_TIME_MS_PER_QUESTION = 15000;
+const MAX_TIME_MS_PER_QUESTION = 45000;
 
 const GameCard = ({ game, onCreateNewGame, onBack }: GameCardProps) => {
+  const theme = useTheme();
   const {
     destinationsRequestStates,
     fetchNextClueRequestStates,
@@ -79,17 +83,29 @@ const GameCard = ({ game, onCreateNewGame, onBack }: GameCardProps) => {
     setSelectedOption(option);
   };
 
-  const handleConfirm = () => {
-    console.log("remainingSeconds", remainingSeconds);
-    let allocatedPoints = 10;
+  const allocatedPoints = useMemo(() => {
+    if (timerState.isEnded) {
+      return 0;
+    }
 
-    if (remainingSeconds > 5 && remainingSeconds <= 10) {
-      allocatedPoints = 5;
-    } else if (remainingSeconds > 0 && remainingSeconds <= 5) {
-      allocatedPoints = 2;
-    } else if (remainingSeconds <= 0) {
+    const remainingSecondsInPercentage =
+      ((remainingSeconds * 1000) / MAX_TIME_MS_PER_QUESTION) * 100;
+
+    let allocatedPoints = 0;
+
+    if (remainingSecondsInPercentage >= 60) {
+      allocatedPoints = scoreToObtain;
+    } else if (remainingSecondsInPercentage >= 30) {
+      allocatedPoints = scoreToObtain / 2;
+    } else if (remainingSecondsInPercentage > 0) {
+      allocatedPoints = scoreToObtain / 4;
+    } else {
       allocatedPoints = 0;
     }
+    return Math.floor(allocatedPoints);
+  }, [remainingSeconds, timerState.isEnded]);
+
+  const handleConfirm = () => {
     timerHandler.end();
     submitAnswer({
       answer: selectedOption || "EMPTY",
@@ -142,6 +158,10 @@ const GameCard = ({ game, onCreateNewGame, onBack }: GameCardProps) => {
     }
   }, [remainingSeconds]);
 
+  useEffect(() => {
+    setIsDecreasing(true);
+  }, [allocatedPoints]);
+
   let nodeToRender;
 
   if (destinationsRequestStates.isPending) {
@@ -171,6 +191,7 @@ const GameCard = ({ game, onCreateNewGame, onBack }: GameCardProps) => {
         );
       }
     }
+
     nodeToRender = (
       <>
         <ScoresContainer>
@@ -179,11 +200,14 @@ const GameCard = ({ game, onCreateNewGame, onBack }: GameCardProps) => {
               <ArrowLeft size={18} />
               Exit Game
             </BackButton>
-            <p style={{ marginLeft: "8px" }}>
-              {timerState.isEnded ? 0 : remainingSeconds}s
-            </p>
           </div>
           <StatsGroup>
+            <StatPill style={{ marginLeft: "8px" }} $type="timer">
+              <StatLabel>Time Remaining</StatLabel>
+              <StatValue>
+                {timerState.isEnded ? 0 : remainingSeconds}s
+              </StatValue>
+            </StatPill>
             <StatPill $type="correct">
               <StatLabel>Correct</StatLabel>
               <StatValue>{stats.correct}</StatValue>
@@ -204,7 +228,7 @@ const GameCard = ({ game, onCreateNewGame, onBack }: GameCardProps) => {
             <CluesHeader>
               <ScoreDisplay>
                 <ScoreNumber isDecreasing={isDecreasing}>
-                  {scoreToObtain}
+                  {allocatedPoints}
                 </ScoreNumber>
                 pts
               </ScoreDisplay>
@@ -253,6 +277,23 @@ const GameCard = ({ game, onCreateNewGame, onBack }: GameCardProps) => {
     nodeToRender = <Error message={errorMessage} />;
   }
 
+  const progressBarFillWidth = useMemo(() => {
+    if (timerState.isEnded) {
+      return 0;
+    }
+    return ((remainingSeconds * 1000) / MAX_TIME_MS_PER_QUESTION) * 100;
+  }, [remainingSeconds, timerState.isEnded]);
+
+  const progressBarFillColor = useMemo(() => {
+    if (progressBarFillWidth >= 60) {
+      return theme.colors.success;
+    } else if (progressBarFillWidth >= 30) {
+      return theme.colors.accent;
+    } else {
+      return theme.colors.error;
+    }
+  }, [progressBarFillWidth]);
+
   return (
     <>
       {showConfetti && (
@@ -267,7 +308,17 @@ const GameCard = ({ game, onCreateNewGame, onBack }: GameCardProps) => {
         />
       )}
 
-      <Card>{nodeToRender}</Card>
+      <Card>
+        <ProgressBar>
+          <ProgressBarFill
+            style={{
+              width: `${progressBarFillWidth}%`,
+              backgroundColor: progressBarFillColor,
+            }}
+          />
+        </ProgressBar>
+        {nodeToRender}
+      </Card>
 
       <ResultModal
         isOpen={showModal}

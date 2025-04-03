@@ -50,20 +50,20 @@ export const Card = styled.div`
     padding: ${({ theme }) => theme.spacing.sm};
     gap: ${({ theme }) => theme.spacing.xs};
   }
+`;
 
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(
-      90deg,
-      ${({ theme }) => theme.colors.primary},
-      ${({ theme }) => theme.colors.secondary}
-    );
-  }
+export const ProgressBar = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: transparent;
+`;
+
+export const ProgressBarFill = styled.div`
+  height: 100%;
+  transition: all 1s ease-in-out;
 `;
 
 export const SpinnerContainer = styled.div`
@@ -277,7 +277,9 @@ export const StatsGroup = styled.div`
   gap: ${({ theme }) => theme.spacing.md};
 `;
 
-export const StatPill = styled.div<{ $type?: "correct" | "wrong" | "total" }>`
+export const StatPill = styled.div<{
+  $type?: "correct" | "wrong" | "total" | "timer";
+}>`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.xs};
@@ -299,6 +301,12 @@ export const StatPill = styled.div<{ $type?: "correct" | "wrong" | "total" }>`
           background: ${theme.colors.error}15;
           color: ${theme.colors.error};
           border: 1px solid ${theme.colors.error}30;
+        `;
+      case "timer":
+        return css`
+          background: ${theme.colors.accent}15;
+          color: ${theme.colors.accent};
+          border: 1px solid ${theme.colors.accent}30;
         `;
       default:
         return css`

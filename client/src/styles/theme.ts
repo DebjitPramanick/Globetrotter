@@ -118,7 +118,7 @@ export const lightTheme: DefaultTheme = {
     text: "#1F2937",
     textSecondary: "#6B7280",
     border: "#E5E7EB",
-    accent: "#818CF8",
+    accent: "#F97316",
     shimmer: {
       base: "#CBD5E1",
       highlight: "#F1F5F9",
@@ -140,7 +140,7 @@ export const darkTheme: DefaultTheme = {
     text: "#F9FAFB",
     textSecondary: "#9CA3AF",
     border: "#374151",
-    accent: "#A78BFA",
+    accent: "#FB923C",
     shimmer: {
       base: "#1F2937",
       highlight: "#374151",
