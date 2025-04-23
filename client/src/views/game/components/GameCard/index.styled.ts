@@ -63,7 +63,7 @@ export const ProgressBar = styled.div`
 
 export const ProgressBarFill = styled.div`
   height: 100%;
-  transition: all 1s ease-in-out;
+  transition: all 1s linear;
 `;
 
 export const SpinnerContainer = styled.div`
